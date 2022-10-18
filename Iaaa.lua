@@ -212,7 +212,7 @@ function IAAA_InitializeSetup()
     end
 
     -- Group
-    if(InformationOnRaid_Config["spamWhenInAGroup"] == nil or InformationOnRaid_Config["spamWhenInAGroup"] == true ) then 
+    if(InformationOnRaid_Config["Group"] == nil or InformationOnRaid_Config["Group"] == true ) then 
         spamWhenInAGroup = true;
         Group:SetChecked(1);
     end
@@ -386,7 +386,7 @@ function IAAA_CheckBoxes()
         InformationOnRaid_Config["Rituals"] = false; 
         rituals = {};
     end
-    
+
     -- TheHandofSacrifice
     spells[6940]  = TheHandofSacrifice:GetChecked() == 1	-- Длань жертвенности
     -- Layingonofhands
