@@ -416,7 +416,7 @@ function SetVariableValues()
     Test();
 end
 
-function IAAA_CheckBoxes()
+function IAAA_ApplySettings()
    
     InformationOnRaid_Config["Included"] = Included:GetChecked()==1;
     InformationOnRaid_Config["Group"] = Group:GetChecked()==1;
@@ -459,11 +459,12 @@ function IAAA_CheckBoxes()
     InformationOnRaid_Config["Taunts"] = Taunts:GetChecked()==1;
     InformationOnRaid_Config["SacredSacrifice"] = SacredSacrifice:GetChecked()==1;
     InformationOnRaid_Config["HolyOath"] = HolyOath:GetChecked()==1;
-    SetVariableValues();
 end
 
 function Apply()
-	
+    IAAA_ApplySettings()
+	SetVariableValues();
+    IAAA_toggle();
 end
    --[[ SLASH COMMAND FUNCTION ]]--
 function IAAASlashCmd(aicmdtxt)
@@ -491,7 +492,6 @@ end
 
 function Test()
 	local _, instance = IsInInstance();
-    print(tostring(instance))
 	if started and (instance == "raid" or (instance == "party" and spamWhenInAGroup))then
 		if instance=="raid" then OUTPUT = "RAID" end
 		if instance=="party" then OUTPUT = "PARTY" end
@@ -537,19 +537,19 @@ function COMBAT_LOG_EVENT_UNFILTERED(
 	...)  -- остальные аргументы
 	-- аргументы закончились
 
-	-- Проверки на смерть с камнем души
-    print("COMBAT_LOG_EVENT_UNFILTERED")
-    print(tostring(timestamp).." время применения")
-	print(tostring(event ).." тип события")
-	print(tostring(srcGUID ).." GUID кастера")
-	print(tostring(srcName ).." имя кастера")
-	print(tostring(srcFlags ).." флаги (можно борнуть для получения инфы врга\друг)")
-	print(tostring(destGUID  ).." GUID получившего каст")
-	print(tostring(destName  ).." имя получившего каст")
-	print(tostring(destFlags ).." флаги")
-	print(tostring(spellID  ).." айди спела")
-	print(tostring(spellName  ).." название спела")
-	print(tostring(school  ).." маска школы")
+	
+    -- print("COMBAT_LOG_EVENT_UNFILTERED")
+    -- print(tostring(timestamp).." время применения")
+	-- print(tostring(event ).." тип события")
+	-- print(tostring(srcGUID ).." GUID кастера")
+	-- print(tostring(srcName ).." имя кастера")
+	-- print(tostring(srcFlags ).." флаги (можно борнуть для получения инфы врга\друг)")
+	-- print(tostring(destGUID  ).." GUID получившего каст")
+	-- print(tostring(destName  ).." имя получившего каст")
+	-- print(tostring(destFlags ).." флаги")
+	-- print(tostring(spellID  ).." айди спела")
+	-- print(tostring(spellName  ).." название спела")
+	-- print(tostring(school  ).." маска школы")
 	
 	if UnitInRaid(destName) or UnitInParty(destName) then
 		if spellName == SOULSTONE and event == "SPELL_AURA_REMOVED" then
