@@ -1,0 +1,11 @@
+## Interface: 30300
+## Title: Information about applied abilities by Maraka
+## Author: Maraka
+## Version: 0.0.1
+## Notes: Information about applied abilities in raid
+## DefaultState: Enabled
+## LoadOnDemand: 0
+## SavedVariables: InformationOnRaid_Config
+
+IAAA.lua
+IAAA.xml

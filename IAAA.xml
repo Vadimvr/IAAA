@@ -1,0 +1,803 @@
+<Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
+	<Script file="IAAA.lua" />
+	<Font virtual="true" outline="NONE">
+		<Color r="1" g="1" b="1" />
+	</Font>
+	<Frame name="IaaaWindow" inherits="BackdropTemplate" parent="UIParent" toplevel="true" movable="true" enableKeyboard="true">
+		<Size x="798" y="600" />
+		<Anchors>
+			<Anchor point="TOPLEFT">
+				<Offset x="129" y="-107" />
+			</Anchor>
+		</Anchors>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
+		</KeyValues>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets left="11" right="12" top="12" bottom="11" />
+			<TileSize val="32" />
+			<EdgeSize val="32" />
+		</Backdrop>
+		<Layers>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Включен" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-30" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Группа" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-60" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Маговские порталы" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-90" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Ритуалы" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-120" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Длань жертвенности" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-150" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Возложение рук" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-180" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Возложение рук" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-210" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Длань свободы" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-240" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Длань спасения" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-270" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Длань защиты" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-300" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Жребий тьмы" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-330" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Оберегающий дух" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-360" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Подавление боли" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-390" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Защита от страха" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-420" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Перенаправление" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-450" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Усмиряющий выстрел" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-480" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Отвлекающий выстрел" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="60" y="-510" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Долой оружие" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-30" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Маленькие хитрости" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-60" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Истерия" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-90" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Дизарм" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-120" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Озарение" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-150" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Укус вампира" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-180" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Инженерка" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-210" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Антимагический манцирь" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-240" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Незыблемость льда" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-270" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Кровь вампира" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-300" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Дубовая кожа" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-330" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Неистовое восстановление" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-360" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Инстинкты выживания" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-390" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Диван" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-420" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Нишагу назад" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-450" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="нишагу назад спадение" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-480" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="глухая оборона" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="310" y="-510" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Ледяная глыба" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="560" y="-30" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Клык" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="560" y="-60" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="хавчик" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="560" y="-90" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Масс бафф" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="560" y="-120" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+		</Layers>
+		<Frames>
+			<CheckButton name="Included" inherits="UICheckButtonTemplate" text="Included">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-20" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Group" inherits="UICheckButtonTemplate" text="Group">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-50" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Magicportals" inherits="UICheckButtonTemplate" text="Magic portals">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-80" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Rituals" inherits="UICheckButtonTemplate" text="Rituals">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-110" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="TheHandofSacrifice" inherits="UICheckButtonTemplate" text="The Hand of Sacrifice">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-140" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Layingonofhands" inherits="UICheckButtonTemplate" text="Laying on of hands">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-170" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Layingonofhands1" inherits="UICheckButtonTemplate" text="Laying on of hands">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-200" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="TheHandofFreedom" inherits="UICheckButtonTemplate" text="The Hand of Freedom">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-230" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="TheHandofSalvation" inherits="UICheckButtonTemplate" text="The Hand of Salvation">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-260" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Durationofprotection" inherits="UICheckButtonTemplate" text="Duration of protection">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-290" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="TheLotofDarkness" inherits="UICheckButtonTemplate" text="The Lot of Darkness">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-320" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Protectingspirit" inherits="UICheckButtonTemplate" text="Protecting spirit">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-350" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Painsuppression" inherits="UICheckButtonTemplate" text="Pain suppression">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-380" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Protectionfromfear" inherits="UICheckButtonTemplate" text="Protection from fear">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-410" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Redirection" inherits="UICheckButtonTemplate" text="Redirection">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-440" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Apacifyingshot" inherits="UICheckButtonTemplate" text="A pacifying shot">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-470" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Adistractingshot" inherits="UICheckButtonTemplate" text="A distracting shot">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="27" y="-500" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Downwiththeweapons" inherits="UICheckButtonTemplate" text="Down with the weapons">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-20" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Littletricks" inherits="UICheckButtonTemplate" text="Little tricks">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-50" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Hysteria" inherits="UICheckButtonTemplate" text="Hysteria">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-80" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Disarm" inherits="UICheckButtonTemplate" text="Disarm">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-110" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Insight" inherits="UICheckButtonTemplate" text="Insight">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-140" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="VampireBite" inherits="UICheckButtonTemplate" text="Vampire Bite">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-170" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Engineer" inherits="UICheckButtonTemplate" text="Engineer">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-200" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="AntimagicArmor" inherits="UICheckButtonTemplate" text="Antimagic Armor">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-230" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Theinviolabilityofice" inherits="UICheckButtonTemplate" text="The inviolability of ice">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-260" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="VampireBlood" inherits="UICheckButtonTemplate" text="Vampire Blood">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-290" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Oakleather" inherits="UICheckButtonTemplate" text="Oak leather">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-320" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="FranticRecovery" inherits="UICheckButtonTemplate" text="Frantic Recovery">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-350" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Survivalinstincts" inherits="UICheckButtonTemplate" text="Survival instincts">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-380" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Sofa" inherits="UICheckButtonTemplate" text="Sofa">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-410" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Notastepback" inherits="UICheckButtonTemplate" text="Not a step back">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-440" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="notastepbackfall" inherits="UICheckButtonTemplate" text="not a step back fall">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-470" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="deafdefense" inherits="UICheckButtonTemplate" text="deaf defense">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="277" y="-500" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="IceBlock" inherits="UICheckButtonTemplate" text="Ice Block">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="527" y="-20" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Fang" inherits="UICheckButtonTemplate" text="Fang">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="527" y="-50" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Meal" inherits="UICheckButtonTemplate" text="Meal">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="527" y="-80" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Massbuff" inherits="UICheckButtonTemplate" text="Mass buff">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="527" y="-110" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+		</Frames>
+		<Scripts>
+			<OnLoad>
+				IAAA_OnLoad();
+			</OnLoad>
+			<OnEvent>
+				IAAA_OnComms(self, event, ...);
+			</OnEvent>
+			<OnMouseDown>
+				self:StartMoving();
+			</OnMouseDown>
+			<OnMouseUp>
+				self:StopMovingOrSizing();
+			</OnMouseUp>
+			<OnEscapePressed>
+				self:Hide();
+			</OnEscapePressed>
+		</Scripts>
+	</Frame>
+</Ui>

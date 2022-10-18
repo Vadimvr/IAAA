@@ -1,0 +1,34 @@
+<Project ToolsVersion="4.0" DefaultTargets="Deploy" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Default</Configuration>
+    <Name>IAAA</Name>
+    <ProjectGuid>968fbc10-a740-4440-b477-2ac5c567b3fb</ProjectGuid>
+    <AssemblyName>IAAA</AssemblyName>
+    <RootNamespace>IAAA</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Default' ">
+    <OutputPath>.</OutputPath>
+  </PropertyGroup>
+  <ItemGroup>
+    <Content Include="IAAA.lua">
+      <SubType>Code</SubType>
+      <DependentUpon>IAAA.xml</DependentUpon>
+    </Content>
+    <Content Include="IAAA.toc">
+      <SubType>TableOfContents</SubType>
+    </Content>
+    <Content Include="IAAA.xml">
+      <SubType>Frame</SubType>
+    </Content>
+  </ItemGroup>
+  <Import Project="$(DevEnvDir)\Extensions\Tools\MSBuild\AddonStudio\Wow\3.0\WowAddonStudio.targets" />
+  <!--
+  To modify your build process, add your task inside one of the targets below and uncomment it.
+  <Target Name="BeforeClean"></Target>
+  <Target Name="AfterClean"></Target>
+  <Target Name="BeforeRebuild"></Target>
+  <Target Name="AfterRebuild"></Target>
+  <Target Name="BeforeDeploy"></Target>
+  <Target Name="AfterDeploy"></Target>
+  -->
+</Project>
