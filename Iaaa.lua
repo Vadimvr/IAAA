@@ -8,7 +8,10 @@
 local OUTPUT = "RAID"
 local MIN_TANK_HP = 55000
 local MIN_HEALER_MANA = 20000
-local DIVINE_PLEA = true
+local DIVINE_PLEA = false; 
+local DIVINE_PLEA_ID = 54428 -- клятва привет еной
+local sacredSacrifice = false;
+local sacredSacrificeId = 64205 -- масс сакра
 
 local bot	 = "%s%s использует %s!"
 local used	 = "%s%s использует %s!"
@@ -86,14 +89,17 @@ local spells = {
 	[70946] = true, -- укус вампира
 }
 
-local taunst = {
+-- Таунты
+local taunst = {}
+
+local taunstDefault = {
 	[56222] = true, -- темная власть дк
 	[49560] = true, -- хватка смерти дк
 	[355] = true, -- Провокация вар
 	[694] = true, -- Дразнящий удар вар
 	[62124] = true, -- 	Длань возмездия пал
 	[31790] = true, -- Праведная защита пал
-	-- [49576] = true, -- хватка смерти
+	[49576] = true, -- хватка смерти
 }
 
 -- инженерка
@@ -190,14 +196,13 @@ function IAAA_OnLoad()
     SlashCmdList["IAAA"] = IAAASlashCmd;
     SLASH_IAAA1 = "/ia";
     SLASH_IAAA2 = "/iaaa";
-    DEFAULT_CHAT_FRAME:AddMessage ("|cff00FFFFInformation about the abilities|r");
+    Print("|cff00FFFFInformation about the abilities|r");
 end
 
 --[[ AUTO INVITE EVENT HANDLER ]]--
 function IAAA_OnComms(self, event, ...)
     if(event == "PLAYER_ENTERING_WORLD") then
         IAAA_InitializeSetup();
-        Test()
     end
     if(event == "COMBAT_LOG_EVENT_UNFILTERED") then
         COMBAT_LOG_EVENT_UNFILTERED(...);
@@ -205,171 +210,72 @@ function IAAA_OnComms(self, event, ...)
 end
 
 function IAAA_InitializeSetup()
-    -- Included
-    if(InformationOnRaid_Config["included"] == nil or InformationOnRaid_Config["included"] == true ) then 
-        started = true;
+    if(InformationOnRaid_Config == nil) then  
+        InformationOnRaid_Config = {};
+    end;
+    if(InformationOnRaid_Config["Included"])then 
         Included:SetChecked(1);
-    end
-
-    -- Group
-    if(InformationOnRaid_Config["Group"] == nil or InformationOnRaid_Config["Group"] == true ) then 
-        spamWhenInAGroup = true;
-        Group:SetChecked(1);
-    end
-    -- Magicportals
-    if(InformationOnRaid_Config["Magicportals"] == nil or InformationOnRaid_Config["Magicportals"] == true) then 
-        port = portDefault;
-        Magicportals:SetChecked(1);
-    end
-    -- Rituals
-    if(InformationOnRaid_Config["Rituals"] == nil or InformationOnRaid_Config["Rituals"] == true) then 
-        rituals = ritualsDefault;
-        Rituals:SetChecked(1);
-    end
-
-    -- Паладин
-    -- TheHandofSacrifice
-    --     [6940] 	= true,	-- Длань жертвенности
-    if(InformationOnRaid_Config["TheHandofSacrifice"] == nil or InformationOnRaid_Config["TheHandofSacrifice"] == true ) then spells[6940] = true; TheHandofSacrifice:SetChecked(1) end;
-    -- Layingonofhands
-    -- Layingonofhands
-    --     [20233] = true, -- Возложение рук
-    --     [20236] = true, -- Возложение рук
-    if(InformationOnRaid_Config["Layingonofhands"] == nil or InformationOnRaid_Config["Layingonofhands"] == true ) then 
-        spells[20233] = true; 
-        spells[20236] = true; 
-        Layingonofhands:SetChecked(1); 
-        Layingonofhands1:SetChecked(1); 
     end;
-    -- TheHandofFreedom
-    --     [1044] = true, -- Длань свободы
-    if(InformationOnRaid_Config["TheHandofFreedom"] == nil or InformationOnRaid_Config["TheHandofFreedom"] == true ) then spells[1044] = true; TheHandofFreedom:SetChecked(1) end;
-    -- TheHandofSalvation
-    --     [1038] = true, -- Длань спасения
-    if(InformationOnRaid_Config["TheHandofSalvation"] == nil or InformationOnRaid_Config["TheHandofSalvation"] == true ) then spells[1038] = true; TheHandofSalvation:SetChecked(1) end;
-    -- Durationofprotection
-    --     [10278] = true, -- Длань защиты
-    if(InformationOnRaid_Config["Durationofprotection"] == nil or InformationOnRaid_Config["Durationofprotection"] == true ) then spells[10278] = true; Durationofprotection:SetChecked(1) end;
-    -- TheLotofDarkness
-    --     [71169] = true, -- жребий тьмы
-    if(InformationOnRaid_Config["TheLotofDarkness"] == nil or InformationOnRaid_Config["TheLotofDarkness"] == true ) then spells[71169] = true; TheLotofDarkness:SetChecked(1) end;
-    
-    --     -- Прист
-    -- Protectingspirit
-    --     [47788] = true, -- Оберегающий дух
-    if(InformationOnRaid_Config["Protectingspirit"] == nil or InformationOnRaid_Config["Protectingspirit"] == true ) then spells[47788] = true; Protectingspirit:SetChecked(1) end;
-    -- Painsuppression
-    --     [33206] = true, -- Подавление боли
-    if(InformationOnRaid_Config["Painsuppression"] == nil or InformationOnRaid_Config["Painsuppression"] == true ) then spells[33206] = true; Painsuppression:SetChecked(1) end;
-    -- Protectionfromfear
-    --     [6346] = true, -- Защита от страха
-    if(InformationOnRaid_Config["Protectionfromfear"] == nil or InformationOnRaid_Config["Protectionfromfear"] == true ) then spells[6346] = true; Protectionfromfear:SetChecked(1) end;
-    --     -- Хант
-    -- Redirection
-    --     [34477] = true, -- Перенаправление
-    if(InformationOnRaid_Config["Redirection"] == nil or InformationOnRaid_Config["Redirection"] == true ) then spells[34477] = true; Redirection:SetChecked(1) end;
-    -- Apacifyingshot
-    --     [19801] = true, -- Усмиряющий выстрел
-    if(InformationOnRaid_Config["Apacifyingshot"] == nil or InformationOnRaid_Config["Apacifyingshot"] == true ) then spells[19801] = true; Apacifyingshot:SetChecked(1) end;
-    -- Adistractingshot
-    --     [20736] = true, -- Отвлекающий выстрел
-    if(InformationOnRaid_Config["Adistractingshot"] == nil or InformationOnRaid_Config["Adistractingshot"] == true ) then spells[20736] = true; Adistractingshot:SetChecked(1) end;
-    
-    --     -- рога
-    -- Downwiththeweapons
-    --     [51722] = true, -- Долой оружие
-    if(InformationOnRaid_Config["Downwiththeweapons"] == nil or InformationOnRaid_Config["Downwiththeweapons"] == true ) then spells[51722] = true; Downwiththeweapons:SetChecked(1) end;
-    -- Littletricks
-    --     [57934] = true, -- Маленькие хитрости
-    if(InformationOnRaid_Config["Littletricks"] == nil or InformationOnRaid_Config["Littletricks"] == true ) then spells[57934] = true; Littletricks:SetChecked(1) end;
-    --     -- дк
-    -- Hysteria
-    --     [49016] = true, -- Истерия
-    if(InformationOnRaid_Config["Hysteria"] == nil or InformationOnRaid_Config["Hysteria"] == true ) then spells[49016] = true; Hysteria:SetChecked(1) end;
-    --     -- вар
-    -- Disarm
-    --     [676] = true, -- Дизарм
-    if(InformationOnRaid_Config["Disarm"] == nil or InformationOnRaid_Config["Disarm"] == true ) then spells[676] = true; Disarm:SetChecked(1) end;
-    --     --друид 
-    -- Insight
-    --     [29166] = true, --Озарение
-    if(InformationOnRaid_Config["Insight"] == nil or InformationOnRaid_Config["Insight"] == true ) then spells[29166] = true; Insight:SetChecked(1) end;
-   
-    -- VampireBite
-    --     [71726] = true, -- укус вампира
-    --     [71729] = true, -- укус вампира
-    --     [71727] = true, -- укус вампира
-    --     [71728] = true, -- укус вампира
-    --     [71475] = true, -- укус вампира
-    --     [71476] = true, -- укус вампира
-    --     [71477] = true, -- укус вампира
-    --     [70946] = true, -- укус вампира
-    if(InformationOnRaid_Config["VampireBite"] == nil or InformationOnRaid_Config["VampireBite"] == true ) then 
-        spells[71726] = true; 
-        spells[71729] = true; 
-        spells[71727] = true; 
-        spells[71728] = true; 
-        spells[71475] = true; 
-        spells[71476] = true; 
-        spells[71477] = true; 
-        spells[70946] = true;  
-        VampireBite:SetChecked(1) 
-    end;
-
-    -- Engineer
-    if(InformationOnRaid_Config["Engineer"] == nil or InformationOnRaid_Config["Engineer"] == true ) then bots = botsDefault ; Engineer:SetChecked(1) end;
-    -- 	-- ДК
-    -- AntimagicArmor
-    -- 	[48707] = true,	-- Антимагический манцирь
-    if(InformationOnRaid_Config["AntimagicArmor"] == nil or InformationOnRaid_Config["AntimagicArmor"] == true ) then use[48707]=true; AntimagicArmor:SetChecked(1) end;
-    -- Theinviolabilityofice
-    -- 	[48792] = true,	-- Незыблемость льда
-    if(InformationOnRaid_Config["Theinviolabilityofice"] == nil or InformationOnRaid_Config["Theinviolabilityofice"] == true ) then use[48792]=true; Theinviolabilityofice:SetChecked(1) end;
-    -- VampireBlood
-    -- 	[55233] = true,	-- Кровь вампира
-    if(InformationOnRaid_Config["VampireBlood"] == nil or InformationOnRaid_Config["VampireBlood"] == true ) then use[55233]=true; VampireBlood:SetChecked(1) end;
-    -- 	-- Друид
-    -- Oakleather
-    -- 	[22812] = true,	-- Дубовая кожа
-    if(InformationOnRaid_Config["Oakleather"] == nil or InformationOnRaid_Config["Oakleather"] == true ) then use[22812]=true; Oakleather:SetChecked(1) end;
-    -- FranticRecovery
-    -- 	[22842] = true,	-- Неистовое восстановление
-    if(InformationOnRaid_Config["FranticRecovery"] == nil or InformationOnRaid_Config["FranticRecovery"] == true ) then use[22842]=true; FranticRecovery:SetChecked(1) end;
-    -- Survivalinstincts
-    -- 	[61336] = true,	-- Инстинкты выживания
-    if(InformationOnRaid_Config["Survivalinstincts"] == nil or InformationOnRaid_Config["Survivalinstincts"] == true ) then use[61336]=true; Survivalinstincts:SetChecked(1) end;
-    -- 	-- Пелодин
-    -- Sofa
-    -- 	[498] 	= true, -- Диван
-    if(InformationOnRaid_Config["Sofa"] == nil or InformationOnRaid_Config["Sofa"] == true ) then use[498]=true; Sofa:SetChecked(1) end;
-    -- 	-- Воин
-    -- Notastepback
-    -- 	[12975] = true,	-- Нишагу назад
-    if(InformationOnRaid_Config["Notastepback"] == nil or InformationOnRaid_Config["Notastepback"] == true ) then use[12975]=true; Notastepback:SetChecked(1) end;
-    -- notastepbackfall
-    -- 	[12976] = true,	-- нишагу назад спадение
-    if(InformationOnRaid_Config["notastepbackfall"] == nil or InformationOnRaid_Config["notastepbackfall"] == true ) then use[12976]=true; notastepbackfall:SetChecked(1) end;
-    -- deafdefense
-    -- 	[871] 	= true,	-- глухая оборона
-    if(InformationOnRaid_Config["deafdefense"] == nil or InformationOnRaid_Config["deafdefense"] == true ) then use[871]=true; deafdefense:SetChecked(1) end;
-    -- 	-- Маг
-    -- IceBlock
-    -- 	[45438] = true, -- Ледяная глыба
-    if(InformationOnRaid_Config["IceBlock"] == nil or InformationOnRaid_Config["IceBlock"] == true ) then use[45438]=true; IceBlock:SetChecked(1) end;
-    -- Fang
-    -- 	[71635] = true, -- Клык
-    if(InformationOnRaid_Config["Fang"] == nil or InformationOnRaid_Config["Fang"] == true ) then use[71635]=true; Fang:SetChecked(1) end;
-    -- Meal
-    if(InformationOnRaid_Config["Meal"] == nil or InformationOnRaid_Config["Meal"] == true ) then feasts= feastsDefault; Meal:SetChecked(1) end;
-    -- Massbuff
-    if(InformationOnRaid_Config["Massbuff"] == nil or InformationOnRaid_Config["Massbuff"] == true ) then special = specialDefault; Massbuff:SetChecked(1) end;
-
+    if(InformationOnRaid_Config["Group"])then Group:SetChecked(1); end;
+    if(InformationOnRaid_Config["Magicportals"])then Magicportals:SetChecked(1); end;
+    if(InformationOnRaid_Config["Rituals"])then Rituals:SetChecked(1); end;
+    if(InformationOnRaid_Config["TheHandofSacrifice"])then TheHandofSacrifice:SetChecked(1); end;
+    if(InformationOnRaid_Config["Layingonofhands"])then Layingonofhands:SetChecked(1); end;
+    if(InformationOnRaid_Config["Layingonofhands"])then Layingonofhands:SetChecked(1); end;
+    if(InformationOnRaid_Config["TheHandofFreedom"])then TheHandofFreedom:SetChecked(1); end;
+    if(InformationOnRaid_Config["TheHandofSalvation"])then TheHandofSalvation:SetChecked(1); end;
+    if(InformationOnRaid_Config["Durationofprotection"])then Durationofprotection:SetChecked(1); end;
+    if(InformationOnRaid_Config["TheLotofDarkness"])then TheLotofDarkness:SetChecked(1); end;
+    if(InformationOnRaid_Config["Protectingspirit"])then Protectingspirit:SetChecked(1); end;
+    if(InformationOnRaid_Config["Painsuppression"])then Painsuppression:SetChecked(1); end;
+    if(InformationOnRaid_Config["Protectionfromfear"])then Protectionfromfear:SetChecked(1); end;
+    if(InformationOnRaid_Config["Redirection"])then Redirection:SetChecked(1); end;
+    if(InformationOnRaid_Config["Apacifyingshot"])then Apacifyingshot:SetChecked(1); end;
+    if(InformationOnRaid_Config["Adistractingshot"])then Adistractingshot:SetChecked(1); end;
+    if(InformationOnRaid_Config["Downwiththeweapons"])then Downwiththeweapons:SetChecked(1); end;
+    if(InformationOnRaid_Config["Littletricks"])then Littletricks:SetChecked(1); end;
+    if(InformationOnRaid_Config["Hysteria"])then Hysteria:SetChecked(1); end;
+    if(InformationOnRaid_Config["Disarm"])then Disarm:SetChecked(1); end;
+    if(InformationOnRaid_Config["Insight"])then Insight:SetChecked(1); end;
+    if(InformationOnRaid_Config["VampireBite"])then VampireBite:SetChecked(1); end;
+    if(InformationOnRaid_Config["Engineer"])then Engineer:SetChecked(1); end;
+    if(InformationOnRaid_Config["AntimagicArmor"])then AntimagicArmor:SetChecked(1); end;
+    if(InformationOnRaid_Config["Theinviolabilityofice"])then Theinviolabilityofice:SetChecked(1); end;
+    if(InformationOnRaid_Config["VampireBlood"])then VampireBlood:SetChecked(1); end;
+    if(InformationOnRaid_Config["Oakleather"])then Oakleather:SetChecked(1); end;
+    if(InformationOnRaid_Config["FranticRecovery"])then FranticRecovery:SetChecked(1); end;
+    if(InformationOnRaid_Config["Survivalinstincts"])then Survivalinstincts:SetChecked(1); end;
+    if(InformationOnRaid_Config["Sofa"])then Sofa:SetChecked(1); end;
+    if(InformationOnRaid_Config["Notastepback"])then Notastepback:SetChecked(1); end;
+    if(InformationOnRaid_Config["notastepbackfall"])then notastepbackfall:SetChecked(1); end;
+    if(InformationOnRaid_Config["deafdefense"])then deafdefense:SetChecked(1); end;
+    if(InformationOnRaid_Config["IceBlock"])then IceBlock:SetChecked(1); end;
+    if(InformationOnRaid_Config["Fang"])then Fang:SetChecked(1); end;
+    if(InformationOnRaid_Config["Meal"])then Meal:SetChecked(1); end;
+    if(InformationOnRaid_Config["Massbuff"])then Massbuff:SetChecked(1); end;
+    if(InformationOnRaid_Config["Taunts"])then Taunts:SetChecked(1); end;
+    if(InformationOnRaid_Config["SacredSacrifice"])then SacredSacrifice:SetChecked(1); end;
+    if(InformationOnRaid_Config["HolyOath"])then HolyOath:SetChecked(1); end;
+    SetVariableValues();
 end
 
-function IAAA_CheckBoxes()
-    if(Included:GetChecked()) then InformationOnRaid_Config["included"] = true; started = true; else InformationOnRaid_Config["included"] = false; started = false;end
+function SetVariableValues()
 
-    if(Group:GetChecked()) then InformationOnRaid_Config["Group"] = true; spamWhenInAGroup = true; else InformationOnRaid_Config["Group"] = false; spamWhenInAGroup = false;end
+    if(Included:GetChecked()) then 
+        InformationOnRaid_Config["included"] = true; 
+        started = true; 
+    else 
+        InformationOnRaid_Config["included"] = false; 
+        started = false;
+    end
+
+    if(Group:GetChecked()) then 
+        InformationOnRaid_Config["Group"] = true; 
+        spamWhenInAGroup = true; 
+    else 
+        InformationOnRaid_Config["Group"] = false; 
+        spamWhenInAGroup = false;
+    end
     
     if(Magicportals:GetChecked()) then 
         InformationOnRaid_Config["Magicportals"] = true; 
@@ -441,7 +347,13 @@ function IAAA_CheckBoxes()
 	spells[70946] = VampireBite:GetChecked() == 1 -- укус вампира
 
     -- Engineer
-    if(Engineer:GetChecked())then bots = botsDefault;  InformationOnRaid_Config["Engineer"] = true; else bots = {};  InformationOnRaid_Config["Engineer"] = false; end;
+    if(Engineer:GetChecked())then 
+        bots = botsDefault;  
+        InformationOnRaid_Config["Engineer"] = true; 
+    else
+         bots = {};  
+         InformationOnRaid_Config["Engineer"] = false; 
+    end;
     -- dk
     -- AntimagicArmor
     use[48707] = AntimagicArmor:GetChecked() == 1;	-- Антимагический манцирь
@@ -473,17 +385,39 @@ function IAAA_CheckBoxes()
 	-- трини
     -- Fang
 	use[71635] = Fang:GetChecked() == 1; -- Клык
-    
-    
     -- Meal
-    if( Meal:GetChecked() ) then feasts= feastsDefault; InformationOnRaid_Config["Meal"] = true; else feast = {};InformationOnRaid_Config["Meal"] = false; end;
+    if( Meal:GetChecked() ) then
+         feasts= feastsDefault;
+          InformationOnRaid_Config["Meal"] = true;
+    else 
+        feast = {};InformationOnRaid_Config["Meal"] = false; 
+    end;
     -- Massbuff
-    if( Massbuff:GetChecked() ) then special= specialDefault; InformationOnRaid_Config["Massbuff"] = true; else special = {};InformationOnRaid_Config["Massbuff"] = false; end;
+    if( Massbuff:GetChecked() ) then 
+        special= specialDefault; 
+        InformationOnRaid_Config["Massbuff"] = true; 
+    else 
+        special = {};
+        InformationOnRaid_Config["Massbuff"] = false; 
+    end;
 
-    
-    
-    
-    
+    -- Таунты в ланалель
+
+    if( Taunts:GetChecked() ) then 
+        taunst= taunstDefault; 
+        InformationOnRaid_Config["Taunts"] = true; 
+    else 
+        taunst = {};
+        InformationOnRaid_Config["Taunts"] = false; 
+    end;
+
+    sacredSacrifice = SacredSacrifice:GetChecked()==1;
+    DIVINE_PLEA = HolyOath:GetChecked() == 1;
+    Test();
+end
+
+function IAAA_CheckBoxes()
+   
     InformationOnRaid_Config["Included"] = Included:GetChecked()==1;
     InformationOnRaid_Config["Group"] = Group:GetChecked()==1;
     InformationOnRaid_Config["Magicportals"] = Magicportals:GetChecked()==1;
@@ -522,9 +456,15 @@ function IAAA_CheckBoxes()
     InformationOnRaid_Config["Fang"] = Fang:GetChecked()==1;
     InformationOnRaid_Config["Meal"] = Meal:GetChecked()==1;
     InformationOnRaid_Config["Massbuff"] = Massbuff:GetChecked()==1;
-    Test()
+    InformationOnRaid_Config["Taunts"] = Taunts:GetChecked()==1;
+    InformationOnRaid_Config["SacredSacrifice"] = SacredSacrifice:GetChecked()==1;
+    InformationOnRaid_Config["HolyOath"] = HolyOath:GetChecked()==1;
+    SetVariableValues();
 end
 
+function Apply()
+	
+end
    --[[ SLASH COMMAND FUNCTION ]]--
 function IAAASlashCmd(aicmdtxt)
     local t = aicmdtxt;
@@ -551,21 +491,26 @@ end
 
 function Test()
 	local _, instance = IsInInstance();
-    print(tostring(instance));
-    print(tostring(spamStarted))
-	if started and (instance == "raid" or instance == "party")then
+    print(tostring(instance))
+	if started and (instance == "raid" or (instance == "party" and spamWhenInAGroup))then
 		if instance=="raid" then OUTPUT = "RAID" end
 		if instance=="party" then OUTPUT = "PARTY" end
 		IaaaWindow:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 		Print("|cff00ff00активирован.|r")
 	else
 		IaaaWindow:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
-		Print("|cFFFF0000деактивирован.|r")
+        if not (started)then
+            Print(" |cFFFF0000Вывод сообщений отключен|r")
+        elseif (instance == "none") then
+		    Print(" |cFFFF0000Вы покинули подземелье вывод сообщений остановлен.|r")
+        else
+		    Print(" |cFFFF0000деактивирован.|r")
+        end
 	end
 end
 
 function Print(...)
-	return print("|cff00AAFFInformation about applied abilities in raid|r:", ...)
+	return print("|cff00AAFFIAAA|r:", ...)
 end
 
 local function send(msg)
@@ -631,12 +576,12 @@ function COMBAT_LOG_EVENT_UNFILTERED(
 					send(cast:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
 				elseif use[spellID] and UnitHealthMax(srcName) >= MIN_TANK_HP then
 					send(used:format(icon(srcName), srcName, GetSpellLink(spellID)))
-				elseif spellID == 64205 then
+				elseif spellID == sacredSacrificeId and sacredSacrifice then
 					send(used:format(icon(srcName), srcName, GetSpellLink(spellID)))
 					sacrifice[srcGUID] = true
 				elseif special[spellID] then
 					send(used:format(icon(srcName), srcName, GetSpellLink(spellID)))
-				elseif DIVINE_PLEA and spellID == 54428 and UnitManaMax(srcName) >= MIN_HEALER_MANA then
+				elseif DIVINE_PLEA and spellID == DIVINE_PLEA_ID and UnitManaMax(srcName) >= MIN_HEALER_MANA then
 					send(used:format(icon(srcName), srcName, GetSpellLink(spellID)))
 					-- elseif taunst[spellID] and destName == lanatel then  -- 31789
 					-- 		send(taunt:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
@@ -716,5 +661,6 @@ function COMBAT_LOG_EVENT_UNFILTERED(
 		end
 	end
 end
+
 
 

@@ -361,6 +361,33 @@
 					<FontHeight val="15" />
 				</FontString>
 			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Таунты в Ланатель" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="560" y="-150" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Масс сакра" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="560" y="-180" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
+            <Layer level="OVERLAY">
+				<FontString inherits="GameFontNormal" text="Священная клятва" justifyV="TOP" justifyH="LEFT" font="25">
+					<Size x="200" y="26" />
+					<Anchors>
+						<Anchor x="560" y="-210" point="TOPLEFT" />
+					</Anchors>
+					<FontHeight val="15" />
+				</FontString>
+			</Layer>
 		</Layers>
 		<Frames>
 			<CheckButton name="Included" inherits="UICheckButtonTemplate" text="Included">
@@ -774,6 +801,39 @@
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="527" y="-110" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="Taunts" inherits="UICheckButtonTemplate" text="Taunts in Lanatel">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="527" y="-140" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+			<CheckButton name="SacredSacrifice" inherits="UICheckButtonTemplate" text="Taunts in Lanatel">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="527" y="-170" point="TOPLEFT" />
+				</Anchors>
+				<Scripts>
+					<OnClick>
+						IAAA_CheckBoxes();
+					</OnClick>
+				</Scripts>
+			</CheckButton>
+            <CheckButton name="HolyOath" inherits="UICheckButtonTemplate" text="Holy Oath">
+				<Size x="32" y="32" />
+				<Anchors>
+					<Anchor x="527" y="-200" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
