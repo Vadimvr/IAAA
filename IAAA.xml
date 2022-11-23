@@ -7,7 +7,7 @@
 		<Size x="798" y="600" />
 		<Anchors>
 			<Anchor point="TOPLEFT">
-				<Offset x="129" y="-107" />
+				<Offset x="617" y="-160" />
 			</Anchor>
 		</Anchors>
 		<KeyValues>
@@ -397,7 +397,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -408,18 +408,18 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Magicportals" inherits="UICheckButtonTemplate" text="Magic portals">
+			<CheckButton name="MagicPortals" inherits="UICheckButtonTemplate" text="Magic portals">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-80" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -430,117 +430,117 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="TheHandofSacrifice" inherits="UICheckButtonTemplate" text="The Hand of Sacrifice">
+			<CheckButton name="TheHandOfSacrifice" inherits="UICheckButtonTemplate" text="The Hand of Sacrifice">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-140" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Layingonofhands" inherits="UICheckButtonTemplate" text="Laying on of hands">
+			<CheckButton name="LayOnHands" inherits="UICheckButtonTemplate" text="Laying on of hands">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-170" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Layingonofhands1" inherits="UICheckButtonTemplate" text="Laying on of hands">
+			<CheckButton name="LayOnHands1" inherits="UICheckButtonTemplate" text="Laying on of hands">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-200" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="TheHandofFreedom" inherits="UICheckButtonTemplate" text="The Hand of Freedom">
+			<CheckButton name="HandOfFreedom" inherits="UICheckButtonTemplate" text="The Hand of Freedom">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-230" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="TheHandofSalvation" inherits="UICheckButtonTemplate" text="The Hand of Salvation">
+			<CheckButton name="HandOfSalvation" inherits="UICheckButtonTemplate" text="The Hand of Salvation">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-260" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Durationofprotection" inherits="UICheckButtonTemplate" text="Duration of protection">
+			<CheckButton name="HandOfProtection" inherits="UICheckButtonTemplate" text="Hand of protection">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-290" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="TheLotofDarkness" inherits="UICheckButtonTemplate" text="The Lot of Darkness">
+			<CheckButton name="FateOfShadow" inherits="UICheckButtonTemplate" text="The Lot of Darkness">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-320" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Protectingspirit" inherits="UICheckButtonTemplate" text="Protecting spirit">
+			<CheckButton name="GuardianSpirit" inherits="UICheckButtonTemplate" text="Protecting spirit">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-350" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Painsuppression" inherits="UICheckButtonTemplate" text="Pain suppression">
+			<CheckButton name="PainSuppression" inherits="UICheckButtonTemplate" text="Pain suppression">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-380" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Protectionfromfear" inherits="UICheckButtonTemplate" text="Protection from fear">
+			<CheckButton name="FearWard" inherits="UICheckButtonTemplate" text="Protection from fear">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-410" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -551,51 +551,51 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Apacifyingshot" inherits="UICheckButtonTemplate" text="A pacifying shot">
+			<CheckButton name="TranquilizingShot" inherits="UICheckButtonTemplate" text="A pacifying shot">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-470" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Adistractingshot" inherits="UICheckButtonTemplate" text="A distracting shot">
+			<CheckButton name="DistractingShot" inherits="UICheckButtonTemplate" text="A distracting shot">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="27" y="-500" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Downwiththeweapons" inherits="UICheckButtonTemplate" text="Down with the weapons">
+			<CheckButton name="DismantleRogue" inherits="UICheckButtonTemplate" text="Down with the weapons">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-20" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Littletricks" inherits="UICheckButtonTemplate" text="Little tricks">
+			<CheckButton name="TricksRogue" inherits="UICheckButtonTemplate" text="Little tricks">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-50" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -606,7 +606,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -617,7 +617,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -628,7 +628,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -639,7 +639,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -650,29 +650,29 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="AntimagicArmor" inherits="UICheckButtonTemplate" text="Antimagic Armor">
+			<CheckButton name="AntiMagicShell" inherits="UICheckButtonTemplate" text="Antimagic Armor">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-230" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Theinviolabilityofice" inherits="UICheckButtonTemplate" text="The inviolability of ice">
+			<CheckButton name="IceboundFortitude" inherits="UICheckButtonTemplate" text="The inviolability of ice">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-260" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -683,40 +683,40 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Oakleather" inherits="UICheckButtonTemplate" text="Oak leather">
+			<CheckButton name="BarkSkin" inherits="UICheckButtonTemplate" text="Oak leather">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-320" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="FranticRecovery" inherits="UICheckButtonTemplate" text="Frantic Recovery">
+			<CheckButton name="FrenziedRegeneration" inherits="UICheckButtonTemplate" text="Frantic Recovery">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-350" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Survivalinstincts" inherits="UICheckButtonTemplate" text="Survival instincts">
+			<CheckButton name="SurvivalInstincts" inherits="UICheckButtonTemplate" text="Survival instincts">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-380" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -727,40 +727,40 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Notastepback" inherits="UICheckButtonTemplate" text="Not a step back">
+			<CheckButton name="LastStand" inherits="UICheckButtonTemplate" text="Not a step back">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-440" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="notastepbackfall" inherits="UICheckButtonTemplate" text="not a step back fall">
+			<CheckButton name="LastStandEnd" inherits="UICheckButtonTemplate" text="not a step back fall">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-470" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="deafdefense" inherits="UICheckButtonTemplate" text="deaf defense">
+			<CheckButton name="ShieldWall" inherits="UICheckButtonTemplate" text="deaf defense">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-500" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -771,18 +771,18 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Fang" inherits="UICheckButtonTemplate" text="Fang">
+			<CheckButton name="FlawlessFangOfSindragosa" inherits="UICheckButtonTemplate" text="Sindragosa's Flawless Fang">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="527" y="-50" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -793,18 +793,18 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="Massbuff" inherits="UICheckButtonTemplate" text="Mass buff">
+			<CheckButton name="MassBuff" inherits="UICheckButtonTemplate" text="Mass buff">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="527" y="-110" point="TOPLEFT" />
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -815,7 +815,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -826,7 +826,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -837,7 +837,7 @@
 				</Anchors>
 				<Scripts>
 					<OnClick>
-						 
+
 					</OnClick>
 				</Scripts>
 			</CheckButton>
@@ -858,7 +858,8 @@
 				IAAA_OnLoad();
 			</OnLoad>
 			<OnEvent>
-				IAAA_OnComms(self, event, ...);
+				IAAA_On(self, event, ...);
+				                UNIT_AURA(...)
 			</OnEvent>
 			<OnMouseDown>
 				self:StartMoving();
@@ -871,4 +872,35 @@
 			</OnEscapePressed>
 		</Scripts>
 	</Frame>
+	<!--<Frame name="Iaaa_FrameCooldownPlague" inherits="BackdropTemplate" enableMouse="true" movable="true">
+		<Size x="75" y="75" />
+		<Anchors>
+			<Anchor x="197" y="-330" point="TOPLEFT" />
+		</Anchors>
+		<KeyValues>
+			<KeyValue key="backdropInfo" value="BACKDROP_DIALOG_32_32" keyType="string" type="global" />
+		</KeyValues>
+		<Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background" edgeFile="Interface\DialogFrame\UI-DialogBox-Border" tile="true">
+			<BackgroundInsets left="11" right="12" top="12" bottom="11" />
+			<TileSize val="32" />
+			<EdgeSize val="32" />
+		</Backdrop>
+		<Frames>
+			<Cooldown name="Iaaa_PlagueCooldown" inherits="CooldownFrameTemplate">
+				<Size x="65" y="65" />
+				<Anchors>
+					<Anchor x="5" y="-5" point="TOPLEFT" />
+				</Anchors>
+				<Backdrop bgFile="Interface\Icons\Ability_Creature_Disease_02" />
+			</Cooldown>
+		</Frames>
+        <Scripts>
+			<OnMouseDown>
+				self:StartMoving();
+			</OnMouseDown>
+			<OnMouseUp>
+				self:StopMovingOrSizing();
+			</OnMouseUp>
+		</Scripts>
+	</Frame>-->
 </Ui>
