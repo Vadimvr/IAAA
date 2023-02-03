@@ -3,7 +3,9 @@
 
 --[[ Loading the addon ]]--
 
+local AddOnName, ns = ...;
 
+local mainWindowLog = ns.log;
 
 local OUTPUT = "RAID"
 local MIN_TANK_HP = 55000
@@ -199,36 +201,36 @@ function IAAA_OnLoad()
     
     IaaaWindow:RegisterEvent("PLAYER_LOGIN")
     IaaaWindow:RegisterEvent("PLAYER_ENTERING_WORLD");
-    IaaaWindow:RegisterEvent("UNIT_AURA")
+  --  IaaaWindow:RegisterEvent("UNIT_AURA")
     IaaaWindow:Hide();
-    
+    mainWindowLog:ADDON_LOADED()
     SlashCmdList["IAAA"] = IAAASlashCmd;
     SLASH_IAAA1 = "/ia";
     SLASH_IAAA2 = "/iaaa";
     Print("|cff00FFFFInformation about the abilities|r");
 end
 
-local plagueHop = GetSpellInfo(70338)
-local plagueExpires = false
-local plagueTimer = 0;
-local lastPlague = nil;
+-- local plagueHop = GetSpellInfo(70338)
+-- local plagueExpires = false
+-- local plagueTimer = 0;
+-- local lastPlague = nil;
 
 
-function UNIT_AURA(arg)
-    if(arg == nil) then 
-        return;
-    else
-        local name = GetUnitName(arg, true)
-        if (not name) or (name == lastPlague) then return end
-        local _, _, _, _, _, _, expires, _, _, _, spellId = UnitDebuff(arg, plagueHop)
-        if not spellId or not expires then return end
-        if (spellId == 73787 or spellId == 70338 or spellId == 73785 or spellId == 73786) and expires > 0 and not plagueExpires then
-            Iaaa_PlagueCooldown:SetCooldown(GetTime(), 5);
-            plagueExpires = true;
-            name = lastPlague;
-        end
-    end;
-end
+-- function UNIT_AURA(arg)
+--     if(arg == nil) then 
+--         return;
+--     else
+--         local name = GetUnitName(arg, true)
+--         if (not name) or (name == lastPlague) then return end
+--         local _, _, _, _, _, _, expires, _, _, _, spellId = UnitDebuff(arg, plagueHop)
+--         if not spellId or not expires then return end
+--         if (spellId == 73787 or spellId == 70338 or spellId == 73785 or spellId == 73786) and expires > 0 and not plagueExpires then
+--             Iaaa_PlagueCooldown:SetCooldown(GetTime(), 5);
+--             plagueExpires = true;
+--             name = lastPlague;
+--         end
+--     end;
+-- end
 
 
 
@@ -498,7 +500,7 @@ function Apply()
     IAAA_ApplySettings()
 	SetVariableValues();
     IAAA_ShowMainWindow();
-    Print(tostring( use[48707]))
+   -- Print( "function Apply()"..tostring( use[48707]))
 end
    --[[ SLASH COMMAND FUNCTION ]]--
 
@@ -563,7 +565,7 @@ function IAAA_ShowMainWindow()
 end
 
 function IAAA_Debag()
-    print (tostring(UISpecialFrames[0]));
+    print ( "IAAA_Debag"..tostring(UISpecialFrames[0]));
 end
 
 local isCOMBAT_LOG_EVENT_UNFILTERED = false;
@@ -595,10 +597,11 @@ function Print(...)
 	return print("|cff00AAFFIAAA|r:", ...)
 end
 
-
 local function send(msg)
     if(debuggingMode)then 
         Print(msg);
+        mainWindowLog:SentMessageInMainWindow( msg )
+      --  KethoEditBox_Show(allHIstory)
     else
         SendChatMessage(msg, OUTPUT);
     end
@@ -642,28 +645,28 @@ function COMBAT_LOG_EVENT_UNFILTERED(
     --     Print(tostring(school  ).." маска школы")
 	-- end
     -- print (tostring(nameScattering))
-    if(spellName == deadeningPlague or nameScattering ==  deadeningPlague) then 
-        if(event == "SPELL_CAST_SUCCESS") then
-            lastPlague = destName;
-            Print ("чума " .. destName)
-            plagueTimer = GetTime();
-            Iaaa_PlagueCooldown:SetCooldown(GetTime(), 5)
-        elseif(event == "SPELL_DISPEL") then
-            lastPlague = nil
-            plagueTimer = 0;
-            Print(srcName .."  dispel ".. destName )
-            plagueExpires = false;
-            Iaaa_PlagueCooldown:SetCooldown(0, 0)
-        end
-    end
-    if(event == "UNIT_DIED")then 
-        if(lastPlague == destName and GetTime()- plagueTimer <= 6)then
-            lastPlague = nil
-            plagueTimer = 0;
-            plagueExpires = false;
-            Iaaa_PlagueCooldown:SetCooldown(0, 0)
-        end
-    end
+    -- if(spellName == deadeningPlague or nameScattering ==  deadeningPlague) then 
+    --     if(event == "SPELL_CAST_SUCCESS") then
+    --         lastPlague = destName;
+    --         Print ("чума " .. destName)
+    --         plagueTimer = GetTime();
+    --         Iaaa_PlagueCooldown:SetCooldown(GetTime(), 5)
+    --     elseif(event == "SPELL_DISPEL") then
+    --         lastPlague = nil
+    --         plagueTimer = 0;
+    --         Print(srcName .."  dispel ".. destName )
+    --         plagueExpires = false;
+    --         Iaaa_PlagueCooldown:SetCooldown(0, 0)
+    --     end
+    -- end
+    -- if(event == "UNIT_DIED")then 
+    --     if(lastPlague == destName and GetTime()- plagueTimer <= 6)then
+    --         lastPlague = nil
+    --         plagueTimer = 0;
+    --         plagueExpires = false;
+    --         Iaaa_PlagueCooldown:SetCooldown(0, 0)
+    --     end
+    -- end
 
 	if UnitInRaid(destName) or UnitInParty(destName) or debuggingMode then
 		if spellName == SOUL_STONE and event == "SPELL_AURA_REMOVED" then
@@ -778,4 +781,75 @@ function COMBAT_LOG_EVENT_UNFILTERED(
 end
 
 
-
+function KethoEditBox_Show(text)
+    if not KethoEditBox then
+        local f = CreateFrame("Frame", "KethoEditBox", UIParent, "DialogBoxFrame")
+        f:SetPoint("CENTER")
+        f:SetSize(600, 500)
+        
+        f:SetBackdrop({
+            bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+            edgeFile = "Interface\\PVPFrame\\UI-Character-PVP-Highlight", -- this one is neat
+            edgeSize = 16,
+            insets = { left = 8, right = 6, top = 8, bottom = 8 },
+        })
+        f:SetBackdropBorderColor(0, .44, .87, 0.5) -- darkblue
+        
+        -- Movable
+        f:SetMovable(true)
+        f:SetClampedToScreen(true)
+        f:SetScript("OnMouseDown", function(self, button)
+            if button == "LeftButton" then
+                self:StartMoving()
+            end
+        end)
+        f:SetScript("OnMouseUp", f.StopMovingOrSizing)
+        
+        -- ScrollFrame
+        local sf = CreateFrame("ScrollFrame", "KethoEditBoxScrollFrame", KethoEditBox, "UIPanelScrollFrameTemplate")
+        sf:SetPoint("LEFT", 16, 0)
+        sf:SetPoint("RIGHT", -32, 0)
+        sf:SetPoint("TOP", 0, -16)
+        sf:SetPoint("BOTTOM", KethoEditBoxButton, "TOP", 0, 0)
+        
+        -- EditBox
+        local eb = CreateFrame("EditBox", "KethoEditBoxEditBox", KethoEditBoxScrollFrame)
+        eb:SetSize(sf:GetSize())
+        eb:SetMultiLine(true)
+        eb:SetHistoryLines(1000);
+        eb:SetAutoFocus(false) -- dont automatically focus
+        eb:SetFontObject("ChatFontNormal")
+        eb:SetScript("OnEscapePressed", function() f:Hide() end)
+        sf:SetScrollChild(eb)
+        
+        -- Resizable
+        f:SetResizable(true)
+        f:SetMinResize(150, 100)
+        
+        local rb = CreateFrame("Button", "KethoEditBoxResizeButton", KethoEditBox)
+        rb:SetPoint("BOTTOMRIGHT", -6, 7)
+        rb:SetSize(16, 16)
+        
+        rb:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
+        rb:SetHighlightTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
+        rb:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Down")
+        
+        rb:SetScript("OnMouseDown", function(self, button)
+            if button == "LeftButton" then
+                f:StartSizing("BOTTOMRIGHT")
+                self:GetHighlightTexture():Hide() -- more noticeable
+            end
+        end)
+        rb:SetScript("OnMouseUp", function(self, button)
+            f:StopMovingOrSizing()
+            self:GetHighlightTexture():Show()
+            eb:SetWidth(sf:GetWidth())
+        end)
+        f:Show()
+    end
+    
+    if text then
+        KethoEditBoxEditBox:SetText(text)
+    end
+    KethoEditBox:Show()
+end

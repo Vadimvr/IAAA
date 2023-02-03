@@ -859,7 +859,7 @@
 			</OnLoad>
 			<OnEvent>
 				IAAA_On(self, event, ...);
-				                UNIT_AURA(...)
+				                <!-- UNIT_AURA(...) -->
 			</OnEvent>
 			<OnMouseDown>
 				self:StartMoving();
