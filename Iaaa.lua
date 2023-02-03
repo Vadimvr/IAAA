@@ -5,7 +5,7 @@
 
 local AddOnName, ns = ...;
 
-local mainWindowLog = ns.log;
+local WindowCombatLog = ns.WindowCombatLog;
 
 local OUTPUT = "RAID"
 local MIN_TANK_HP = 55000
@@ -15,19 +15,19 @@ local DIVINE_PLEA_ID = 54428 -- клятва привет Enoi
 local sacredSacrifice = false;
 local sacredSacrificeId = 64205 -- масс сакра
 local debuggingMode = false;
-local bot	 = "%s%s использует %s!"
-local used	 = "%s%s использует %s!"
-local sw	 = "%s спадает с %s%s!"
-local cast	 = "%s%s использует %s на %s%s!"
+local bot	 = "%s использует %s!"
+local used	 = "%s использует %s!"
+local sw	 = "%s спадает с %s!"
+local cast	 = "%s использует %s на %s!"
 local taunt	 = "%s использует %s на %s!"
-local fade	 = "%s%s %s спадает с %s%s!"
-local feast  = "%s%s готовит %s!"
-local gs	 = "%s%s %s потребляет: %d лечение!"
-local ad	 = "%s%s %s потребляются!"
-local res	 = "%s%s %s воскрешен %s%s!"
-local portal = "%s%s открыт %s!"
-local create = "%s%s создает %s!"
-local dispel = "%s%s %s не удалось рассеять %s%s's %s!"
+local fade	 = "%s %s спадает с %s!"
+local feast  = "%s готовит %s!"
+local gs	 = "%s %s потребляет: %d лечение!"
+local ad	 = "%s %s потребляются!"
+local res	 = "%s %s воскрешен %s!"
+local portal = "%s открыт %s!"
+local create = "%s создает %s!"
+local dispel = "%s %s не удалось рассеять %s's %s!"
 local ss	 = "%s умирает от %s!"
 local lanaTel	 = "Кровавая королева Лана'тель" 
 
@@ -203,7 +203,11 @@ function IAAA_OnLoad()
     IaaaWindow:RegisterEvent("PLAYER_ENTERING_WORLD");
   --  IaaaWindow:RegisterEvent("UNIT_AURA")
     IaaaWindow:Hide();
-    mainWindowLog:ADDON_LOADED()
+    WindowCombatLog:ADDON_LOADED()
+-- TODO авто тест надо удалить!!!
+    IAAASlashCmd("test")
+-- TODO авто тест надо удалить!!! end
+
     SlashCmdList["IAAA"] = IAAASlashCmd;
     SLASH_IAAA1 = "/ia";
     SLASH_IAAA2 = "/iaaa";
@@ -568,7 +572,7 @@ function IAAA_Debag()
     print ( "IAAA_Debag"..tostring(UISpecialFrames[0]));
 end
 
-local isCOMBAT_LOG_EVENT_UNFILTERED = false;
+local isCOMBAT_LOG_EVENT_UNFILTERED = true;
 
 --[[ Спамер ]]--
 
@@ -600,17 +604,18 @@ end
 local function send(msg)
     if(debuggingMode)then 
         Print(msg);
-        mainWindowLog:SentMessageInMainWindow( msg )
-      --  KethoEditBox_Show(allHIstory)
+        --  KethoEditBox_Show(allHIstory)
     else
-        SendChatMessage(msg, OUTPUT);
+       -- SendChatMessage(msg, OUTPUT);
     end
+    WindowCombatLog:AddMessage( msg )
 end
 
-local function icon(name)
-	local n = GetRaidTargetIndex(name)
-	return n and format("{rt%d} ", n) or ""
-end
+-- Иконка в для рейда 
+-- local function icon(name)
+-- 	local n = GetRaidTargetIndex(name)
+-- 	return n and format("{rt%d} ", n) or ""
+-- end
 
 
 function COMBAT_LOG_EVENT_UNFILTERED(
@@ -628,46 +633,7 @@ function COMBAT_LOG_EVENT_UNFILTERED(
 	idScattering, -- ид при рассеивании
     nameScattering, -- заклинание которое рассеяли
     ...)  -- остальные аргументы
-	-- аргументы закончились
-
-    -- if(outputOfInformationDuringDebugging) then
-    --     Print("COMBAT_LOG_EVENT_UNFILTERED")
-    --     Print(tostring(timestamp).." время применения")
-    --     Print(tostring(event ).." тип события")
-    --     Print(tostring(srcGUID ).." GUID источника")
-    --     Print(tostring(srcName ).." имя источника")
-    --     Print(tostring(srcFlags ).." флаги ( для получения инфы враг\\друг)")
-    --     Print(tostring(destGUID  ).." GUID получившего каст")
-    --     Print(tostring(destName  ).." имя получившего каст")
-    --     Print(tostring(destFlags ).." флаги")
-    --     Print(tostring(spellID  ).." id спела")
-    --     Print(tostring(spellName  ).." название спела")
-    --     Print(tostring(school  ).." маска школы")
-	-- end
-    -- print (tostring(nameScattering))
-    -- if(spellName == deadeningPlague or nameScattering ==  deadeningPlague) then 
-    --     if(event == "SPELL_CAST_SUCCESS") then
-    --         lastPlague = destName;
-    --         Print ("чума " .. destName)
-    --         plagueTimer = GetTime();
-    --         Iaaa_PlagueCooldown:SetCooldown(GetTime(), 5)
-    --     elseif(event == "SPELL_DISPEL") then
-    --         lastPlague = nil
-    --         plagueTimer = 0;
-    --         Print(srcName .."  dispel ".. destName )
-    --         plagueExpires = false;
-    --         Iaaa_PlagueCooldown:SetCooldown(0, 0)
-    --     end
-    -- end
-    -- if(event == "UNIT_DIED")then 
-    --     if(lastPlague == destName and GetTime()- plagueTimer <= 6)then
-    --         lastPlague = nil
-    --         plagueTimer = 0;
-    --         plagueExpires = false;
-    --         Iaaa_PlagueCooldown:SetCooldown(0, 0)
-    --     end
-    -- end
-
+	
 	if UnitInRaid(destName) or UnitInParty(destName) or debuggingMode then
 		if spellName == SOUL_STONE and event == "SPELL_AURA_REMOVED" then
 			if not soulStones[destName] then soulStones[destName] = {} end
@@ -685,38 +651,38 @@ function COMBAT_LOG_EVENT_UNFILTERED(
     end
 	
 	if UnitInRaid(srcName) or UnitInParty(srcName) or debuggingMode then
-		if true then -- Проверка на бой UnitAffectingCombat(srcName) or spellID == 49016
+		--if true then -- Проверка на бой UnitAffectingCombat(srcName) or spellID == 49016
 			if event == "SPELL_CAST_SUCCESS"  then
 				if spells[spellID] then
-					send(cast:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+					send(cast:format( srcName, GetSpellLink(spellID), destName))
 				elseif spellID == 19752 then
-					send(cast:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+					send(cast:format( srcName, GetSpellLink(spellID), destName))
 				elseif use[spellID] and UnitHealthMax(srcName) >= MIN_TANK_HP then
                     Print("Имя"..tostring(srcName).."HP"..tostring(UnitHealthMax(srcName)))
-					send(used:format(icon(srcName), srcName, GetSpellLink(spellID)))
+					send(used:format( srcName, GetSpellLink(spellID)))
 				elseif spellID == sacredSacrificeId and sacredSacrifice then
-					send(used:format(icon(srcName), srcName, GetSpellLink(spellID)))
+					send(used:format( srcName, GetSpellLink(spellID)))
 					sacrifice[srcGUID] = true
 				elseif special[spellID] then
-					send(used:format(icon(srcName), srcName, GetSpellLink(spellID)))
+					send(used:format( srcName, GetSpellLink(spellID)))
 				elseif DIVINE_PLEA and spellID == DIVINE_PLEA_ID and UnitManaMax(srcName) >= MIN_HEALER_MANA then
-					send(used:format(icon(srcName), srcName, GetSpellLink(spellID)))
+					send(used:format( srcName, GetSpellLink(spellID)))
 					-- elseif taunts[spellID] and destName == lanaTel then  -- 31789
-					-- 		send(taunt:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+					-- 		send(taunt:format( srcName, GetSpellLink(spellID), destName))
 				end
 				
 			elseif event == "SPELL_AURA_APPLIED" then
 				if spellID == 20233 or spellID == 20236 then
-					send(cast:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+					send(cast:format( srcName, GetSpellLink(spellID), destName))
 				elseif bonus[spellID] then
-					send(used:format(icon(srcName), srcName, GetSpellLink(spellID)))
+					send(used:format( srcName, GetSpellLink(spellID)))
 				elseif spellID == 66233 then
 					if not ad_heal then
-						send(ad:format(icon(srcName), srcName, GetSpellLink(spellID)))
+						send(ad:format( srcName, GetSpellLink(spellID)))
 					end
 					ad_heal = false
 				elseif spellName == HOP and UnitHealthMax(destName) >= MIN_TANK_HP then
-					send(cast:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+					send(cast:format( srcName, GetSpellLink(spellID), destName))
 				elseif taunts[spellID] then  -- 31789
 					send(taunt:format( srcName, GetSpellLink(spellID),  destName))
 				end
@@ -725,56 +691,56 @@ function COMBAT_LOG_EVENT_UNFILTERED(
 				if spellID == 48153 or spellID == 66235 then
 					local amount = ...
 					ad_heal = true
-					send(gs:format(icon(srcName), srcName, GetSpellLink(spellID), amount))
+					send(gs:format( srcName, GetSpellLink(spellID), amount))
 				end
 			end
-		end
+		--end
 		-- мое
 		
 
 		if event == "SPELL_CAST_SUCCESS" then
 			if spellID == HEROISM then
-				send(used:format(icon(srcName), srcName, GetSpellLink(spellID)))
+				send(used:format( srcName, GetSpellLink(spellID)))
             elseif bots[spellID] then 
-				send(bot:format(icon(srcName), srcName, GetSpellLink(spellID)))
+				send(bot:format( srcName, GetSpellLink(spellID)))
 			elseif rituals[spellID] then
-				send(create:format(icon(srcName), srcName, GetSpellLink(spellID)))
+				send(create:format( srcName, GetSpellLink(spellID)))
 			end
 			
 		elseif event == "SPELL_AURA_APPLIED" then
             if bots[spellID] then 
-                send(bot:format(icon(srcName), srcName, GetSpellLink(spellID)))
+                send(bot:format( srcName, GetSpellLink(spellID)))
 			elseif spellName == SOUL_STONE then
 				local _, class = UnitClass(srcName)
 				if class == "WARLOCK" then
-					send(cast:format(icon(srcName), srcName, GetSpellLink(6203), icon(destName), destName))
+					send(cast:format( srcName, GetSpellLink(6203), destName))
 				end
 			end
 			
 		elseif event == "SPELL_CREATE" then
 			if port[spellID] then
-				send(portal:format(icon(srcName), srcName, GetSpellLink(spellID)))
+				send(portal:format( srcName, GetSpellLink(spellID)))
 			-- elseif toys[spellID] then
-			-- 	send(bot:format(icon(srcName), srcName, GetSpellLink(spellID)))
+			-- 	send(bot:format( srcName, GetSpellLink(spellID)))
 			end
 			
 		elseif event == "SPELL_CAST_START" then
 			if feasts[spellID] then
-				send(feast:format(icon(srcName), srcName, GetSpellLink(spellID)))
+				send(feast:format( srcName, GetSpellLink(spellID)))
 			end
 			
 		elseif event == "SPELL_RESURRECT" then
 			if spellName == REBIRTH then
-				send(cast:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+				send(cast:format( srcName, GetSpellLink(spellID), destName))
 			elseif spellName == CABLES then
-				send(res:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName))
+				send(res:format( srcName, GetSpellLink(spellID), destName))
 			end	
 			
 		elseif event == "SPELL_DISPEL_FAILED" then
 			local extraID, extraName = ...
 			local target = fails[extraName]
 			if target or destName == target then
-				send(dispel:format(icon(srcName), srcName, GetSpellLink(spellID), icon(destName), destName, GetSpellLink(extraID)))
+				send(dispel:format( srcName, GetSpellLink(spellID), destName, GetSpellLink(extraID)))
 			end
 		end
 	end
@@ -853,3 +819,46 @@ function KethoEditBox_Show(text)
     end
     KethoEditBox:Show()
 end
+
+
+
+-- аргументы закончились
+
+    -- if(outputOfInformationDuringDebugging) then
+    --     Print("COMBAT_LOG_EVENT_UNFILTERED")
+    --     Print(tostring(timestamp).." время применения")
+    --     Print(tostring(event ).." тип события")
+    --     Print(tostring(srcGUID ).." GUID источника")
+    --     Print(tostring(srcName ).." имя источника")
+    --     Print(tostring(srcFlags ).." флаги ( для получения инфы враг\\друг)")
+    --     Print(tostring(destGUID  ).." GUID получившего каст")
+    --     Print(tostring(destName  ).." имя получившего каст")
+    --     Print(tostring(destFlags ).." флаги")
+    --     Print(tostring(spellID  ).." id спела")
+    --     Print(tostring(spellName  ).." название спела")
+    --     Print(tostring(school  ).." маска школы")
+	-- end
+    -- print (tostring(nameScattering))
+    -- if(spellName == deadeningPlague or nameScattering ==  deadeningPlague) then 
+    --     if(event == "SPELL_CAST_SUCCESS") then
+    --         lastPlague = destName;
+    --         Print ("чума " .. destName)
+    --         plagueTimer = GetTime();
+    --         Iaaa_PlagueCooldown:SetCooldown(GetTime(), 5)
+    --     elseif(event == "SPELL_DISPEL") then
+    --         lastPlague = nil
+    --         plagueTimer = 0;
+    --         Print(srcName .."  dispel ".. destName )
+    --         plagueExpires = false;
+    --         Iaaa_PlagueCooldown:SetCooldown(0, 0)
+    --     end
+    -- end
+    -- if(event == "UNIT_DIED")then 
+    --     if(lastPlague == destName and GetTime()- plagueTimer <= 6)then
+    --         lastPlague = nil
+    --         plagueTimer = 0;
+    --         plagueExpires = false;
+    --         Iaaa_PlagueCooldown:SetCooldown(0, 0)
+    --     end
+    -- end
+    --print("combat log")
