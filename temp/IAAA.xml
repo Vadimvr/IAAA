@@ -1,6 +1,6 @@
 <Ui xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.blizzard.com/wow/ui/">
-	<Script file="IAAA.lua" />
-	<Font virtual="true" outline="NONE">
+	
+	<!-- <Font virtual="true" outline="NONE">
 		<Color r="1" g="1" b="1" />
 	</Font>
 	<Frame name="IaaaWindow" inherits="BackdropTemplate" parent="UIParent" toplevel="true" movable="true" enableKeyboard="true">
@@ -654,7 +654,7 @@
 					</OnClick>
 				</Scripts>
 			</CheckButton>
-			<CheckButton name="AntiMagicShell" inherits="UICheckButtonTemplate" text="Antimagic Armor">
+			<CheckButton name="AntiMagicShell" inherits="UICheckButtonTemplate" text="AntiMagic Shell">
 				<Size x="32" y="32" />
 				<Anchors>
 					<Anchor x="277" y="-230" point="TOPLEFT" />
@@ -854,13 +854,10 @@
 			</Button>
 		</Frames>
 		<Scripts>
-			<OnLoad>
+			<!-- <OnLoad>
 				IAAA_OnLoad();
-			</OnLoad>
-			<OnEvent>
-				IAAA_On(self, event, ...);
-				                <!-- UNIT_AURA(...) -->
-			</OnEvent>
+			</OnLoad> -->
+			<!-- <OnEvent>IAAA_On(self, event, ...);</OnEvent> -->
 			<OnMouseDown>
 				self:StartMoving();
 			</OnMouseDown>
@@ -871,7 +868,7 @@
 				self:Hide();
 			</OnEscapePressed>
 		</Scripts>
-	</Frame>
+	</Frame> -->
 	<!--<Frame name="Iaaa_FrameCooldownPlague" inherits="BackdropTemplate" enableMouse="true" movable="true">
 		<Size x="75" y="75" />
 		<Anchors>

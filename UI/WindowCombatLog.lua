@@ -7,12 +7,8 @@ local lastWidthMainWindow = 500;
 local MainWindow = CreateFrame("Frame", "WindowCombatLog_Frame", UIParent);
 ns.WindowCombatLog = MainWindow;
 
-MainWindow:RegisterEvent("ADDON_LOADED");
-MainWindow:SetScript("OnEvent", function(self, event, ...) return self[event](self, ...) end);
-
 function MainWindow:ADDON_LOADED( addOnName )
     if AddOnName ~= addOnName then return; end;
-    print("Core:ADDON_LOADED");
     CreateMainWindow();
     CreateHideButton(MainWindow) -- главное окно 
     CreateResizableButton(MainWindow) 
@@ -20,20 +16,19 @@ function MainWindow:ADDON_LOADED( addOnName )
     MainWindow:AddMessage( " |cff00ff00 Успешно загружен.|r")
 end
 
-function MainWindow:AddMessage( msg )
+function MainWindow:AddMessage( msg)
+    local a,b,c,d,i,f,g
     local time = time();
     local h , m  =GetGameTime();
     local s = floor(mod(time, 60))
-    MainWindow.messageFrame:AddMessage( string.format("[%02d:%02d:%02d]  ", h,m,s) .. msg)
+    MainWindow.messageFrame:AddMessage( string.format("|cFF9393a8[%02d:%02d:%02d]|r  ", h,m,s) .. msg )
     local count = MainWindow.messageFrame:GetNumMessages();
     MainWindow.scroll:SetValue(count)
     MainWindow.scroll:SetMinMaxValues(0, count)
     MainWindow.messageFrame:ScrollToBottom()
 end
 
--------------------------------------------------------------------------------
 -- Window
--------------------------------------------------------------------------------
 function CreateMainWindow()
     isMaxSize = true;
     MainWindow:SetPoint("TOPRIGHT",0,0)
@@ -52,10 +47,11 @@ function CreateMainWindow()
     MainWindow:SetBackdropBorderColor(0, .44, .87, 0.5) -- darkblue
     
     MainWindow:EnableMouse(true)
-    
+
     -- Movable
     MainWindow:SetMovable(true)
     MainWindow:SetClampedToScreen(false)
+    --MainWindow:SetHyperlinksEnabled(true)
     MainWindow:SetScript("OnMouseDown", function(self, button)
         if button == "LeftButton" then
             MainWindow:StartMoving()
@@ -64,32 +60,11 @@ function CreateMainWindow()
     MainWindow:SetScript("OnMouseUp", MainWindow.StopMovingOrSizing)
     -- Movable
 
-    
-
     MainWindow:EnableMouseWheel(true)
-    MainWindow:SetScript("OnMouseWheel", function(self, delta)
-        print(delta)
-        ineNum = messageFrame:GetCurrentLine()
-
-        local cur_val =  MainWindow.scroll:GetValue()
-        local min_val, max_val =  MainWindow.scroll:GetMinMaxValues()
-        if delta < 0 and cur_val < max_val then
-            cur_val = math.min(max_val, cur_val + 1)
-            MainWindow.scroll:SetValue(cur_val)
-        elseif delta > 0 and cur_val > min_val then
-            cur_val = math.max(min_val, cur_val - 1)
-            if(cur_val == 0) then cur_val = 1; end;
-            print(cur_val)
-            MainWindow.scroll:SetValue(cur_val)
-        end
-    end)
-
     WindowCombatLog_Frame:Show();
 end
 
--------------------------------------------------------------------------------
--- ScrollingMessageFrame
--------------------------------------------------------------------------------
+-- ScrollingMessageFrame 
 function CreteScrollingMessageFrame (frame)
 
 
@@ -99,27 +74,24 @@ function CreteScrollingMessageFrame (frame)
     messageFrame:SetPoint("BOTTOM", frame, "BOTTOM", -20, 20)
     messageFrame:SetPoint("LEFT", frame, "LEFT", 20, 20)
     messageFrame:SetFontObject(GameFontNormal)
-    messageFrame:SetTextColor(1, 1, 1, 1) -- default color
+    messageFrame:SetTextColor( 1.00, 0.49, 0.04,1) -- default color
     messageFrame:SetJustifyH("LEFT")
+    --messageFrame:EnableMouse(true)
     messageFrame:SetHyperlinksEnabled(true)
+    messageFrame:SetScript("OnHyperlinkClick", function(self, link, text, button)
+        SetItemRef(link, text, button, self)
+    end)
     messageFrame:SetFading(false)
     messageFrame:SetMaxLines(500)
-    messageFrame:SetFontObject("ChatFontNormal")
+    messageFrame:SetFont("Fonts\\ARIALN.ttf", 16)
     frame.messageFrame = messageFrame
     
-    for i = 1, 100 do
-    local time = time();
-    local h , m  =GetGameTime();
-    local s = floor(mod(time, 60))
-    frame.messageFrame:AddMessage(" |cff00ff00 Успешно загружен.|r")
-    end
-    -------------------------------------------------------------------------------
     -- ScrollingMessageFrame end
-    -------------------------------------------------------------------------------
     
-    -------------------------------------------------------------------------------
+    
+    
     -- Scroll bar
-    -------------------------------------------------------------------------------
+    
     local scrollBar = CreateFrame("Slider", nil, frame, "UIPanelScrollBarTemplate")
     scrollBar:SetPoint("RIGHT", frame, "RIGHT", -10, 10)
     scrollBar:SetPoint("TOP", frame, "TOP", -50, -40)
@@ -139,7 +111,7 @@ function CreteScrollingMessageFrame (frame)
 
     frame:EnableMouseWheel(true)
     frame:SetScript("OnMouseWheel", function(self, delta)
-        print(delta)
+       -- print(delta)
         ineNum = frame.messageFrame:GetCurrentLine()
 
         local cur_val =  frame.scroll:GetValue()
@@ -150,14 +122,17 @@ function CreteScrollingMessageFrame (frame)
         elseif delta > 0 and cur_val > min_val then
             cur_val = math.max(min_val, cur_val - 1)
             if(cur_val == 0) then cur_val = 1; end;
-            print(cur_val)
+           -- print(cur_val)
             frame.scroll:SetValue(cur_val)
         end
     end)
-
-
 end
--------------------------------------------------------------------------------
+
+
+function OnHyperlinkClick(...)
+    print(...)
+end
+
 -- Hide button
 function CreateHideButton(frame)
     
@@ -175,7 +150,6 @@ function CreateHideButton(frame)
     end)
 end
 
--------------------------------------------------------------------------------
 -- Resize button
 function CreateResizableButton(frame) 
     if frame == nil then print(AddOnName .. " function CreateResizableButton(frame)  frame is nill" ); return; end;

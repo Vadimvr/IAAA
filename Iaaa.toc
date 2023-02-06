@@ -7,6 +7,11 @@
 ## LoadOnDemand: 0
 ## SavedVariables: InformationOnRaid_Config
 
-WindowCombatLog.lua
-IAAA.lua
-IAAA.xml
+Resources\Data.lua
+Resources\TestData.lua
+Resources\Spells.lua
+Resources\MessagePattern.lua
+Cmd\SlashCmd.lua
+UI\WindowCombatLog.lua
+UI\WindowSetting.lua
+Core.lua

@@ -10,15 +10,11 @@
     <OutputPath>.</OutputPath>
   </PropertyGroup>
   <ItemGroup>
-    <Content Include="IAAA.lua">
+    <Content Include="Code.lua">
       <SubType>Code</SubType>
-      <DependentUpon>IAAA.xml</DependentUpon>
     </Content>
     <Content Include="IAAA.toc">
       <SubType>TableOfContents</SubType>
-    </Content>
-    <Content Include="IAAA.xml">
-      <SubType>Frame</SubType>
     </Content>
   </ItemGroup>
   <Import Project="$(DevEnvDir)\Extensions\Tools\MSBuild\AddonStudio\Wow\3.0\WowAddonStudio.targets" />
