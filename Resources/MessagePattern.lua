@@ -6,7 +6,7 @@ ns.used	 	        = "%s использует %s!"
 ns.sw	 	        = "%s спадает с %s!"
 ns.cast	 	        = "%s использует %s на %s!"
 ns.taunt	        = "%s использует %s на %s!"
-
+ns.castICC 	        = "%s использует %s id %s на %s!"
 ns.tauntMissed	    = "%s промазал %s по %s!"
 
 ns.fade	 	        = "%s %s спадает с %s!"
@@ -18,34 +18,34 @@ ns.portal           = "%s открыт %s!"
 ns.create           = "%s создает %s!"
 ns.dispel           = "%s %s не удалось рассеять %s's %s!"
 ns.ss	 	        = "%s умирает. Может встать %s!"
-ns.lanaTel	        = "Кровавая королева Лана'тель" 
+-- ns.lanaTel	        = "Кровавая королева Лана'тель" 
 
-local debuggingMode = true;
-local spells = ns.spellsNew;
+-- local debuggingMode = true;
+-- local spells = ns.spellsNew;
 
 
-local OUTPUT = "RAID"
-local MIN_TANK_HP = 55000
-local MIN_HEALER_MANA = 20000
-local DIVINE_PLEA = false; 
-local DIVINE_PLEA_ID = 54428 -- клятва привет Enoi
-local sacredSacrifice = false;
-local sacredSacrificeId = 64205 -- масс сакра
-local debuggingMode = false;
+-- local OUTPUT = "RAID"
+-- local MIN_TANK_HP = 55000
+-- local MIN_HEALER_MANA = 20000
+-- local DIVINE_PLEA = false; 
+-- local DIVINE_PLEA_ID = 54428 -- клятва привет Enoi
+-- local sacredSacrifice = false;
+-- local sacredSacrificeId = 64205 -- масс сакра
+-- local debuggingMode = false;
 	 
-local sacrifice  = {} -- сюда пойдут id юнитов с диванами и тд
-local soulStones = {} -- сюда пойдут id юнитов с камнями души (лок рес)
-local ad_heal	 = false
+-- local sacrifice  = {} -- сюда пойдут id юнитов с диванами и тд
+-- local soulStones = {} -- сюда пойдут id юнитов с камнями души (лок рес)
+-- local ad_heal	 = false
 
-local deadeningPlague = "Мертвящая чума";
-local deadeningPlagueIsEnabled = true;
-local outputOfInformationDuringDebugging = false;
+-- local deadeningPlague = "Мертвящая чума";
+-- local deadeningPlagueIsEnabled = true;
+-- local outputOfInformationDuringDebugging = false;
 
-local HEROISM	= UnitFactionGroup("player") == "Horde" and 2825 or 32182	-- Героизм\жажда крови
-local REBIRTH 	= GetSpellInfo(20484)										-- Возрождение
-local HOP 		= GetSpellInfo(1022)										-- Длань защиты
-local SOUL_STONE = GetSpellInfo(20707)										-- Воскрешение камнем души
-local CABLES	= GetSpellInfo(54732)		
+-- local HEROISM	= UnitFactionGroup("player") == "Horde" and 2825 or 32182	-- Героизм\жажда крови
+-- local REBIRTH 	= GetSpellInfo(20484)										-- Возрождение
+-- local HOP 		= GetSpellInfo(1022)										-- Длань защиты
+-- local SOUL_STONE = GetSpellInfo(20707)										-- Воскрешение камнем души
+-- local CABLES	= GetSpellInfo(54732)		
 
 
 -- function ns:Send(

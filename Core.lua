@@ -1,167 +1,88 @@
  -- Author      : rvadi
  -- Create Date : 17.10.2022 19:11:49
 
- --[[ Loading the addon ]]--
  ---------------------------
 local AddOnName, ns = ...;
 
-local nicknameColors = {} -- цвет класса по нику
-
-
 local Core = CreateFrame("Frame", AddOnName.."_Window", UIParent);
 local _listWithLinksToAptitudeCheckButton = {}
+local level = 200;
 
 
 ns.Core = Core;
 Core:RegisterEvent("ADDON_LOADED");
 Core:SetScript("OnEvent", function(self, event, ...) return self[event](self, ...) end);
+local debuggingMode = true;
+
+local ldb = LibStub("LibDataBroker-1.1"):NewDataObject("IAAA", {
+	type = "data source",
+	text = "Iaaa",
+	icon = [[Interface\Icons\Ability_Rogue_ShadowDance]],
+})
+local icon = LibStub("LibDBIcon-1.0")
+
 
 function Core:ADDON_LOADED(addOnName)
     if AddOnName ~= addOnName then return; end;
-    Core:load()
-    ns.WindowCombatLog:ADDON_LOADED(addOnName);
+    
+    ns:Init()
+    icon:Register("Iaa", ldb,  {hide = false,})
+    
     ns.WindowSetting:ADDON_LOADED();
-    Core:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+    ns.WindowCombatLog:ADDON_LOADED(addOnName);
+   -- ns.WindowSetting:Hide();
     Core:RegisterEvent("PLAYER_ENTERING_WORLD")
     
     Core:UnregisterEvent("ADDON_LOADED");
     Core:RegisterEvent("PLAYER_LOGOUT");
  
     ns:SetCommands()
-    -- SlashCmdList["IAAA"] = IAAASlashCmd;
-    -- SLASH_IAAA1 = "/ia";
-    -- SLASH_IAAA2 = "/iaaa";
+    ns.WindowSetting:SetFrameLevel(level + 300);
     print("|cff00FFFFInformation about the abilities|r");
-    CreteGetGUIDButton()
-    CreteGetGUIDButton1()
 end
-
 function Core:PLAYER_ENTERING_WORLD()
+    ns.WindowSetting:SetFrameLevel(level + 300);
     local _, instance = IsInInstance();
-    print(instance)
     if instance == "none" then
         Print("|cFFFF0000 отключен.")
+        Core:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+
     else
+        Core:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+        debuggingMode = true
         Print("|cff00ff00 активирован.|r")
     end
 end
 
-function Core:load()
-    if(InformationOnRaid_Config["NicknameColors"]) then 
-        nicknameColors = InformationOnRaid_Config["NicknameColors"];
-    else
-        InformationOnRaid_Config["NicknameColors"] = {}
-    end
-    print("end []", InformationOnRaid_Config["NicknameColors"])
-
+function ldb:OnTooltipShow()
+    GameTooltip:AddLine("Iaaa", 1, .8, 0)
+    GameTooltip:AddLine("Left-Click Show or hide log window.")
+    GameTooltip:AddLine("Shift + Left-Click Show or hide setting window.")
 end
+
+function ldb:OnClick(button)
+	if button == "LeftButton" then
+		if IsShiftKeyDown() then
+           ns.WindowSetting:ShowHide();
+		else
+            ns.WindowCombatLog:ShowHide();
+		end
+	end
+end
+
 
 
 function Core:PLAYER_LOGOUT()
-    print ("PLAYER_LOGIN")
-    InformationOnRaid_Config["NicknameColors"] = nicknameColors
-
-    for k,v in pairs(ns.listWithLinksToAptitudeCheckButton) do 
-        InformationOnRaid_Config["_listWithLinksToAptitudeCheckButton"][k] = v:GetChecked();
-    end
+    ns:Exit()
 end
 
--- кнопки
- function CreteGetGUIDButton()
-    if not GetGUID_TargetButton then
-        local getGUID_TargetButton = CreateFrame("Button", "GetGUID_TargetButton", UIParent,"UIPanelButtonTemplate" )
-        getGUID_TargetButton:SetPoint("TOPLEFT", 50, -80)
-        getGUID_TargetButton:SetSize(40, 20)
-        getGUID_TargetButton:SetText("Guid")
-        getGUID_TargetButton:SetScript("OnMouseDown", function(self, button)
-            if button == "LeftButton" then
-                if( ns.WindowCombatLog:IsVisible()) then  ns.WindowCombatLog:Hide(); else  ns.WindowCombatLog:Show(); end
-            elseif button == "RightButton" then
-                if(ns.WindowSetting:IsVisible()) then ns.WindowSetting:Hide(); else ns.WindowSetting:Show(); end
-            end
-        end)
-        getGUID_TargetButton:Show()
-    end
- end
- function CreteGetGUIDButton1()
-    if not GetGUID_TargetButton1 then
-        local getGUID_TargetButton = CreateFrame("Button", "GetGUID_TargetButton1", UIParent,"UIPanelButtonTemplate" )
-        getGUID_TargetButton:SetPoint("TOPLEFT", 50, -120)
-        getGUID_TargetButton:SetSize(40, 20)
-        getGUID_TargetButton:SetText("47476")
-        getGUID_TargetButton:SetScript("OnMouseDown", function(self, button)
-            if button == "LeftButton" then
-               --  ns.listWithLinksToAptitudeCheckButton[47476]:SetChecked(1);
-               Core:PLAYER_LOGOUT();
-            end
-        end)
-        getGUID_TargetButton:Show()
-    end
- end
--- кнопки
 
-
-
-local OUTPUT = "RAID"
-local MIN_TANK_HP = 55000
-local MIN_HEALER_MANA = 20000
-
-
-local debuggingMode = true;
-	 
 
 local soulStones = {} -- сюда пойдут id юнитов с камнями души (лок рес)
 local fails = {}      -- незнаю что
 
-ns.zealousDefender  = 66233; 
-
 local ad_heal	 = false
-
-local deadeningPlague = "Мертвящая чума";
-local deadeningPlagueIsEnabled = true;
-local outputOfInformationDuringDebugging = false;
-
-
-local REBIRTH 	= GetSpellInfo(20484)										-- Возрождение
-local CABLES	= GetSpellInfo(54732)										-- Гномий дефибриллятор 
 local SOUL_STONE = GetSpellInfo(20707)										-- Воскрешение камнем души
-
-
-local included = true;
-local started = false;
-local spamWhenInAGroup = false;
-
-local isMinHPandMP = false;
-
-function IAAASlashCmd1(iaaaSubcommand)
-    local t = iaaaSubcommand;
-    if(t == "") then 
-        if( ns.WindowSetting:IsVisible()) then  ns.WindowSetting:Hide(); else  ns.WindowSetting:Show(); end
-    elseif(t == "log")then
-        if( ns.WindowCombatLog:IsVisible()) then  ns.WindowCombatLog:Hide(); else  ns.WindowCombatLog:Show(); end
-    elseif(t == "chat")then
-        if(ns.inChat) then
-            Print("|cFFFF0000Вывод сообщений отключен|r чтобы включить |cff00ff00/ia chat.|r.")
-        else
-            Print("|cff00ff00Вывод сообщений активирован|r чтобы отключить |cFFFF0000/ia chat.|r.")
-        end
-       ns.inChat =ns.inChat== false;
-    elseif(t == "raid")then
-        local _, instance = IsInInstance();
-        if not ns.inRaidChat and instance == "raid" then
-            Print("|cff00ff00Вывод сообщений в raid активирован|r чтобы отключить |cFFFF0000/ia raid.|r.")
-            ns.inRaidChat = true;
-        else
-            Print("|cFFFF0000Вывод сообщений в raid отключен|r чтобы включить |cff00ff00/ia raid.|r.")
-            ns.inRaidChat =false
-        end
-    else
-        Print("/ia /iaaa    - Открывает настройки аддона.");
-        Print("/ia log      - Открывает окно логов.");
-        Print("/ia chat     - Вывод сообщений в чат");
-        Print("/ia raid     - Вывод сообщений в райд чат")
-    end
-end
 
 function Print(...)
 	return print("|cff00AAFFIAAA|r:", ...)
@@ -231,6 +152,8 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
         if event == "SPELL_CAST_SUCCESS"  then
             if ns.spells[spellID] then
                 send(ns.cast:format( GetColor(srcGUID,srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
+            elseif ns.icc[spellID] then
+                send(ns.castICC:format( GetColor(srcGUID,srcName), GetSpellLink(spellID), spellID ,GetColor(destGUID, destName)))
             elseif ns.use[spellID] then
                 send(ns.used:format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
             elseif ns.bots[spellID] then 
@@ -275,8 +198,6 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
         elseif event == "SPELL_CREATE" then
 			if ns.port[spellID] then
 				send(ns.portal:format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
-			-- elseif toys[spellID] then
-			-- 	send(ns.bot 	 :format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
 			end
         elseif event == "SPELL_CAST_START" then
 			if ns.feasts[spellID] then
@@ -334,17 +255,16 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
 end
 
 function GetColor(guid, name)
-    if(nicknameColors[guid] == nil)then
+    if(ns.NicknameColors[guid] == nil)then
         local locClass, classFilename =  GetPlayerInfoByGUID(tostring(guid))
         local color = ns:GetColor(classFilename)
-        nicknameColors[guid] = color.. name.. "|r";
+        ns.NicknameColors[guid] = color.. name.. "|r";
     end
     
-    return nicknameColors[guid];
+    return ns.NicknameColors[guid];
 end
 
 function ns:GetColor(classFilename)
-
         local color = "|cFFFFFFFF";
         if (classFilename =="DEATHKNIGHT")then
             color = "|cFFC41E3A"; 

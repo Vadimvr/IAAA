@@ -1,17 +1,24 @@
 ## Interface: 30300
 ## Title: Information about applied abilities by Maraka
 ## Author: Maraka
-## Version: 0.0.1
+## Version: 0.0.6 beta
 ## Notes: Information about applied abilities in raid
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
-## SavedVariables: InformationOnRaid_Config
+## SavedVariables: _Config
 
-Resources\Data.lua
+Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
+Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
+
+Config.lua
+
 Resources\TestData.lua
 Resources\Spells.lua
 Resources\MessagePattern.lua
+
 Cmd\SlashCmd.lua
+
 UI\WindowCombatLog.lua
 UI\WindowSetting.lua
+
 Core.lua

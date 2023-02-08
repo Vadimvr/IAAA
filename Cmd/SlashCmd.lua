@@ -12,10 +12,10 @@ end
 
 function IAAASlashCmd(iaaaSubcommand)
     local t = iaaaSubcommand;
-    if(t == "") then 
-        if( ns.WindowSetting:IsVisible()) then  ns.WindowSetting:Hide(); else  ns.WindowSetting:Show(); end
-    elseif(t == "log")then
-        if( ns.WindowCombatLog:IsVisible()) then  ns.WindowCombatLog:Hide(); else  ns.WindowCombatLog:Show(); end
+    if(t == "")then
+    ns.WindowCombatLog:ShowHide();
+    elseif(t == "s") then 
+        ns.WindowSetting:ShowHide();
     elseif(t == "chat")then
         if(ns.inChat) then
             Print("|cFFFF0000Вывод сообщений отключен|r чтобы включить |cff00ff00/ia chat.|r.")
@@ -34,7 +34,7 @@ function IAAASlashCmd(iaaaSubcommand)
         end
     else
         Print("/ia /iaaa    - Открывает настройки аддона.");
-        Print("/ia log      - Открывает окно логов.");
+        Print("/ia s        - Открывает окно настроек.");
         Print("/ia chat     - Вывод сообщений в чат");
         Print("/ia raid     - Вывод сообщений в райд чат")
     end

@@ -3,51 +3,42 @@ local AddOnName, ns = ...;
 
 local WindowSetting = CreateFrame("Frame", AddOnName.."_WindowSetting", UIParent);
 local width = 800;
-local height = 900;
+local height = 750;
 local distanceBetweenColumns = 60;
 local labelSizeWight = 200;
 local labelSizeHeight = 26;
 local conversionRateOfTextToRealLength = 5;
 local rowHeight = 30;
 
-local _listWithLinksToAptitudeCheckButton = {};
-ns.listWithLinksToAptitudeCheckButton = {} 
+local listWithLinksToAptitudeCheckButton = {} 
 ns.WindowSetting  = WindowSetting;
-function WindowSetting:ADDON_LOADED(addOnName)
+function WindowSetting:ADDON_LOADED()
 
-    WindowSetting:CreateWindowsSetting()
-    WindowSetting:CreateWindowsSettingElements()
-    WindowSetting:CreateApplyButton(WindowSetting)
-    WindowSetting:CreateTestButton(WindowSetting)
-    WindowSetting:CreateHideButton(WindowSetting)
-    LoadSavedSettings()
-    SetValuesInSpellLists()
-    WindowSetting:Show()
+    WindowSetting:CreateWindowsSetting();
+    WindowSetting:CreateWindowsSettingElements();
+    WindowSetting:CreateButtons(WindowSetting);
+    WindowSetting:LoadSavedSettings();
+    SetValuesInSpellLists();
+    print ("WindowSetting:ADDON_LOADED()", ns.ShowSetting)
+    if(ns.ShowSetting) then WindowSetting:Show(); else WindowSetting:Hide() end
 end
 
-function LoadSavedSettings()
-    if(not InformationOnRaid_Config) then InformationOnRaid_Config = {} end;
-
-    if(InformationOnRaid_Config["_listWithLinksToAptitudeCheckButton"]) then 
-        _listWithLinksToAptitudeCheckButton = InformationOnRaid_Config["_listWithLinksToAptitudeCheckButton"] ;
-    else 
-        InformationOnRaid_Config["_listWithLinksToAptitudeCheckButton"] = _listWithLinksToAptitudeCheckButton;
-    end;
-
-    for k,v in pairs(_listWithLinksToAptitudeCheckButton)do
-       if(ns.listWithLinksToAptitudeCheckButton[k]) then
-            ns.listWithLinksToAptitudeCheckButton[k]:SetChecked(1);
+function WindowSetting:ShowHide()
+    if( WindowSetting:IsVisible()) then  WindowSetting:Hide(); else WindowSetting:Show(); end
+    ns.ShowSetting = WindowSetting:IsVisible()==1;
+end
+function WindowSetting:LoadSavedSettings()
+    for k,v in pairs(ns.TrackedSpells)do
+       if(listWithLinksToAptitudeCheckButton[k]) then
+            listWithLinksToAptitudeCheckButton[k]:SetChecked(1);
        end
-    end
-
-    for k,v in pairs(_listWithLinksToAptitudeCheckButton)do
-        if(ns.listWithLinksToAptitudeCheckButton[k]) then
-            ns.listWithLinksToAptitudeCheckButton[k]:SetChecked(1);
-        end
     end
 end
 
 function SetValuesInSpellLists()
+    for k,v in pairs(listWithLinksToAptitudeCheckButton)do
+        ns.TrackedSpells[k]=listWithLinksToAptitudeCheckButton[k]:GetChecked();
+    end
     SetValuesInSpellList(ns.rituals)
     SetValuesInSpellList(ns.spells )
     SetValuesInSpellList(ns.taunts) 
@@ -57,58 +48,67 @@ function SetValuesInSpellLists()
     SetValuesInSpellList(ns.feasts)  
     SetValuesInSpellList(ns.port)
     SetValuesInSpellList(ns.reborn)
+
+    ResetValuesInSpellList(ns.icc)
+    SetValuesInSpellListRaid(ns.icc, 73797) -- 73797, -- жнец душ
+    SetValuesInSpellListRaid(ns.icc, 71726) --  71726, -- укус вампира
 end
 
+function ResetValuesInSpellList(array)
+    for k,v in pairs(array) do
+        array[k] = false;
+    end
+end
+--/dump GetSpellInfo(73797);
+function SetValuesInSpellListRaid(array, key)
+    if(listWithLinksToAptitudeCheckButton[key]and listWithLinksToAptitudeCheckButton[key]:GetChecked())then
+       local spellNameKey, spellRank  = GetSpellInfo(key);
+        for k,v in pairs(array) do
+            local spellName, spellRank = GetSpellInfo( k);
+            if(spellNameKey == spellName)then
+                array[k] = true;
+            end
+        end
+    end
+end
 
 function SetValuesInSpellList(array)
     for k,v in pairs(array)do
-       -- print(k,v,ns.listWithLinksToAptitudeCheckButton[k])
-        if(ns.listWithLinksToAptitudeCheckButton[k]and ns.listWithLinksToAptitudeCheckButton[k]:GetChecked() ) then
+        if(listWithLinksToAptitudeCheckButton[k]and listWithLinksToAptitudeCheckButton[k]:GetChecked() ) then
             array[k] = true;
         else
             array[k] = false;
         end
     end
-    -- for k,v in pairs(array)do
-    --     if(not v)then 
-    --        local name, rank, icon, castTime, minRange, maxRange, spellID, originalIcon     = GetSpellInfo(k)
-   
-    --         ns.WindowCombatLog:AddMessage(k.."   " ..GetSpellLink(k)    )
-    --     end
-    -- end
 end
 
 function  WindowSetting:CreateWindowsSetting()
     WindowSetting:SetPoint("TOPRIGHT",0,0)
-   
     WindowSetting.width  = width
     WindowSetting.height = height
     WindowSetting:SetSize( WindowSetting.width,  WindowSetting.height)
     
     
     WindowSetting:SetBackdrop({
-        bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+        bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark",
         edgeFile = "Interface\\PVPFrame\\UI-Character-PVP-Highlight", -- this one is neat
         edgeSize = 16,
         insets = { left = 8, right = 6, top = 8, bottom = 8 },
     })
-    
+    WindowSetting:SetBackdropBorderColor(0, .44, .87, 0.5) ;
     WindowSetting:EnableMouse(true)
 
     -- Movable
     WindowSetting:SetMovable(true)
     WindowSetting:SetClampedToScreen(false)
-  --  WindowSetting:SetHyperlinksEnabled(true)
     WindowSetting:SetScript("OnMouseDown", function(self, button)
         if button == "LeftButton" then
             WindowSetting:StartMoving()
         end
     end)
-
-    WindowSetting:SetScript("OnMouseUp", WindowSetting.StopMovingOrSizing)
     
+    WindowSetting:SetScript("OnMouseUp", WindowSetting.StopMovingOrSizing)   
 end
-
 
 function WindowSetting:CreateWindowsSettingElements()
     local x = 60;
@@ -118,26 +118,29 @@ function WindowSetting:CreateWindowsSettingElements()
 
     for i, d in pairs(ns.spellsNew1) do
         if type(d) == "table" then
-            for a, b in pairs(d) do
-                local name, rank = GetSpellInfo(a);
-                n = string.len (name);
-               
+            for a = 1, #d do
+                if(type(d[a]) == "number") then        
+                    local name, rank = GetSpellInfo(d[a]);
+                    n = string.len (name);
+                else
+                n = string.len (d[a]);
+                end
                 if(n >stringLength)then 
                     stringLength = n; 
                 end;
             end
         end
     end
---
+
     stringLength = stringLength*conversionRateOfTextToRealLength
 
-
-    for i, d in pairs(ns.spellsNew1) do
-
+    for i = 1 , #ns.NamedCategories do
+        local nameColum = string.lower(ns.NamedCategories[i][2]);
+       -- nameColum =  ns.NamedCategories[i][1]:sub(1,1)..nameColum:sub(2)
         local columnName = WindowSetting:CreateFontString(nil, "OVERLAY", "GameFontNormal");
         columnName:SetPoint("TOPLEFT", x,y);
         columnName:SetSize (labelSizeWight, labelSizeHeight)
-        columnName:SetText(ns:GetColor(i)..i.."|r")
+        columnName:SetText(ns:GetColor(ns.NamedCategories[i][1])..ns.NamedCategories[i][2].."|r")
         columnName:SetJustifyH("LEFT")
         columnName:SetJustifyV("TOP")
         columnName:SetFont("Fonts\\ARIALN.ttf", 18)
@@ -152,48 +155,101 @@ function WindowSetting:CreateWindowsSettingElements()
             y = y - rowHeight;
         end
 
-        if type(d) == "table" then
-            for k,v in pairs(d) do  
-                local name, rank = GetSpellInfo(k)
-                ns.listWithLinksToAptitudeCheckButton[k] = CreateFrame("CheckButton", WindowSetting:GetName().. "_"..k.."_CheckButton", WindowSetting,"ChatConfigCheckButtonTemplate")
-                ns.listWithLinksToAptitudeCheckButton[k]:SetSize(32,32);
-                ns.listWithLinksToAptitudeCheckButton[k]:SetPoint("TOPLEFT", x - 32, y+7 );
-                local FontString = WindowSetting:CreateFontString(nil, "OVERLAY", "GameFontNormal");
-                FontString:SetPoint("TOPLEFT", x,y);
-                FontString:SetSize (labelSizeWight, labelSizeHeight)
-                FontString:SetText(name.. " " .. k)
-                FontString:SetJustifyH("LEFT")
-                FontString:SetJustifyV("TOP")
-                FontString:SetFont("Fonts\\ARIALN.ttf", 16)
-
-                n = string.len (name);
-                if(n >rowLengthOfTheLastColumn)then 
-                    rowLengthOfTheLastColumn = n; 
-                end;
-
-                y = y - rowHeight;
-                if(y < (height - rowHeight)*-1)then 
-                    y = -rowHeight
-                    x = x + stringLength;
-                    rowLengthOfTheLastColumn = 0
+        local isSpells = ns.spellsNew1[ns.NamedCategories[i][1]]
+        for j = 1 , #isSpells do  
+            local k = isSpells[j]
+            local name, rank = GetSpellInfo(k)
+            listWithLinksToAptitudeCheckButton[k] = CreateFrame("CheckButton", WindowSetting:GetName().. "_"..k.."_CheckButton", WindowSetting,"ChatConfigCheckButtonTemplate")
+            listWithLinksToAptitudeCheckButton[k]:SetSize(32,32);
+            listWithLinksToAptitudeCheckButton[k]:SetPoint("TOPLEFT", x - 32, y+7 );
+            listWithLinksToAptitudeCheckButton[k]:SetScript("OnMouseDown", function(self, button)
+               if(button == "RightButton") then
+                    if(name ~= nil) then
+                        SetItemRef(GetSpellLink(k))
+                        local w, h =  ItemRefTooltip:GetSize()
+                        ItemRefTooltip:SetSize(w, h + 20)
+                        ItemRefTooltip:AddLine("|cFFab1f5e".. k .."|r")
+                    end
                 end
+            end) 
+            listWithLinksToAptitudeCheckButton[k]:SetScript("OnLeave", function()
+                ItemRefTooltip:Hide();
+            end) 
+            listWithLinksToAptitudeCheckButton[k]:SetScript("OnMouseUp", function()
+                ItemRefTooltip:Hide();
+            end) 
+            local FontString = WindowSetting:CreateFontString(nil, "OVERLAY", "GameFontNormal");
+            FontString:SetPoint("TOPLEFT", x,y);
+            FontString:SetSize (labelSizeWight, labelSizeHeight)
+            if(name ~= nil) then
+                FontString:SetText("|cFF7d7e8c".. name .."|r")
+                n = string.len (name);
+            else
+                FontString:SetText("|cFF7d7e8c".. k .."|r")
+                n = string.len (k);
+            end
+            FontString:SetJustifyH("LEFT")
+            FontString:SetJustifyV("TOP")
+            FontString:SetFont("Fonts\\ARIALN.ttf", 16)
+            
+
+            if(n >rowLengthOfTheLastColumn)then 
+                rowLengthOfTheLastColumn = n; 
+            end;
+
+            y = y - rowHeight;
+            if(y < (height - rowHeight)*-1)then 
+                y = -rowHeight
+                x = x + stringLength;
+                rowLengthOfTheLastColumn = 0
             end
         end
+       
         if(x > width)then 
-            WindowSetting:SetSize(x +rowLengthOfTheLastColumn* conversionRateOfTextToRealLength, height )
+            WindowSetting:SetSize(x + 10 +rowLengthOfTheLastColumn* conversionRateOfTextToRealLength, height )
         end
     end
 end
 
-local msg = "dssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssssss"
+local PaddingRight  = 25;
+local GapBetweenButtons  = 10;
+local buttonWight = 80
+function  WindowSetting:CreateButtons(frame)
+    frame:SetHeight(frame:GetHeight()+50)
+    WindowSetting:CreateButton(frame, "Apply", buttonWight, function(self, button)
+        if button == "LeftButton" then
+            SetValuesInSpellLists();
+            ns.WindowCombatLog:AddMessage("заклинания обновлены") 
+        end
+    end)
 
+    WindowSetting:CreateButton(frame, "Hide", buttonWight, function(self, button)
+         if button == "LeftButton" then
+            frame:ShowHide();
+        end
+    end)
 
-function WindowSetting:CreateTestButton(frame)
-    local button = CreateFrame("Button", nil, frame,"UIPanelButtonTemplate" )
-    button:SetPoint("BOTTOMRIGHT", -25, 50)
-    button:SetSize(60, 30)
-    button:SetText("Test")
-    button:SetScript("OnMouseDown", function(self, button)
+    WindowSetting:CreateButton(frame, "Select All", buttonWight, function(self, button)
+        if(self.isCheckAll == nil) then
+            self.isCheckAll = true;
+        end
+        if button == "LeftButton" then
+            if(self.isCheckAll) then
+                self:SetText("Hide All")
+                for k,v in pairs(listWithLinksToAptitudeCheckButton) do
+                    v:SetChecked(1);
+                end
+            else
+                self:SetText("Select All")
+                for k,v in pairs(listWithLinksToAptitudeCheckButton) do
+                    v:SetChecked(0);
+                 end
+            end
+            self.isCheckAll = self.isCheckAll== false
+        end
+   end)
+
+    WindowSetting:CreateButton(frame, "Test", buttonWight, function(self, button)
         if button == "LeftButton" then
             SetValuesInSpellLists();
             for i = 1, #ns.data2 do
@@ -210,31 +266,38 @@ function WindowSetting:CreateTestButton(frame)
             end
         end
     end)
-    button:Show()
+
+
+    WindowSetting:CreateButton(frame, "BG +", buttonWight, function(self, button)
+        if button == "LeftButton" then
+            ns.WindowCombatLog:BgPlus();
+        end
+    end)
+    WindowSetting:CreateButton(frame, "BG -", buttonWight, function(self, button)
+        if button == "LeftButton" then
+            ns.WindowCombatLog:BgMinus();
+        end
+    end)
+
+    WindowSetting:CreateButton(frame, "Font +", buttonWight, function(self, button)
+        if button == "LeftButton" then
+            ns.WindowCombatLog:FontPlus();
+        end
+    end)
+    WindowSetting:CreateButton(frame, "Font -", buttonWight, function(self, button)
+        if button == "LeftButton" then
+            ns.WindowCombatLog:FontMinus();
+        end
+    end)
 end
 
-function WindowSetting:CreateApplyButton(frame)
+
+function  WindowSetting:CreateButton(frame, name, wightButton, func)
     local button = CreateFrame("Button", nil, frame,"UIPanelButtonTemplate" )
-    button:SetPoint("BOTTOMRIGHT", -25, 25)
-    button:SetSize(60, 30)
-    button:SetText("Apply")
-    button:SetScript("OnMouseDown", function(self, button)
-        if button == "LeftButton" then
-            SetValuesInSpellLists();
-            ns.WindowCombatLog:AddMessage("заклинания обновлены") 
-        end
-    end)
+    button:SetPoint("BOTTOMRIGHT", -PaddingRight, 20)
+    button:SetSize(wightButton, 30)
+    button:SetText(name)
+    button:SetScript("OnMouseDown", func)
     button:Show()
-end
-function WindowSetting:CreateHideButton(frame)
-    local button = CreateFrame("Button", nil, frame,"UIPanelButtonTemplate" )
-    button:SetPoint("BOTTOMRIGHT", -90, 25)
-    button:SetSize(60, 30)
-    button:SetText("Hide")
-    button:SetScript("OnMouseDown", function(self, button)
-        if button == "LeftButton" then
-            frame:Hide();
-        end
-    end)
-    button:Show()
+    PaddingRight  = PaddingRight + wightButton + GapBetweenButtons;
 end
