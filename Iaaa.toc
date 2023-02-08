@@ -1,5 +1,5 @@
 ## Interface: 30300
-## Title: Information about applied abilities by Maraka
+## Title: IAAA by Maraka
 ## Author: Maraka
 ## Version: 0.0.6 beta
 ## Notes: Information about applied abilities in raid

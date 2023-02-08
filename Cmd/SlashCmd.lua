@@ -13,7 +13,7 @@ end
 function IAAASlashCmd(iaaaSubcommand)
     local t = iaaaSubcommand;
     if(t == "")then
-    ns.WindowCombatLog:ShowHide();
+        ns.WindowCombatLog:ShowHide();
     elseif(t == "s") then 
         ns.WindowSetting:ShowHide();
     elseif(t == "chat")then

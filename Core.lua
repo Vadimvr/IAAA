@@ -141,7 +141,6 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
 		elseif event == "UNIT_DIED" and soulStones[destName] and not UnitIsFeignDeath(destName) then
 			if not soulStones[destName].SoR and (GetTime() - soulStones[destName].time) < 2 then
 				send(ns.ss:format(GetColor(destGUID, destName), GetSpellLink(6203)))
-				--SendChatMessage(ns.ss:format(destName, GetSpellLink(6203)), "RAID_WARNING")
 			end
 			soulStones[destName] = nil
 		end
@@ -205,44 +204,6 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
 			end
         end
 
-        
-		-- if event == "SPELL_CAST_SUCCESS" then
-        --     if ns.bots[spellID] then 
-		-- 		send(ns.bot:format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
-		-- 	elseif ns.rituals[spellID] then
-		-- 		send(ns.create:format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
-		-- 	end
-			
-		-- else
-      --  if event == "SPELL_AURA_APPLIED" then
-            -- if ns.bots[spellID] then 
-            --     send(ns.bot:format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
-			-- elseif spellName == SOUL_STONE then
-			-- 	local _, class = UnitClass(srcName)
-			-- 	if class == "WARLOCK" then
-			-- 		send(ns.cast:format( GetColor(srcGUID,srcName), GetSpellLink(6203), GetColor(destGUID, destName)))
-			-- 	end
-			-- end
-			
-		-- if event == "SPELL_CREATE" then
-		-- 	if ns.port[spellID] then
-		-- 		send(ns.portal:format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
-		-- 	-- elseif toys[spellID] then
-		-- 	-- 	send(ns.bot 	 :format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
-		-- 	end
-			
-		-- elseif event == "SPELL_CAST_START" then
-		-- 	if ns.feasts[spellID] then
-		-- 		send(ns.feast:format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
-		-- 	end
-			
-		-- elseif event == "SPELL_RESURRECT" then
-		-- 	if spellName == REBIRTH then
-		-- 		send(ns.cast:format( GetColor(srcGUID,srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
-		-- 	elseif spellName == CABLES then
-		-- 		send(ns.res:format( GetColor(srcGUID,srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
-		-- 	end	
-			
 		-- elseif event == "SPELL_DISPEL_FAILED" then
 		-- 	local extraID, extraName = ...
         --     print(extraID, extraName)

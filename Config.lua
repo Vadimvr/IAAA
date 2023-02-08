@@ -2,6 +2,12 @@ local AddOnName, ns = ...;
 
 ns._listWithLinksToAptitudeCheckButton = {}
 
+
+ns.SettingInWindowsSeting  = {
+    "Chat" = false,
+    "Raid" = false,
+    
+} 
 -- windows setting
     ns.FontSizeWindowLog = 16; 
     ns.AlphaBackGround = 0.3;
