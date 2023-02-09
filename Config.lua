@@ -2,18 +2,24 @@ local AddOnName, ns = ...;
 
 ns._listWithLinksToAptitudeCheckButton = {}
 
-
-ns.SettingInWindowsSeting  = {
-    "Chat" = false,
-    "Raid" = false,
-    
-} 
+ns.sizeButtons = 15;-- hide show close
+ns.X_Offset_WindowsCombatLog = 69;
+ns.Y_Offset_WindowsCombatLog = 14;
+-- ns.SettingInWindowsSetting  = 
+-- {
+--     "Chat" = false,
+--     "Raid" = false,
+-- } 
 -- windows setting
     ns.FontSizeWindowLog = 16; 
     ns.AlphaBackGround = 0.3;
+    
     ns.ShowLog =true;
+    ns.ShowLogMineralize = false;
+
     ns.ShowSetting = true;
     ns.ShowMinimapIcon = false;
+
 --
 
 -- data and spells
@@ -29,6 +35,9 @@ function ns:Init()
 -- Show log window
     if(_Config.ShowLog == nil) then _Config.ShowLog = true; end
     ns.ShowLog = _Config.ShowLog;
+    -- Show log window
+    if(_Config.ShowLogMineralize == nil) then _Config.ShowLogMineralize = false; end
+    ns.ShowLogMineralize = _Config.ShowLogMineralize;
 --
 -- Show setting window
     if(_Config.ShowSetting == nil) then _Config.ShowSetting = true; end
@@ -81,6 +90,7 @@ function ns:Exit()
     if(not _Config) then _Config = {} end;
 
    _Config.ShowLog = ns.ShowLog; 
+   _Config.ShowLogMineralize = ns.ShowLogMineralize;
    _Config.ShowSetting =  ns.ShowSetting; 
     _Config.ShowMinimapIcon = ns.ShowMinimapIcon;
 

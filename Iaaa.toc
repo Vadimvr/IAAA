@@ -19,6 +19,7 @@ Resources\MessagePattern.lua
 Cmd\SlashCmd.lua
 
 UI\WindowCombatLog.lua
+UI\MinimizeWindowsCombatLog.lua
 UI\WindowSetting.lua
 
 Core.lua

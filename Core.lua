@@ -38,9 +38,11 @@ function Core:ADDON_LOADED(addOnName)
  
     ns:SetCommands()
     ns.WindowSetting:SetFrameLevel(level + 300);
+
     print("|cff00FFFFInformation about the abilities|r");
 end
 function Core:PLAYER_ENTERING_WORLD()
+    ns.WindowCombatLog:Pos()
     ns.WindowSetting:SetFrameLevel(level + 300);
     local _, instance = IsInInstance();
     if instance == "none" then
@@ -202,8 +204,15 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
 			if ns.feasts[spellID] then
 				send(ns.feast:format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
 			end
-        end
+        elseif event == "SPELL_DISPEL" then
+            print("SPELL_DISPEL",ns.dispels, spellID)
 
+			if ns.dispels[spellID] then
+				send(ns.dispel:format( GetColor(srcGUID,srcName), GetSpellLink(spellID),  GetSpellLink(idScattering) ,GetColor(destGUID, destName)))
+			end
+        end
+-- ns.dispel           = "%s %s рассеивает %s с %s!"
+-- ns.dispelFail       = "%s %s не удалось рассеять %s's %s!"
 		-- elseif event == "SPELL_DISPEL_FAILED" then
 		-- 	local extraID, extraName = ...
         --     print(extraID, extraName)
