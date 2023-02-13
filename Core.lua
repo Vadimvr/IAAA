@@ -26,7 +26,7 @@ function Core:ADDON_LOADED(addOnName)
     if AddOnName ~= addOnName then return; end;
     
     ns:Init()
-    icon:Register("Iaa", ldb,  {hide = false,})
+    icon:Register("Iaaa", ldb,  {hide = false,})
     
     ns.WindowSetting:ADDON_LOADED();
     ns.WindowCombatLog:ADDON_LOADED(addOnName);
@@ -38,28 +38,27 @@ function Core:ADDON_LOADED(addOnName)
  
     ns:SetCommands()
     ns.WindowSetting:SetFrameLevel(level + 300);
-
-    print("|cff00FFFFInformation about the abilities|r");
+    print("|cff00FFFF".. ns.L["Information about the abilities"].."|r");
 end
 function Core:PLAYER_ENTERING_WORLD()
     ns.WindowCombatLog:Pos()
     ns.WindowSetting:SetFrameLevel(level + 300);
     local _, instance = IsInInstance();
     if instance == "none" then
-        Print("|cFFFF0000 отключен.")
+        Print("|cFFFF0000".. ns.L["turned off"].. "|r")
         Core:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 
     else
         Core:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
         debuggingMode = true
-        Print("|cff00ff00 активирован.|r")
+        Print("|cff00ff00 ".. ns.L["turned on"].. "|r")
     end
 end
 
 function ldb:OnTooltipShow()
     GameTooltip:AddLine("Iaaa", 1, .8, 0)
-    GameTooltip:AddLine("Left-Click Show or hide log window.")
-    GameTooltip:AddLine("Shift + Left-Click Show or hide setting window.")
+    GameTooltip:AddLine("Left-Click"..ns.L["Show or hide log window."])
+    GameTooltip:AddLine("Shift + Left-Click "..ns.L["Show or hide setting window."])
 end
 
 function ldb:OnClick(button)
@@ -205,14 +204,14 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
 				send(ns.feast:format( GetColor(srcGUID,srcName), GetSpellLink(spellID)))
 			end
         elseif event == "SPELL_DISPEL" then
-            print("SPELL_DISPEL",ns.dispels, spellID)
+            -- print("SPELL_DISPEL",ns.dispels, spellID)
 
 			if ns.dispels[spellID] then
 				send(ns.dispel:format( GetColor(srcGUID,srcName), GetSpellLink(spellID),  GetSpellLink(idScattering) ,GetColor(destGUID, destName)))
 			end
         end
--- ns.dispel           = "%s %s рассеивает %s с %s!"
--- ns.dispelFail       = "%s %s не удалось рассеять %s's %s!"
+        -- ns.dispel           = "%s %s рассеивает %s с %s!"
+        -- ns.dispelFail       = "%s %s не удалось рассеять %s's %s!"
 		-- elseif event == "SPELL_DISPEL_FAILED" then
 		-- 	local extraID, extraName = ...
         --     print(extraID, extraName)

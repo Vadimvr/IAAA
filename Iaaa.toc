@@ -3,6 +3,7 @@
 ## Author: Maraka
 ## Version: 0.0.6 beta
 ## Notes: Information about applied abilities in raid
+## Notes-ruRU: Измеритель урона.
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
 ## SavedVariables: _Config
@@ -10,6 +11,7 @@
 Libs\LibDataBroker-1.1\LibDataBroker-1.1.lua
 Libs\LibDBIcon-1.0\LibDBIcon-1.0.lua
 
+Locales\Locales.xml
 Config.lua
 
 Resources\TestData.lua

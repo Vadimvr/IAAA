@@ -18,13 +18,13 @@ function MinimizeWindowsCombatLog:ADDON_LOADED(frameShow,func)
     
     local offset_x = 0;
     local offset_y = 0;    
-    CreateButton(self, ns.sizeButtons,offset_x,offset_y,"Interface\\Addons\\IAAA\\Textures\\icon-close.tga" ,
+    MinimizeWindowsCombatLog.buttonClose=CreateButton(self, ns.sizeButtons,offset_x,offset_y,"Interface\\Addons\\IAAA\\Textures\\icon-close.tga" ,
     function(...)
          self:Hide(); 
          ns.ShowLogMineralize = false;
     end )
     offset_x = offset_x - ns.sizeButtons*1.3
-    CreateButton(self, ns.sizeButtons,offset_x,offset_y, "Interface\\Addons\\IAAA\\Textures\\icon-show.tga" , func)
+    MinimizeWindowsCombatLog.buttonShow= CreateButton(self, ns.sizeButtons,offset_x,offset_y, "Interface\\Addons\\IAAA\\Textures\\icon-show.tga" , func)
     offset_x = offset_x - ns.sizeButtons*1.3
     
     -- Move
@@ -43,7 +43,10 @@ function MinimizeWindowsCombatLog:ADDON_LOADED(frameShow,func)
         MinimizeWindowsCombatLog:StopMovingOrSizing()
         MinimizeWindowsCombatLog:Pos()
     end)
+    
+    MinimizeWindowsCombatLog:SetTooltip();
 
+    
     if(ns.ShowLogMineralize) then 
         self:Show()
     else
@@ -51,7 +54,36 @@ function MinimizeWindowsCombatLog:ADDON_LOADED(frameShow,func)
     end
 end
 
+function  MinimizeWindowsCombatLog:SetTooltip()
 
+    -- MinimizeWindowsCombatLog.buttonClose:SetScript("OnEnter", function()
+    --     GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+    --     GameTooltip:AddLine("Закрыть")
+    --     GameTooltip:Show()
+    -- end)
+    -- MinimizeWindowsCombatLog.buttonClose:SetScript("OnLeave", function()
+    --     GameTooltip:Hide()
+    -- end)
+
+    -- MinimizeWindowsCombatLog.buttonShow:SetScript("OnEnter", function()
+    --     GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+    --     GameTooltip:AddLine("Открыть комат лог")
+    --     GameTooltip:Show()
+    -- end)
+    -- MinimizeWindowsCombatLog.buttonShow:SetScript("OnLeave", function()
+    --     GameTooltip:Hide()
+    -- end)
+
+
+    -- MinimizeWindowsCombatLog.buttonMove:SetScript("OnEnter", function()
+    --     GameTooltip:SetOwner(self, "ANCHOR_CURSOR")
+    --     GameTooltip:AddLine("Переместить")
+    --     GameTooltip:Show()
+    -- end)
+    -- MinimizeWindowsCombatLog.buttonMove:SetScript("OnLeave", function()
+    --     GameTooltip:Hide()
+    -- end)
+end
 
 function  MinimizeWindowsCombatLog:CreateButton( frame, size, offset_x, offset_y, pathToTextures , func)
     local button = CreateFrame("Button", nil, frame)

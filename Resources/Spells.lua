@@ -508,20 +508,20 @@ ns.spellsNew1 = {
 
 
 ns.NamedCategories = {
-    {"DEATHKNIGHT", "Рыцарь смерти"},
-    {"DRUID","Друид"},
-    {"HUNTER","Охотник"},
-    {"MAGE","Маг"},
-    {"PALADIN","Паладин"},
-    {"PRIEST","Жрец"},
-    {"ROGUE","Разбойник"},
-    {"SHAMAN","Шаман"},
-    {"WARLOCK","Чернокнижник"},
-    {"WARRIOR","Вар"},
-    {"DISPELS","Расеивания"},
-    {"Engineering","Инженеры"},
-    {"Accessories","Аксессуары"},
-    {"MagicPortals","Порталы магов" },
-    {"Food","Еда"},
-    {"ICC25HM","ЦЛК"},
+    {"DEATHKNIGHT", ns.L["DEATHKNIGHT"]},
+    {"DRUID", ns.L["DRUID"]},
+    {"HUNTER", ns.L["HUNTER"]},
+    {"MAGE", ns.L["MAGE"]},
+    {"PRIEST", ns.L["PRIEST"]},
+    {"ROGUE", ns.L["ROGUE"]},
+    {"SHAMAN", ns.L["SHAMAN"]},
+    {"WARLOCK", ns.L["WARLOCK"]},
+    {"WARRIOR", ns.L["WARRIOR"]},
+    {"Engineering",ns.L["Engineering"]},
+    {"Accessories",ns.L["Accessories"] },
+    {"MagicPortals",ns.L["MagicPortals"]},
+    {"Food",ns.L["Food"]},
+    {"ICC25HM",ns.L["ICC25HM"]},
 }
+
+   

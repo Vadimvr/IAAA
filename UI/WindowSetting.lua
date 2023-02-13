@@ -1,6 +1,5 @@
 local AddOnName, ns = ...;
 
-
 local WindowSetting = CreateFrame("Frame", AddOnName.."_WindowSetting", UIParent);
 local width = 800;
 local height = 750;
@@ -19,7 +18,6 @@ function WindowSetting:ADDON_LOADED()
     WindowSetting:CreateButtons(WindowSetting);
     WindowSetting:LoadSavedSettings();
     SetValuesInSpellLists();
-    print ("WindowSetting:ADDON_LOADED()", ns.ShowSetting)
     if(ns.ShowSetting) then WindowSetting:Show(); else WindowSetting:Hide() end
 end
 
@@ -216,31 +214,31 @@ local GapBetweenButtons  = 10;
 local buttonWight = 80
 function  WindowSetting:CreateButtons(frame)
     frame:SetHeight(frame:GetHeight()+50)
-    WindowSetting:CreateButton(frame, "Apply", buttonWight, function(self, button)
+    WindowSetting:CreateButton(frame, ns.L["Apply"], buttonWight, function(self, button)
         if button == "LeftButton" then
             SetValuesInSpellLists();
             ns.WindowCombatLog:AddMessage("заклинания обновлены") 
         end
     end)
 
-    WindowSetting:CreateButton(frame, "Hide", buttonWight, function(self, button)
+    WindowSetting:CreateButton(frame, ns.L["Hide"], buttonWight, function(self, button)
          if button == "LeftButton" then
             frame:ShowHide();
         end
     end)
 
-    WindowSetting:CreateButton(frame, "Select All", buttonWight, function(self, button)
+    WindowSetting:CreateButton(frame, ns.L["Select All"], buttonWight, function(self, button)
         if(self.isCheckAll == nil) then
             self.isCheckAll = true;
         end
         if button == "LeftButton" then
             if(self.isCheckAll) then
-                self:SetText("Hide All")
+                self:SetText( ns.L["Hide All"])
                 for k,v in pairs(listWithLinksToAptitudeCheckButton) do
                     v:SetChecked(1);
                 end
             else
-                self:SetText("Select All")
+                self:SetText( ns.L["Select All"])
                 for k,v in pairs(listWithLinksToAptitudeCheckButton) do
                     v:SetChecked(0);
                  end
@@ -249,17 +247,15 @@ function  WindowSetting:CreateButtons(frame)
         end
    end)
 
-    WindowSetting:CreateButton(frame, "Test", buttonWight, function(self, button)
+    WindowSetting:CreateButton(frame, ns.L["Test"], buttonWight, function(self, button)
         if button == "LeftButton" then
             SetValuesInSpellLists();
             for i = 1, #ns.data2 do
                 local a = ns.data2[i];
                 ns.Core:COMBAT_LOG_EVENT_UNFILTERED(a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11],a[12],a[13],a[14],a[15],a[16],a[17],a[18],a[19]);
             end
-            ns.WindowCombatLog:AddMessage("Тест") 
+            ns.WindowCombatLog:AddMessage(ns.L["Test"]) 
         elseif button == "RightButton" then 
-            print("RightButton")
-            print(#ns.data2)
             for i = 1, #ns.data2 do
                 local a = ns.data2[i];
                 ns.Core:COMBAT_LOG_EVENT_UNFILTERED(a[1],a[2],a[3],a[4],a[5],a[6],a[7],a[8],a[9],a[10],a[11],a[12],a[13],a[14],a[15],a[16],a[17],a[18],a[19]);
@@ -268,23 +264,23 @@ function  WindowSetting:CreateButtons(frame)
     end)
 
 
-    WindowSetting:CreateButton(frame, "BG +", buttonWight, function(self, button)
+    WindowSetting:CreateButton(frame, ns.L["BG +"], buttonWight, function(self, button)
         if button == "LeftButton" then
             ns.WindowCombatLog:BgPlus();
         end
     end)
-    WindowSetting:CreateButton(frame, "BG -", buttonWight, function(self, button)
+    WindowSetting:CreateButton(frame, ns.L["BG -"], buttonWight, function(self, button)
         if button == "LeftButton" then
             ns.WindowCombatLog:BgMinus();
         end
     end)
 
-    WindowSetting:CreateButton(frame, "Font +", buttonWight, function(self, button)
+    WindowSetting:CreateButton(frame, ns.L["Font +"], buttonWight, function(self, button)
         if button == "LeftButton" then
             ns.WindowCombatLog:FontPlus();
         end
     end)
-    WindowSetting:CreateButton(frame, "Font -", buttonWight, function(self, button)
+    WindowSetting:CreateButton(frame, ns.L["Font -"], buttonWight, function(self, button)
         if button == "LeftButton" then
             ns.WindowCombatLog:FontMinus();
         end

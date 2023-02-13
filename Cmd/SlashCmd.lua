@@ -18,24 +18,25 @@ function IAAASlashCmd(iaaaSubcommand)
         ns.WindowSetting:ShowHide();
     elseif(t == "chat")then
         if(ns.inChat) then
-            Print("|cFFFF0000Вывод сообщений отключен|r чтобы включить |cff00ff00/ia chat.|r.")
+            Print("|cFFFF0000".. ns.L["Message output is disabled."].." |r".. ns.L["To turn on, type"].. " |cff00ff00/ia chat.|r.")
         else
-            Print("|cff00ff00Вывод сообщений активирован|r чтобы отключить |cFFFF0000/ia chat.|r.")
+            Print("|cff00ff00".. ns.L["Message output is activated."].." |r".. ns.L["To turn off, type"].. " |cFFFF0000/ia chat.|r.")
         end
        ns.inChat =ns.inChat== false;
     elseif(t == "raid")then
         local _, instance = IsInInstance();
         if not ns.inRaidChat and instance == "raid" then
-            Print("|cff00ff00Вывод сообщений в raid активирован|r чтобы отключить |cFFFF0000/ia raid.|r.")
+            Print("|cff00ff00".. ns.L["The output of messages to the raid is activated."].." |r".. ns.L["To turn off, type"].. " |cFFFF0000/ia raid.|r.")
             ns.inRaidChat = true;
         else
-            Print("|cFFFF0000Вывод сообщений в raid отключен|r чтобы включить |cff00ff00/ia raid.|r.")
+            Print("|cFFFF0000".. ns.L["The output of messages in raid is disabled."].." |r".. ns.L["To turn on, type"].. " |cff00ff00/ia raid.|r.")
             ns.inRaidChat =false
         end
     else
-        Print("/ia /iaaa    - Открывает настройки аддона.");
-        Print("/ia s        - Открывает окно настроек.");
-        Print("/ia chat     - Вывод сообщений в чат");
-        Print("/ia raid     - Вывод сообщений в райд чат")
+        Print("/ia      - "..ns.L["Opens the logs window."]);
+        Print("/ia s    - "..ns.L["Opens the settings window."]);
+        Print("/ia chat - "..ns.L["Output of messages to the chat."]);
+        Print("/ia raid - "..ns.L["Output of messages to the ride chat."]);
     end
 end
+

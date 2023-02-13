@@ -14,10 +14,10 @@ function MainWindow:ADDON_LOADED( addOnName )
     if AddOnName ~= addOnName then return; end;
     MainWindow:CreateMainWindow();
     MainWindow:CreateButtons(self);
-    CreteScrollingMessageFrame(self)
-    MainWindow:AddMessage( " |cff00ff00 Успешно загружен.|r")
+    CreateResizableButton(self); 
+    CreteScrollingMessageFrame(self);
+    MainWindow:AddMessage( " |cff00ff00" ..ns.L["Successfully uploaded."].."|r");
     if(ns.ShowLog)then MainWindow:Show(); else MainWindow:Hide() end;
-    print(" MainWindow:ADDON_LOADED( addOnName )")
     ns.MinimizeWindowsCombatLog:ADDON_LOADED(self, function(...) self:ShowHide() end);
 end
 
@@ -170,7 +170,6 @@ end
 function  MainWindow:CreateButtons( frame)
     local offset_x = -14
     local offset_y =-14 
-    print(frame)
     CreateButton(frame, ns.sizeButtons, offset_x, offset_y, "Interface\\Addons\\IAAA\\Textures\\icon-close.tga", function(...) 
         frame:ShowHide()
      end) -- close window
@@ -224,6 +223,7 @@ function CreateResizableButton(frame)
         frame.width, frame.height =  frame:GetSize();
         MainWindow:Pos();
     end)
+    
 end
 
 
