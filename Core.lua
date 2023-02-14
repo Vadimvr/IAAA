@@ -99,18 +99,19 @@ local function send(msg)
     elseif ns.inRaidChat then
         SendChatMessage(msg, "RAID")
     end
-
-
     ns.WindowCombatLog:AddMessage(ns:GetTimeHH_MM_SS() .. msg)
 end
 
+function ns:Send(msg)
+    send(msg)
+end
 
 function Core:COMBAT_LOG_EVENT_UNFILTERED(
     timestamp, -- время применения
     event, -- тип события
     srcGUID, -- GUID источника
     srcName, -- имя источника
-    srcFlags, -- флаги ( для получения инфы враг\\друг)
+    srcFlags, -- флаги
     destGUID, -- GUID получившего каст
     destName, -- имя получившего каст
     destFlags, -- флаги
@@ -127,7 +128,7 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
     --     Print(tostring(event ).." тип события")
     --     Print(tostring(srcGUID ).." GUID источника")
     --     Print(tostring(srcName ).." имя источника")
-    --     Print(tostring(srcFlags ).." флаги ( для получения инфы враг\\друг)")
+    --     Print(tostring(srcFlags ).." флаги
     --     Print(tostring(destGUID  ).." GUID получившего каст")
     --     Print(tostring(destName  ).." имя получившего каст")
     --     Print(tostring(destFlags ).." флаги")

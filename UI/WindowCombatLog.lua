@@ -10,7 +10,7 @@ local MainWindow = CreateFrame("Frame", AddOnName .. "_WindowCombatLog_Frame", U
 MainWindow.lines = 500;
 local buffer = {}
 local nexIndexBuffer = 1; -- индекс в буфере  куда будем вставлять элемент
-local endIndexBuffer = 100 -- MainWindow.lines; -- размер буфера;
+local bufferSize = 100 -- MainWindow.lines; -- размер буфера;
 
 ns.WindowCombatLog = MainWindow;
 
@@ -22,13 +22,8 @@ function MainWindow:ADDON_LOADED(addOnName)
     CreateResizableButton(self);
     CreteScrollingMessageFrame(self);
 
-    -- for x = 1, #ns.HistoryCombatLogBetweenSessions do
-    --     MainWindow:AddMessage(ns.HistoryCombatLogBetweenSessions[x]);
-    --     -- MainWindow:AddMessageInBuffer( ns.HistoryCombatLogBetweenSessions[x])
-    -- end
-    for x = 1, 58 do
-        MainWindow:AddMessage("message " .. x);
-        -- MainWindow:AddMessageInBuffer( ns.HistoryCombatLogBetweenSessions[x])
+    for x = 1, #ns.HistoryCombatLogBetweenSessions do
+        MainWindow:AddMessage(ns.HistoryCombatLogBetweenSessions[x]);
     end
 
     MainWindow:AddMessage(ns:GetTimeHH_MM_SS() .. "|cff00ff00" .. ns.L["Successfully uploaded."] .. "|r");
@@ -39,13 +34,12 @@ end
 function MainWindow:AddMessage(message)
     MainWindow:AddMessageInBuffer(message)
     MainWindow.messageFrame:AddMessage(message)
-    local count =  MainWindow.messageFrame:GetNumMessages(); -- устанавливаем  слайдер на последний элемент
-   -- print(SliderGotoDown, MainWindow.messageFrame:GetNumMessages(), MainWindow.messageFrame:GetCurrentLine(),message:sub( 1, 50) )
+    local count = MainWindow.messageFrame:GetNumMessages(); -- устанавливаем  слайдер на последний элемент
+    MainWindow.scroll:SetMinMaxValues(1, count)
     if SliderGotoDown then
         MainWindow.scroll:SetValue(count)
         MainWindow.messageFrame:ScrollToBottom()
     end
-    MainWindow.scroll:SetMinMaxValues(1, MainWindow.messageFrame:GetNumMessages())
 end
 
 function MainWindow:Clear()
@@ -58,10 +52,10 @@ function MainWindow:Clear()
 end
 
 function MainWindow:AddMessageInBuffer(msg)
-    if (nexIndexBuffer >= endIndexBuffer) then
+    if (nexIndexBuffer > bufferSize) then
         nexIndexBuffer = 1
     end
-    print (nexIndexBuffer, msg)
+    -- print(nexIndexBuffer, msg)
     buffer[nexIndexBuffer] = msg;
     nexIndexBuffer = nexIndexBuffer + 1;
 end
@@ -69,7 +63,7 @@ end
 function MainWindow:SaveHistoryBetweenSessions()
     ns.HistoryCombatLogBetweenSessions = {}
     local temIndex = nexIndexBuffer - 1; -- вернуться на 1 назад
-    for i = 1, endIndexBuffer do
+    for i = 1, bufferSize do
         if buffer[temIndex] ~= nil then
             ns.HistoryCombatLogBetweenSessions[i] = buffer[temIndex];
         else
@@ -77,7 +71,7 @@ function MainWindow:SaveHistoryBetweenSessions()
         end
         temIndex = temIndex - 1;
         if (temIndex == 0) then
-            temIndex = endIndexBuffer; -- если индекс становиться 0 то мы переключаемся на последний элемент буфера
+            temIndex = bufferSize; -- если индекс становиться 0 то мы переключаемся на последний элемент буфера
         end
     end
 
@@ -92,49 +86,58 @@ function MainWindow:SaveHistoryBetweenSessions()
 end
 
 function MainWindow:PrintBuffer()
-    print(MainWindow.scroll:GetValue())
-
     local temIndex = nexIndexBuffer - 1; -- вернуться на 1 назад
     --    print("#buffer",#buffer)
-    for i = 1,math.min(10, #buffer )do
-        if buffer[temIndex] ~= nil then
-            print("temIndex = ", temIndex, "  i = ", i, buffer[temIndex])
-        else
-            print("temIndex = ", temIndex, "  i = ", i, "end")
-            return;
-        end
+    for i = 1, #buffer do
+        print("temIndex = ", temIndex, "  i = ", i, buffer[temIndex])
         temIndex = temIndex - 1;
         if (temIndex == 0) then
             temIndex = #buffer; -- если индекс становиться 0 то мы переключаемся на последний элемент буфера
         end
     end
+    local cur_val = MainWindow.scroll:GetValue()
+    local min_val, max_val = MainWindow.scroll:GetMinMaxValues()
+    print("cur_val = ", cur_val, "  min_val = ", min_val, "  max_val = ", max_val)
 end
 
-
 function MainWindow:PrintInChat()
-   --  print(MainWindow.messageFrame:GetCurrentLine(),MainWindow.scroll:GetValue(),MainWindow.messageFrame:GetCurrentLine() - MainWindow.scroll:GetValue() )
-    if (MainWindow.messageFrame:GetCurrentLine() - MainWindow.scroll:GetValue() > endIndexBuffer) then
-        print("позиция больше буфера")
+    local cur_val = MainWindow.scroll:GetValue()
+    local min_val, max_val = MainWindow.scroll:GetMinMaxValues()
+
+
+    if (max_val - cur_val > bufferSize) then -- так как в буфере только bufferSize элементов
+        print("Индекс за пределами буфера")
         return;
     end
 
-    local startIndexPrint = (MainWindow.messageFrame:GetCurrentLine() - MainWindow.scroll:GetValue()) + 1;
-    --local endIndexPrint = startIndexPrint + printLineSize;
-    --print("startIndexPrint = ", startIndexPrint, "  endIndexPrint = ", endIndexPrint,nexIndexBuffer , "size",#buffer )
-    local temIndex = nexIndexBuffer - 1; -- вернуться на 1 назад
-    local arrIndex = math.min(printLineSize, #buffer);
-   -- print("arrIndex", arrIndex, "temIndex", temIndex, startIndexPrint)
-    local res = {};
-    for i = 1, #buffer do
-        if (i >= startIndexPrint and arrIndex >= 1) then
-            if buffer[temIndex] ~= nil then
-                res[arrIndex] = buffer[temIndex];
-                arrIndex = arrIndex - 1;
-                --print( "i= ",i," arrIndex = ", arrIndex, buffer[temIndex])
-            else
-                --print("end")
-                return;
-            end
+
+
+    local count      = 10;
+    local startIndex = max_val - cur_val; -- индекс с которого начнем это число не будет больше bufferSize так как в начале сделали проверку.
+    local arrIndex   = math.min((#buffer - startIndex), printLineSize, #buffer); -- количество элементов которые возможно извлечь из массива
+    local temIndex   = nexIndexBuffer - 1;
+    local res        = {}
+    -- print("startIndex", startIndex, "temIndex ", temIndex, "#buffer", #buffer, "bufferSize - startIndex",
+    --     math.min((bufferSize - startIndex), printLineSize))
+    --local temIndex = nexIndexBuffer - 1; -- вернуться на 1 назад
+
+    temIndex         = temIndex - startIndex;
+    --print(temIndex, #buffer)
+
+    if temIndex == 0 then
+        temIndex = #buffer;
+    elseif temIndex < 0 then
+        temIndex = #buffer + temIndex;
+    else
+        temIndex = temIndex;
+    end
+    --print(temIndex, #buffer)
+
+    for i = startIndex, #buffer do
+        --print(i, buffer[i])
+        if (i >= startIndex and arrIndex >= 1) then
+            res[arrIndex] = buffer[temIndex];
+            arrIndex = arrIndex - 1;
         end
         temIndex = temIndex - 1;
         if (temIndex == 0) then
@@ -144,33 +147,27 @@ function MainWindow:PrintInChat()
 
     local Print;
     if (UnitInRaid("player")) then
-        print("(UnitInRaid()")
         Print = function(msg)
             SendChatMessage(msg, "RAID")
         end
     elseif (UnitInParty("party1")) then
-        print("(UnitInParty()")
         Print = function(msg)
             SendChatMessage(msg, "PARTY")
         end
     end
-    print(res[#res]); 
-    -- for i = arrIndex, #res do
-    --     local msg = res[i];
-
-    --     if Print and msg then
-            
-    --         msg = msg:gsub("|c[%w][%w][%w][%w][%w][%w][%w][%w]", "")
-    --             :gsub("|r", "")
-    --             :gsub("|Hspell:", "|cff71d5ff|Hspell:")
-    --             :gsub("]|h", "]|h|r")
-
-    --         Print(msg)
-    --     else
-    --          print(msg)
-    --     end
-    -- end
-    print(MainWindow.scroll:GetValue())
+    local msg
+    for i = 1, #res do
+        msg = res[i]
+        if Print and msg then --сли
+            msg = msg:gsub("|c[%w][%w][%w][%w][%w][%w][%w][%w]", "") -- удаляем цвета в сообщении |сFFdd15dd
+                :gsub("|r", "") -- удаляем цвета в сообщении |r
+                :gsub("|Hspell:", "|cff71d5ff|Hspell:") -- Восстанавливаем цвет для GetSpellLink()
+                :gsub("]|h", "]|h|r") -- Восстанавливаем цвет для  GetSpellLink()
+            Print(msg)
+        else
+            print(msg)
+        end
+    end
 end
 
 function MainWindow:ShowHide()
@@ -282,16 +279,11 @@ function CreteScrollingMessageFrame(frame)
     scrollBar:SetMinMaxValues(1, 1)
     scrollBar:SetValueStep(1)
     scrollBar.scrollStep = 1
-    --scrollBar.DownButton:SetScript("OnEnter", function(self, button) print ("Click"); end)
-    --scrollBar:SetScript("OnEnter", function(self, button) print (self, button,  "Click"); end)
-
     -- если нажали "В низ" то разрешаем установку на последний элемент.
     IAAA_WindowCombatLog_FrameScrollDownButton:SetScript("OnMouseDown", function(self, button)
         SliderGotoDown = true;
-        -- print(frame.scroll:GetValue());
     end)
     scrollBar:SetScript("OnValueChanged", function(self, value)
-       -- print(value, "offset", select(2, scrollBar:GetMinMaxValues()) - value, self)
         frame.messageFrame:SetScrollOffset(select(2, scrollBar:GetMinMaxValues()) - value)
     end)
 
@@ -311,7 +303,6 @@ function CreteScrollingMessageFrame(frame)
         elseif delta > 0 and cur_val > min_val then
             cur_val = math.max(min_val, cur_val - 1)
             if (cur_val == 0) then cur_val = 1; end
-            ;
             frame.scroll:SetValue(cur_val)
         end
     end)
@@ -351,12 +342,18 @@ function MainWindow:CreateButtons(frame)
         function(...)
             MainWindow:Clear();
         end)
-    offset_x = offset_x - ns.sizeButtons * 1.3
+    -- offset_x = offset_x - ns.sizeButtons * 1.3
 
-    CreateButton(frame, ns.sizeButtons, offset_x, offset_y, "Interface\\Addons\\IAAA\\Textures\\icon-setting.tga", function(...)
-        MainWindow:PrintBuffer();
-    end)
-    offset_x = offset_x - ns.sizeButtons*1.3
+    -- CreateButton(frame, ns.sizeButtons, offset_x, offset_y, "Interface\\Addons\\IAAA\\Textures\\icon-setting.tga",
+    --     function(...)
+    --         MainWindow:PrintBuffer();
+    --     end)
+    -- offset_x = offset_x - ns.sizeButtons * 1.3
+    -- CreateButton(frame, ns.sizeButtons, offset_x, offset_y, "Interface\\Addons\\IAAA\\Textures\\icon-move.tga",
+    --     function(...)
+    --         ns:Send("Новое сообщение")
+    --     end)
+    -- offset_x = offset_x - ns.sizeButtons * 1.3
 end
 
 function CreateButton(frame, size, offset_x, offset_y, pathToTextures, func)
