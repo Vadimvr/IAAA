@@ -53,6 +53,8 @@ function SetValuesInSpellLists()
     ResetValuesInSpellList(ns.icc)
     SetValuesInSpellListRaid(ns.icc, 73797) -- 73797, -- жнец душ
     SetValuesInSpellListRaid(ns.icc, 71726) --  71726, -- укус вампира
+--чума 
+    SetValuesInSpellListRaid(ns.icc, 73914) --  73914, -- чума
 end
 
 function ResetValuesInSpellList(array)

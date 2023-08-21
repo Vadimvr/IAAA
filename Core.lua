@@ -21,12 +21,11 @@ local ldb = LibStub("LibDataBroker-1.1"):NewDataObject("IAAA", {
 })
 local icon = LibStub("LibDBIcon-1.0")
 
-
 function Core:ADDON_LOADED(addOnName)
     if AddOnName ~= addOnName then return; end
 
     ns:Init()
-    icon:Register("Iaaa", ldb, { hide = false, })
+    icon:Register("Iaaa", ldb, ns.MinimapIcon)
 
     ns.WindowSetting:ADDON_LOADED();
     ns.WindowCombatLog:ADDON_LOADED(addOnName);
@@ -57,7 +56,7 @@ end
 
 function ldb:OnTooltipShow()
     GameTooltip:AddLine("Iaaa", 1, .8, 0)
-    GameTooltip:AddLine("Left-Click" .. ns.L["Show or hide log window."])
+    GameTooltip:AddLine("Left-Click " .. ns.L["Show or hide log window."])
     GameTooltip:AddLine("Shift + Left-Click " .. ns.L["Show or hide setting window."])
 end
 
@@ -107,20 +106,20 @@ function ns:Send(msg)
 end
 
 function Core:COMBAT_LOG_EVENT_UNFILTERED(
-    timestamp, -- время применения
-    event, -- тип события
-    srcGUID, -- GUID источника
-    srcName, -- имя источника
-    srcFlags, -- флаги
-    destGUID, -- GUID получившего каст
-    destName, -- имя получившего каст
-    destFlags, -- флаги
-    spellID, -- id спела
-    spellName, -- название спела
-    school, -- маска школы
-    idScattering, -- ид при рассеивании
+    timestamp,      -- время применения
+    event,          -- тип события
+    srcGUID,        -- GUID источника
+    srcName,        -- имя источника
+    srcFlags,       -- флаги
+    destGUID,       -- GUID получившего каст
+    destName,       -- имя получившего каст
+    destFlags,      -- флаги
+    spellID,        -- id спела
+    spellName,      -- название спела
+    school,         -- маска школы
+    idScattering,   -- ид при рассеивании
     nameScattering, -- заклинание которое рассеяли
-    ...) -- остальные аргументы
+    ...)            -- остальные аргументы
     --
     -- if(true) then
     --     Print("COMBAT_LOG_EVENT_UNFILTERED")
@@ -214,7 +213,21 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
                 send(ns.dispel:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetSpellLink(idScattering),
                     GetColor(destGUID, destName)))
             end
+        elseif event == "UNIT_DIED" then
+            --print("UNIT_DIED",destGUID, destName)
+            if (destGUID == nil) then
+                return "====================error destGUID is nil"
+            end
+            if (destName == nil) then
+                return "====================error destName is nil"
+            end
+            local _, classFilename = GetPlayerInfoByGUID(tostring(destGUID))
+           
+            if (classFilename ~= nil) then
+                send(ns.died:format(GetColor(destGUID, destName)));
+            end
         end
+
         -- ns.dispel           = "%s %s рассеивает %s с %s!"
         -- ns.dispelFail       = "%s %s не удалось рассеять %s's %s!"
         -- elseif event == "SPELL_DISPEL_FAILED" then
@@ -264,75 +277,75 @@ function ns:GetColor(classFilename)
     return color;
 end
 
-function KethoEditBox_Show(text)
-    if not KethoEditBox then
-        local f = CreateFrame("Frame", "KethoEditBox", UIParent, "DialogBoxFrame")
-        f:SetPoint("CENTER")
-        f:SetSize(600, 500)
+-- function KethoEditBox_Show(text)
+--     if not KethoEditBox then
+--         local f = CreateFrame("Frame", "KethoEditBox", UIParent, "DialogBoxFrame")
+--         f:SetPoint("CENTER")
+--         f:SetSize(600, 500)
 
-        f:SetBackdrop({
-            bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
-            edgeFile = "Interface\\PVPFrame\\UI-Character-PVP-Highlight", -- this one is neat
-            edgeSize = 16,
-            insets = { left = 8, right = 6, top = 8, bottom = 8 },
-        })
-        f:SetBackdropBorderColor(0, .44, .87, 0.5) -- darkblue
+--         f:SetBackdrop({
+--             bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background",
+--             edgeFile = "Interface\\PVPFrame\\UI-Character-PVP-Highlight", -- this one is neat
+--             edgeSize = 16,
+--             insets = { left = 8, right = 6, top = 8, bottom = 8 },
+--         })
+--         f:SetBackdropBorderColor(0, .44, .87, 0.5) -- darkblue
 
-        -- Movable
-        f:SetMovable(true)
-        f:SetClampedToScreen(true)
-        f:SetScript("OnMouseDown", function(self, button)
-            if button == "LeftButton" then
-                self:StartMoving()
-            end
-        end)
-        f:SetScript("OnMouseUp", f.StopMovingOrSizing)
+--         -- Movable
+--         f:SetMovable(true)
+--         f:SetClampedToScreen(true)
+--         f:SetScript("OnMouseDown", function(self, button)
+--             if button == "LeftButton" then
+--                 self:StartMoving()
+--             end
+--         end)
+--         f:SetScript("OnMouseUp", f.StopMovingOrSizing)
 
-        -- ScrollFrame
-        local sf = CreateFrame("ScrollFrame", "KethoEditBoxScrollFrame", KethoEditBox, "UIPanelScrollFrameTemplate")
-        sf:SetPoint("LEFT", 16, 0)
-        sf:SetPoint("RIGHT", -32, 0)
-        sf:SetPoint("TOP", 0, -16)
-        sf:SetPoint("BOTTOM", KethoEditBoxButton, "TOP", 0, 0)
+--         -- ScrollFrame
+--         local sf = CreateFrame("ScrollFrame", "KethoEditBoxScrollFrame", KethoEditBox, "UIPanelScrollFrameTemplate")
+--         sf:SetPoint("LEFT", 16, 0)
+--         sf:SetPoint("RIGHT", -32, 0)
+--         sf:SetPoint("TOP", 0, -16)
+--         sf:SetPoint("BOTTOM", KethoEditBoxButton, "TOP", 0, 0)
 
-        -- EditBox
-        local eb = CreateFrame("EditBox", "KethoEditBoxEditBox", KethoEditBoxScrollFrame)
-        eb:SetSize(sf:GetSize())
-        eb:SetMultiLine(true)
-        eb:SetHistoryLines(1000);
-        eb:SetAutoFocus(false) -- dont automatically focus
-        eb:SetFontObject("ChatFontNormal")
-        eb:SetScript("OnEscapePressed", function() f:Hide() end)
-        sf:SetScrollChild(eb)
+--         -- EditBox
+--         local eb = CreateFrame("EditBox", "KethoEditBoxEditBox", KethoEditBoxScrollFrame)
+--         eb:SetSize(sf:GetSize())
+--         eb:SetMultiLine(true)
+--         eb:SetHistoryLines(1000);
+--         eb:SetAutoFocus(false) -- dont automatically focus
+--         eb:SetFontObject("ChatFontNormal")
+--         eb:SetScript("OnEscapePressed", function() f:Hide() end)
+--         sf:SetScrollChild(eb)
 
-        -- Resizable
-        f:SetResizable(true)
-        f:SetMinResize(150, 100)
+--         -- Resizable
+--         f:SetResizable(true)
+--         f:SetMinResize(150, 100)
 
-        local rb = CreateFrame("Button", "KethoEditBoxResizeButton", KethoEditBox)
-        rb:SetPoint("BOTTOMRIGHT", -6, 7)
-        rb:SetSize(16, 16)
+--         local rb = CreateFrame("Button", "KethoEditBoxResizeButton", KethoEditBox)
+--         rb:SetPoint("BOTTOMRIGHT", -6, 7)
+--         rb:SetSize(16, 16)
 
-        rb:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
-        rb:SetHighlightTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
-        rb:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Down")
+--         rb:SetNormalTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Up")
+--         rb:SetHighlightTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Highlight")
+--         rb:SetPushedTexture("Interface\\ChatFrame\\UI-ChatIM-SizeGrabber-Down")
 
-        rb:SetScript("OnMouseDown", function(self, button)
-            if button == "LeftButton" then
-                f:StartSizing("BOTTOMRIGHT")
-                self:GetHighlightTexture():Hide() -- more noticeable
-            end
-        end)
-        rb:SetScript("OnMouseUp", function(self, button)
-            f:StopMovingOrSizing()
-            self:GetHighlightTexture():Show()
-            eb:SetWidth(sf:GetWidth())
-        end)
-        f:Show()
-    end
+--         rb:SetScript("OnMouseDown", function(self, button)
+--             if button == "LeftButton" then
+--                 f:StartSizing("BOTTOMRIGHT")
+--                 self:GetHighlightTexture():Hide() -- more noticeable
+--             end
+--         end)
+--         rb:SetScript("OnMouseUp", function(self, button)
+--             f:StopMovingOrSizing()
+--             self:GetHighlightTexture():Show()
+--             eb:SetWidth(sf:GetWidth())
+--         end)
+--         f:Show()
+--     end
 
-    if text then
-        KethoEditBoxEditBox:SetText(text)
-    end
-    KethoEditBox:Show()
-end
+--     if text then
+--         KethoEditBoxEditBox:SetText(text)
+--     end
+--     KethoEditBox:Show()
+-- end

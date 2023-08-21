@@ -16,6 +16,11 @@ function IAAASlashCmd(iaaaSubcommand)
         ns.WindowCombatLog:ShowHide();
     elseif(t == "s") then 
         ns.WindowSetting:ShowHide();
+    -- elseif(t == "x") then 
+    --     for k, v in pairs(ns.icc) do
+    --         local spellName, spellRank = GetSpellInfo(k);
+    --         print(spellName, k, v)
+    --     end
     elseif(t == "chat")then
         if(ns.inChat) then
             Print("|cFFFF0000".. ns.L["Message output is disabled."].." |r".. ns.L["To turn on, type"].. " |cff00ff00/ia chat.|r.")

@@ -62,6 +62,7 @@ L["%s creates %s!"]                                         = "%s creates %s!"
 L["%s %s dissipates %s with %s!"]                           = "%s %s dissipates %s with %s!"   
 L["%s dying. Can get up %s!"]                               = "%s dying. Can get up %s!"       
 L["%s %s failed to dispel %s's %s!"]                        = "%s %s failed to dispel %s's %s!"
+L["%s died lol!"]                                           = "%s died lol!" 
 ----------------------------------------------------------------------------------------------------------------------------------------
 L["DISPELS"]                                                = "Dispels"
 L["Engineering"]                                            = "Engineering"

@@ -80,11 +80,12 @@ function ns:Init()
     --
 
     -- Character name color
-    if (_Config.NicknameColors == nil) then
+    if (_Config.NicknameColors == nil or TableLength(_Config.NicknameColors) >1000) then
         _Config.NicknameColors = ns.NicknameColors;
     else
         ns.NicknameColors = _Config.NicknameColors;
     end
+
     --
 
     -- history
@@ -95,7 +96,23 @@ function ns:Init()
     ns.HistoryCombatLogBetweenSessions = _Config.HistoryCombatLogBetweenSessions;
     print(ns.HistoryCombatLogBetweenSessions)
     --
+    if (_Config.MinimapIcon == nil) then
+        _Config.MinimapIcon = {
+            hide = false,
+            minimapPos = 110,
+            radius = 80,
+        };
+    end
+
+    ns.MinimapIcon = _Config.MinimapIcon
 end
+
+function TableLength(T)
+    local count = 0
+    for _ in pairs(T) do count = count + 1 end
+    return count
+  end
+
 
 function ns:Exit()
     if (not _Config) then _Config = {} end
@@ -112,4 +129,5 @@ function ns:Exit()
     _Config.NicknameColors = ns.NicknameColors;
 
     _Config.HistoryCombatLogBetweenSessions = ns.HistoryCombatLogBetweenSessions;
+    _Config.MinimapIcon =ns.MinimapIcon ;
 end
