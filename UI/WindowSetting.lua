@@ -11,7 +11,7 @@ local rowHeight                          = 30;
 
 local listWithLinksToAptitudeCheckButton = {}
 ns.WindowSetting                         = WindowSetting;
-
+ns.SpellsAndPatterns                     = {}
 
 function WindowSetting:ADDON_LOADED()
     WindowSetting:CreateWindowsSetting();
@@ -29,59 +29,35 @@ end
 
 function WindowSetting:LoadSavedSettings()
     for k, v in pairs(ns.TrackedSpells) do
-        if (listWithLinksToAptitudeCheckButton[k]) then
-            listWithLinksToAptitudeCheckButton[k]:SetChecked(1);
+        if (listWithLinksToAptitudeCheckButton[v]) then
+            listWithLinksToAptitudeCheckButton[v]:SetChecked(1);
         end
     end
 end
 
 function SetValuesInSpellLists()
+    ns.TrackedSpells = {}
+    ns.SpellsAndPatterns={}
     for k, v in pairs(listWithLinksToAptitudeCheckButton) do
-        ns.TrackedSpells[k] = listWithLinksToAptitudeCheckButton[k]:GetChecked();
-    end
-    SetValuesInSpellList(ns.rituals)
-    SetValuesInSpellList(ns.spells)
-    SetValuesInSpellList(ns.taunts)
-    SetValuesInSpellList(ns.bots)
-    SetValuesInSpellList(ns.use)
-    SetValuesInSpellList(ns.bonus)
-    SetValuesInSpellList(ns.feasts)
-    SetValuesInSpellList(ns.port)
-    SetValuesInSpellList(ns.reborn)
-    SetValuesInSpellList(ns.dispels)
-
-    ResetValuesInSpellList(ns.icc)
-    SetValuesInSpellListRaid(ns.icc, 73797) -- 73797, -- жнец душ
-    SetValuesInSpellListRaid(ns.icc, 71726) --  71726, -- укус вампира
---чума 
-    SetValuesInSpellListRaid(ns.icc, 73914) --  73914, -- чума
-end
-
-function ResetValuesInSpellList(array)
-    for k, v in pairs(array) do
-        array[k] = false;
-    end
-end
-
---/dump GetSpellInfo(73797);
-function SetValuesInSpellListRaid(array, key)
-    if (listWithLinksToAptitudeCheckButton[key] and listWithLinksToAptitudeCheckButton[key]:GetChecked()) then
-        local spellNameKey, spellRank = GetSpellInfo(key);
-        for k, v in pairs(array) do
-            local spellName, spellRank = GetSpellInfo(k);
-            if (spellNameKey == spellName) then
-                array[k] = true;
-            end
+        if (listWithLinksToAptitudeCheckButton[k]:GetChecked() == 1) then
+            local name, rank = GetSpellInfo(k)
+            ns.TrackedSpells[name] = k;
         end
     end
-end
 
-function SetValuesInSpellList(array)
-    for k, v in pairs(array) do
-        if (listWithLinksToAptitudeCheckButton[k] and listWithLinksToAptitudeCheckButton[k]:GetChecked()) then
-            array[k] = true;
-        else
-            array[k] = false;
+    for i = 1, #ns.NamedCategories do
+        local isSpells = ns.spellsAll[ns.NamedCategories[i][1]]
+
+        for j = 1, #isSpells do
+            local record = isSpells[j]
+            if (ns.SpellsAndPatterns[record.event] == nil) then
+                ns.SpellsAndPatterns[record.event] = {}
+            end
+            if (ns.TrackedSpells[record.name]) then
+                if (ns.SpellsAndPatterns[record.event][record.id] == nil) then
+                    ns.SpellsAndPatterns[record.event][record.id] = record.message
+                end
+            end
         end
     end
 end
@@ -120,14 +96,14 @@ function WindowSetting:CreateWindowsSettingElements()
     local stringLength = 0;
     local rowLengthOfTheLastColumn = 0;
 
-    for i, d in pairs(ns.spellsNew1) do
+    for i, d in pairs(ns.spellsAll) do
         if type(d) == "table" then
             for a = 1, #d do
-                if (type(d[a]) == "number") then
-                    local name, rank = GetSpellInfo(d[a]);
+                if (type(d[a].id) == "number") then
+                    local name, rank = GetSpellInfo(d[a].id);
                     n = string.len(name);
                 else
-                    n = string.len(d[a]);
+                    n = string.len(d[a].id);
                 end
                 if (n > stringLength) then
                     stringLength = n;
@@ -138,7 +114,7 @@ function WindowSetting:CreateWindowsSettingElements()
     end
 
     stringLength = stringLength * conversionRateOfTextToRealLength
-
+    local singleButton = {}
     for i = 1, #ns.NamedCategories do
         local nameColum = string.lower(ns.NamedCategories[i][2]);
         -- nameColum =  ns.NamedCategories[i][1]:sub(1,1)..nameColum:sub(2)
@@ -160,55 +136,58 @@ function WindowSetting:CreateWindowsSettingElements()
             y = y - rowHeight;
         end
 
-        local isSpells = ns.spellsNew1[ns.NamedCategories[i][1]]
+        local isSpells = ns.spellsAll[ns.NamedCategories[i][1]]
         for j = 1, #isSpells do
-            local k = isSpells[j]
+            local k = isSpells[j].id
             local name, rank = GetSpellInfo(k)
-            listWithLinksToAptitudeCheckButton[k] = CreateFrame("CheckButton",
-                WindowSetting:GetName() .. "_" .. k .. "_CheckButton", WindowSetting, "ChatConfigCheckButtonTemplate")
-            listWithLinksToAptitudeCheckButton[k]:SetSize(32, 32);
-            listWithLinksToAptitudeCheckButton[k]:SetPoint("TOPLEFT", x - 32, y + 7);
-            listWithLinksToAptitudeCheckButton[k]:SetScript("OnMouseDown", function(self, button)
-                if (button == "RightButton") then
-                    if (name ~= nil) then
-                        SetItemRef(GetSpellLink(k))
-                        local w, h = ItemRefTooltip:GetSize()
-                        ItemRefTooltip:SetSize(w, h + 20)
-                        ItemRefTooltip:AddLine("|cFFab1f5e" .. k .. "|r")
+            if (singleButton[name] == nil  ) then
+                singleButton[name] = 1;
+                listWithLinksToAptitudeCheckButton[k] = CreateFrame("CheckButton",
+                    WindowSetting:GetName() .. "_" .. k .. "_CheckButton", WindowSetting, "ChatConfigCheckButtonTemplate")
+                listWithLinksToAptitudeCheckButton[k]:SetSize(32, 32);
+                listWithLinksToAptitudeCheckButton[k]:SetPoint("TOPLEFT", x - 32, y + 7);
+                listWithLinksToAptitudeCheckButton[k]:SetScript("OnMouseDown", function(self, button)
+                    if (button == "RightButton") then
+                        if (name ~= nil) then
+                            SetItemRef(GetSpellLink(k))
+                            local w, h = ItemRefTooltip:GetSize()
+                            ItemRefTooltip:SetSize(w, h + 20)
+                            ItemRefTooltip:AddLine("|cFFab1f5e" .. k .. "|r")
+                        end
                     end
+                end)
+                listWithLinksToAptitudeCheckButton[k]:SetScript("OnLeave", function()
+                    ItemRefTooltip:Hide();
+                end)
+                listWithLinksToAptitudeCheckButton[k]:SetScript("OnMouseUp", function()
+                    ItemRefTooltip:Hide();
+                end)
+                local FontString = WindowSetting:CreateFontString(nil, "OVERLAY", "GameFontNormal");
+                FontString:SetPoint("TOPLEFT", x, y);
+                FontString:SetSize(labelSizeWight, labelSizeHeight)
+                if (name ~= nil) then
+                    FontString:SetText("|cFF7d7e8c" .. name .. "|r")
+                    n = string.len(name);
+                else
+                    FontString:SetText("|cFF7d7e8c" .. k .. "|r")
+                    n = string.len(k);
                 end
-            end)
-            listWithLinksToAptitudeCheckButton[k]:SetScript("OnLeave", function()
-                ItemRefTooltip:Hide();
-            end)
-            listWithLinksToAptitudeCheckButton[k]:SetScript("OnMouseUp", function()
-                ItemRefTooltip:Hide();
-            end)
-            local FontString = WindowSetting:CreateFontString(nil, "OVERLAY", "GameFontNormal");
-            FontString:SetPoint("TOPLEFT", x, y);
-            FontString:SetSize(labelSizeWight, labelSizeHeight)
-            if (name ~= nil) then
-                FontString:SetText("|cFF7d7e8c" .. name .. "|r")
-                n = string.len(name);
-            else
-                FontString:SetText("|cFF7d7e8c" .. k .. "|r")
-                n = string.len(k);
-            end
-            FontString:SetJustifyH("LEFT")
-            FontString:SetJustifyV("TOP")
-            FontString:SetFont("Fonts\\ARIALN.ttf", 16)
+                FontString:SetJustifyH("LEFT")
+                FontString:SetJustifyV("TOP")
+                FontString:SetFont("Fonts\\ARIALN.ttf", 16)
 
 
-            if (n > rowLengthOfTheLastColumn) then
-                rowLengthOfTheLastColumn = n;
-            end
-            ;
+                if (n > rowLengthOfTheLastColumn) then
+                    rowLengthOfTheLastColumn = n;
+                end
+                ;
 
-            y = y - rowHeight;
-            if (y < (height - rowHeight) * -1) then
-                y = -rowHeight
-                x = x + stringLength;
-                rowLengthOfTheLastColumn = 0
+                y = y - rowHeight;
+                if (y < (height - rowHeight) * -1) then
+                    y = -rowHeight
+                    x = x + stringLength;
+                    rowLengthOfTheLastColumn = 0
+                end
             end
         end
 
@@ -257,8 +236,8 @@ function WindowSetting:CreateButtons(frame)
     end)
 
     WindowSetting:CreateButton(frame, ns.L["Test"], buttonWight, function(self, button)
+        SetValuesInSpellLists()
         if button == "LeftButton" then
-            SetValuesInSpellLists();
             for i = 1, #ns.data2 do
                 local a = ns.data2[i];
                 ns.Core:COMBAT_LOG_EVENT_UNFILTERED(a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8], a[9], a[10], a[11],

@@ -1,493 +1,345 @@
 local AddOnName, ns = ...;
 
-local HEROISM       = UnitFactionGroup("player") == "Horde" and 2825 or 32182 -- Героизм\жажда крови
-local REBIRTH       = GetSpellInfo(20484)                                     -- Возрождение
-local HOP           = GetSpellInfo(1022)                                      -- Длань защиты
-local SOUL_STONE    = GetSpellInfo(20707)                                     -- Воскрешение камнем души
-local CABLES        = GetSpellInfo(54732)                                     -- Гномий дефибриллятор
+local SPELL_AURA_APPLIED = "SPELL_AURA_APPLIED"
+local SPELL_CAST_SUCCESS = "SPELL_CAST_SUCCESS"
+local SPELL_CAST_START = "SPELL_CAST_START"
+local SPELL_CREATE = "SPELL_CREATE"
+local SPELL_RESURRECT = "SPELL_RESURRECT"
+local SPELL_AURA_REMOVED = "SPELL_AURA_REMOVED"
+local UNIT_DIED = "UNIT_DIED";
+local SPELL_DISPEL_FAILED = "SPELL_DISPEL_FAILED"
+local SPELL_HEAL = "SPELL_HEAL"
+local SPELL_MISSED = "SPELL_MISSED"
+local SPELL_DAMAGE = "SPELL_DAMAGE"
+local SPELL_PERIODIC_HEAL = "SPELL_PERIODIC_HEAL"
+local SPELL_DISPEL = "SPELL_DISPEL"
+local SPELL_DISPEL_FAILED = "SPELL_DISPEL_FAILED";
+local SWING_MISSED = "SWING_MISSED";
+local SWING_DAMAGE = "SWING_DAMAGE"
+local SPELL_PERIODIC_DAMAGE = "SPELL_PERIODIC_DAMAGE";
 
+function Used(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
 
-ns.dispels = {
-    [2782] = true,  -- "Снятие проклятия"
-    [526] = true,   -- "Оздоровление"
-    [4987] = true,  -- "Очищение"
-    [51886] = true, -- "Очищение духа"
-    [32375] = true, -- "Массовое рассеивание"
-    [32592] = true, -- "Массовое рассеивание"
-    [988] = true,   -- "Рассеивание заклинаний"
-    [552] = true,   -- "Устранение болезни"
-    [48011] = true, -- "Пожирание магии"
-    [528] = true,   -- "Излечение болезни"
-    --[19801] = true, -- "Усмиряющий выстрел"
-    [475] = true,   -- "Снятие проклятия"
-    [10872] = true, -- "Эффект устранения болезни"
-    [2893] = true,  -- "Устранение яда"
-    [3137] = true,  -- "Эффект устранения яда"
-    [1152] = true,  -- "Омовение"
-    [57767] = true, -- "Очищение"
-}
+    return ns.used:format(GetColor(srcGUID, srcName), GetSpellLink(spellID))
+end
+function TauntMissed(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
 
+    return ns.tauntMissed:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName))
+end
 
+function Cast(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
 
--- ритуалы
+    return ns.cast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName))
+end
 
-ns.rituals = {
-    -- Маг
-    [58659] = true, -- Обряд сотворения яств
-    -- Лок
-    [58887] = true, -- Ритуал душ
-    [698] = true,   -- Ритуал призыва
-}
+function Taunt(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.taunt:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName))
+end
 
-ns.icc     = {
-    [69409] = true, -- жнец душ 10 об
-    [73797] = true, -- жнец душ 25 об
-    [73798] = true, -- жнец душ 10 хм
-    [73799] = true, -- жнец душ 25 hm
-    [71726] = true, -- укус вампира
-    [71729] = true, -- укус вампира
-    [71727] = true, -- укус вампира
-    [71728] = true, -- укус вампира
-    [71475] = true, -- укус вампира
-    [71476] = true, -- укус вампира
-    [71477] = true, -- укус вампира
-    [70946] = true, -- укус вампира
-    [73914] = true, -- чума
-}
--- спелы применяемые на членов рейда
-ns.spells  = {
-    -- Паладин
-    [6940]  = false, -- Длань жертвенности
-    [20233] = false, -- Возложение рук
-    [20236] = false, -- Возложение рук
-    [1044]  = false, -- Длань свободы
-    [1038]  = false, -- Длань спасения
-    [10278] = false, -- Длань защиты
-    [19752] = false, -- Божественное вмешательство
-    -- Priest
-    [47788] = false, -- Оберегающий дух
-    [33206] = false, -- Подавление боли
-    [6346]  = false, -- Защита от страха
-    -- Hunter
-    [34477] = false, -- Перенаправление
-    [19801] = false, -- Усмиряющий выстрел
-    [20736] = false, -- Отвлекающий выстрел
-    -- рога
-    [51722] = false, -- Долой оружие
-    [57934] = false, -- Маленькие хитрости
-    -- дк
-    [49016] = false, -- Истерия
-    [47528] = false, -- сбить каст
-    [47476] = false, -- [Удушение]
-    [49005] = false, -- [Кровавая метка]
-    -- вар
-    [676]   = false, -- Disarm
-    [6552]  = false, -- [Зуботычина]
-    [3411]  = false, -- [Вмешательство]
-    [7386]  = false, -- раскол
-    -- маг
-    [2139]  = false, -- [Антимагия]
-    [475]   = false, -- [Снятие проклятия]
-    --друид
-    [29166] = false, --Озарение
-    [48477] = true,  -- br
-}
+function Feast(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.feast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID))
+end
 
--- aura applied
-ns.taunts  = {
-    -- дк
-    [56222] = false, -- темная власть дк
-    [49560] = false, -- хватка смерти дк
-    [49576] = false, -- хватка смерти
-    --вар
-    [12809] = false, -- [Оглушающий удар]
-    [355] = false,   -- Провокация вар
-    [694] = false,   -- Дразнящий удар вар
-    [1161] = false,  -- [Вызывающий крик] -- таунт
-    [6552] = false,  -- [Зуботычина]
-    -- пал
-    [62124] = false, -- 	Длань возмездия пал
-    [31790] = false, -- Праведная защита пал
-    [31789] = false, -- [Праведная защита] каст
-    [20066] = false, -- [Покаяние]
-    [70940] = false, -- [Божественный страж]
-    [10308] = false, -- [Молот правосудия]
-    -- дру
-    [6795] = false,  -- [Рык]
-    [5209] = false,  -- [Вызывающий рев]
-    [53227] = false, -- [Тайфун]
-    [33786] = false, -- смерч
-    -- хант
-    [20736] = false, -- [Отвлекающий выстрел]
-    [20736] = false, -- [Отвлекающий выстрел]
-    [20233] = false,
-    [20236] = false,
-    [10278] = false,
-    [71289] = false, -- леди  контроль
-}
+function Dispel(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.dispel:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetSpellLink(idScattering), GetColor(destGUID, destName))
+end
+function Create(srcGUID, srcName, spellID,destGUID, destName,idScattering)
 
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.create:format(GetColor(srcGUID, srcName), GetSpellLink(spellID))
+end
+function DispelFail(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return "DispelFail"
+end
 
-ns.bots = {
-    [22700] = true,
-    [44389] = true,
-    [67826] = true,
-    [54710] = true,
-    [54711] = true,
-    [54861] = true,
-}
+function SpiritLady(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.spiritLady:format(GetColor(destGUID, destName))
+end
 
--- использование на себя
-ns.use = {
-    [72148] = false, -- Исступление на шарке 25 героик
-    [28747] = false, -- Бешенство на шарке 25 героик
-    -- ДК
-    [48982] = false, -- захват рун
-    [48707] = false, -- Антимагический панцирь
-    [48792] = false, -- Незыблемость льда
-    [55233] = false, -- Кровь вампира
-    [42650] = false, -- бомжи
-    [48743] = false, -- [Смертельный союз]
-    -- Друид
-    [22812] = false, -- Дубовая кожа
-    --[22842] = false,	-- Неистовое восстановление
-    [61336] = false, -- Инстинкты выживания
-    -- Паладин
-    [498]   = false, -- Диван
-    [48817] = false, -- [Гнев небес]
-    [64205] = true,  -- масс сакра
-    [31821] = false, -- Мастер аур
-    [54428] = false, -- святая клятва
-    [31884] = false, -- гнев карателя
-    -- Воин
-    [12975] = false, -- Ни шагу назад
-    [12976] = false, -- ни шагу назад спадение
-    [871]   = false, -- глухая оборона
-    [5246]  = false, -- фир
-    [2565]  = false, -- [Блок щитом]
-    -- Маг
-    [45438] = false, -- Ледяная глыба
-    -- Trinkets
-    [71638] = false, -- Клык
-    -- Priest
-    [64843] = false, -- Божественный гимн
-    [64901] = false, -- [Гимн надежды]
-    -- Чмо
-    [31224] = false, -- [Плащ Теней]
-    -- хант
-    [13809] = false, -- [Ледяная ловушка]
-    [34600] = false, -- [Змеиная ловушка]
-    [23989] = false, -- [Готовность]
-    -- шама
-    [2825]  = false, -- [Жажда крови]
-    [32182] = false, -- gera
-    [21169] = false, -- [Перерождение]
-    [16190] = false, -- [Тотем прилива маны]
-}
+function SoulReaper_APPLIED(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.soulReaperApplied:format(GetSpellLink(spellID), GetColor(destGUID, destName), idScattering)
 
--- бонусы от комплектов
-ns.bonus = {
-    -- ДК
-    [70654] = false, -- [4P T10]
-    -- Друид
-    [70725] = false, -- [4P T10]
-    --маг
-    [66] = false,    -- [Невидимость]
-    -- пал
-    [642] = false,   -- бабл
-    -- Шарк в цлк
-    [72148] = false, -- Исступление на шарке 25 героик
-    [28747] = false, -- Бешенство на шарке 25 героик
-}
+end
 
--- Еда
-ns.feasts = {
-    [57426] = false, -- Рыбный пир
-    [57301] = false, -- "Пир на весь мир"
-    [66476] = false, -- Богатый пир
-}
+function SoulReaper_REMOVED(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.soulReaperRemoved:format(GetSpellLink(spellID), GetColor(destGUID, destName), idScattering)
+end
 
---  порталы магов
-ns.port = {
-    [53142] = false, -- Даларан
-    [11419] = false, -- Дарнас
-    [32266] = false, -- Экзодар
-    [11416] = false, -- Стальгорн
-    [11417] = false, -- Огри
-    [33691] = false, -- Шатрат
-    [35717] = false, -- Шатрат
-    [32267] = false, -- Луносвет
-    [49361] = false, -- Каменор
-    [10059] = false, -- Шторм
-    [49360] = false, -- Терамор
-    [11420] = false, -- Громовой утес
-    [11418] = false, -- Подгород
-}
+--#region GetColor
+function GetColor(guid, name)
+    if (ns.NicknameColors[guid] == nil) then
+        local _, classFilename = GetPlayerInfoByGUID(tostring(guid))
+        local color = ns:GetColor(classFilename)
+        ns.NicknameColors[guid] = color .. name .. "|r";
+    end
 
-ns.reborn = {
-    [48153] = true, -- ангел у жреца
-    [66233] = true, -- прокладка у пала
-    [66235] = true, -- прокладка у пала
-}
+    return ns.NicknameColors[guid];
+end
 
-ns.spellsNew1 = {
+function ns:GetColor(classFilename)
+    local color = "|cFFFFFFFF";
+    if (classFilename == "DEATHKNIGHT") then
+        color = "|cFFC41E3A";
+    elseif (classFilename == "WARLOCK") then
+        color = "|cFF8788EE";
+    elseif (classFilename == "DRUID") then
+        color = "|cFFFF7C0A";
+    elseif (classFilename == "MAGE") then
+        color = "|cFF3FC7EB";
+    elseif (classFilename == "HUNTER") then
+        color = "|cFFAAD372";
+    elseif (classFilename == "PALADIN") then
+        color = "|cFFF48CBA";
+    elseif (classFilename == "WARRIOR") then
+        color = "|cFFC69B6D";
+    elseif (classFilename == "ROGUE") then
+        color = "|cFFFFF468";
+    elseif (classFilename == "SHAMAN") then
+        color = "|cFf0070DD";
+    elseif (classFilename == "PRIEST") then
+        color = "|cFFFFFFFF"
+    end
+    return color;
+end
+--#endregion
+
+--{id = 0, message = used, event = SPELL_CAST_SUCCESS, print = false, say = false}, --
+ns.spellsAll = {
     DEATHKNIGHT = {
-        56222, -- Темная власть
-        55233, -- Кровь вампира
-        42650, -- Войско мертвых
-        48792, -- Незыблемость льда
-        48982, -- Захват рун
-        70654, -- Кровавый доспех
-        47528, -- Заморозка разума
-        48707, -- Антимагический панцирь
-        49560, -- Хватка смерти
-        49576, -- Хватка смерти сам каст
-        --51271, -- Несокрушимая броня
-        48743, -- Смертельный союз
-        49016, -- Истерия
-        47476, -- Удушение
-        49005, -- Кровавая метка
+        { id = 56222, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Темная власть
+        { id = 56222, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Темная власть
+        { id = 49576, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Хватка смерти сам каст
+        { id = 49576, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Хватка смерти сам каст
+
+        { id = 55233, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Кровь вампира
+        { id = 42650, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Войско мертвых
+        { id = 48792, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Незыблемость льда
+        { id = 48982, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Захват рун
+        { id = 70654, message = Used, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Кровавый доспех
+        { id = 47528, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Заморозка разума
+        { id = 48707, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Антимагический панцирь
+        -- { id = 49560, message = cast, event = SPELL_CAST_SUCCESS, print = false, say = false }, --  Хватка смерти
+
+        { id = 48743, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Смертельный союз
+        { id = 49016, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Истерия
+        { id = 47476, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Удушение
+        { id = 49005, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Кровавая метка
     },
     DRUID = {
-        61336, -- Инстинкты выживания
-        22812, -- Дубовая кожа
-        --20484,  -- бр
-        48477, -- Возрождение
-        -- 48447, -- Спокойствие
-        53227, -- Тайфун
-        --8983, -- Оглушить
-        6795,  -- Рык
-        5209,  -- Вызывающий рев
-        29166, -- Озарение
-        70725, -- 4P T10
-        33786, -- конроль
+        { id = 61336, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Инстинкты выживания
+        { id = 22812, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Дубовая кожа
+
+        { id = 48477, message = Used, event =  SPELL_CAST_START,   print = false, say = false }, --  Возрождение
+        { id = 48477, message = Cast, event =  SPELL_RESURRECT,    print = false, say = false }, --  Возрождение
+
+        { id = 53227, message = Cast, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Тайфун
+        { id = 53227, message = Cast, event =  SPELL_DAMAGE,       print = false, say = false }, --  Тайфун
+
+        { id = 06795, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Рык
+        { id = 06795, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Рык
+        { id = 05209, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Вызывающий рев
+        { id = 05209, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Вызывающий рев
+
+        { id = 29166, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Озарение
+        { id = 70725, message = Used, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  4P T10
+
+        { id = 33786, message = Used, event =  SPELL_CAST_START,   print = false, say = false }, --  конроль
+        { id = 33786, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  конроль
+        { id = 33786, message = Cast, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  конроль
     },
     HUNTER = {
-        34477, -- Перенаправление
-        13809, -- Ледяная ловушка
-        --23989, -- Готовность
-        19801, -- Усмиряющий выстрел
-        20736, -- Отвлекающий выстрел
-        34600, -- Змеиная ловушка
+        { id = 20736, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Отвлекающий выстрел
+        { id = 20736, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Отвлекающий выстрел
+        { id = 34477, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Перенаправление
+        { id = 13809, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Ледяная ловушка
+        { id = 34600, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Змеиная ловушка
+        { id = 19801, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Усмиряющий выстрел
     },
     MAGE = {
-        66,    -- Невидимость
-        --  31687, -- Призыв элементаля воды
-        45438, -- Ледяная глыба
-        --475, -- Снятие проклятия
-        2139,  -- Антимагия
-        58659, -- Стол
+        { id = 00066, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, -- Невидимость
+        { id = 45438, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Ледяная глыба
+        { id = 02139, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Антимагия
+        { id = 58659, message = Create, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Стол
     },
     PALADIN = {
-        31790, -- Праведная защита пал
-        62124, -- Длань возмездия
+        { id = 31790, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Праведная защита пал
+        { id = 31789, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Праведная защита каст
 
-        1044,  -- Длань свободы
-        1038,  -- Длань спасения
-        6940,  -- Длань жертвенности
-        10278, -- Длань защиты
+        { id = 62124, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Длань возмездия
+        { id = 62124, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Длань возмездия
 
-        20066, -- Покаяние
+        { id = 01044, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Длань свободы
+        { id = 01038, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Длань спасения
+        { id = 06940, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Длань жертвенности
+        { id = 10278, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Длань защиты
+        { id = 20066, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Покаяние
+        { id = 48817, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Гнев небес
+        { id = 10308, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Молот правосудия
 
-        48817, -- Гнев небес
-        10308, -- Молот правосудия
+        { id = 66233, message = Used, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Ревностный защитник
 
-        -- 31850, -- Ревностный защитник
-        66233, -- Ревностный защитник
-        66235, -- Ревностный защитник
+        -- do do ammount
+        -- { id = 66235, message = gs, event =  SPELL_HEAL, print = false, say = false }, --  Ревностный защитник
 
-        31789, -- Праведная защита каст
-        31821, -- Мастер аур
-        --31884, -- крылья
-        --53601, -- Священный щит
-        498, -- 50 на 50
-
-        642, -- бабл
-
-        --70940, -- Божественный страж эфект от масс сакры на рейде
-        64205, -- масс сакра
-        --31842, -- Божественное просветление
-
-        19752, -- диван
-
-        54428, -- Святая клятва
-        -- 48788, -- Возложение рук
-        20233, -- Возложение рук
-        20236, -- Возложение рук
-        31884, -- крылья
+        { id = 31821, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Мастер аур
+        { id = 31884, message = Used, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  крылья
+        { id = 00498, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  50 на 50
+        { id = 00642, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  бабл
+        { id = 64205, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  масс сакра
+        { id = 19752, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  диван
+        { id = 54428, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Святая клятва
+        { id = 20233, message = Cast, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Возложение рук
+        { id = 20236, message = Cast, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Возложение рук
     },
     PRIEST = {
-        48153, -- Оберегающий дух
-        47788, -- Оберегающий дух
-        6346,  -- Защита от страха
-        33206, -- Подавление боли
-
-        64901, -- Гимн надежды
-        64843, -- Божественный гимн
-
-        -- 8122, -- Ментальный крик
-        -- 15487, -- Безмолвие
-        -- 34433, -- Исчадие Тьмы
-        -- 724, -- Колодец Света
-        -- 64044, -- Глубинный ужас
-        -- 10890, -- Ментальный крик
-
-        -- 586, -- Уход в тень
-
-        -- 10060, -- Придание сил
-
-        -- 47585, -- Слияние с Тьмой
-        -- 48113, -- Молитва восстановления
+        --hill
+        -- { id = 48153, message = reborn , event =  SPELL_HEAL, print = false, say = false }, --  Оберегающий дух
+        { id = 47788, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Оберегающий дух
+        { id = 06346, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Защита от страха
+        { id = 33206, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Подавление боли
+        { id = 64901, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Гимн надежды
+        { id = 64843, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Божественный гимн
     },
     ROGUE = {
-        51722, -- Долой оружие
-        57934, -- Маленькие хитрости
-
-        -- 26669, -- Ускользание
-        -- 13877, -- Шквал клинков
-        -- 48659, -- Ложный выпад
-        -- 1856, -- Исчезновение
-        -- 11305, -- Спринт
-        -- 26889, -- Исчезновение
-        -- 1766, -- Пинок
-        -- 5277, -- Ускользание
-        -- 2094, -- Ослепление
-        -- 13750, -- Выброс адреналина
-        -- 8643, -- Удар по почкам
-        -- 14185, -- Подготовка
-        -- 51690, -- Череда убийств
-        31224, -- Плащ Теней
-        --1725, -- Отвлечение
+        { id = 51722, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Долой оружие
+        { id = 57934, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Маленькие хитрости
+        { id = 31224, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Плащ Теней
     },
     SHAMAN = {
-        2825,  -- Жажда крови
-        32182, -- Героизм
-        16190, -- Тотем прилива маны
-        21169, -- Перерождение
-
-        -- 16188, -- Природная стремительность
-        -- 51533, -- Дух дикого волка
-        -- 16166, -- Покорение стихий
-        -- 57994, -- Пронизывающий ветер
-        -- 30823, -- Ярость шамана
-        -- 59159, -- Гром и молния
-
-        -- 51514, -- Сглаз
-        -- 20608, -- Перерождение
-        -- 2894, -- Тотем элементаля огня
-        -- 2062, -- Тотем элементаля земли
+        { id = 02825, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Жажда крови
+        { id = 32182, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Героизм
+        { id = 16190, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Тотем прилива маны
+        { id = 21169, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Перерождение
     },
     WARLOCK = {
-        58887, -- Ритуал душ
-        698,   -- Ритуал призыва
-
-        -- 47241, -- Метаморфоза
-        -- 1122, -- Инфернал
-        -- 18540, -- Ритуал Рока
-        -- 29858, -- Раскол души
-        -- 47883, -- Воскрешение камнем души
-        -- 47891, -- Заслон от темной магии
-        -- 29893, -- Ритуал душ
-        -- 698, -- Ритуал призыва
-        -- 6203, -- Камень души
+        { id = 58887, message = Create, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Ритуал душ
+        { id = 00698, message = Create, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Ритуал призыва
     },
     WARRIOR = {
+        { id = 00355, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Провокация
+        { id = 00355, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Провокация
+        { id = 00694, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  дразнящий удар
+        { id = 00694, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  дразнящий удар
+        { id = 01161, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Вызывающий крик -- таунт
 
-        355,  -- Провокация
-        694,  -- дразнящий удар
-        1161, -- Вызывающий крик -- таунт
-        7386, -- Раскол брони
-        6552, -- Зуботычина
-
-        676,  -- Разоружение
-
-        --55694, -- Безудержное восстановление
-        12809, -- Оглушающий удар
-        3411,  -- Вмешательство
-        12975, -- Ни шагу назад
-        12976, -- Ни шагу назад
-        871,   -- Глухая оборона
-        70845, -- Стоицизм т10
-
-        2565,  -- Блок щитом
-        --  12323, -- Пронзительный вой
-
-        5246, -- устрашающий-крик
+        { id = 07386, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Раскол брони
+        { id = 06552, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Зуботычина
+        { id = 00676, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Разоружение
+        { id = 12809, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Оглушающий удар
+        { id = 03411, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Вмешательство
+        { id = 12975, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Ни шагу назад
+        { id = 12976, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Ни шагу назад
+        { id = 00871, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Глухая оборона
+        { id = 70845, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Стоицизм т10
+        { id = 02565, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Блок щитом
+        { id = 05246, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  устрашающий-крик
     },
+
     Engineering = {
-        -- инженерка
-        54861,
-        22700,
-        44389,
-        67826,
-        54710,
-        54711,
+        { id = 54861, message = Used, event =  SPELL_AURA_APPLIED, print = false, say = false },
+        { id = 22700, message = Create, event =  SPELL_CREATE,       print = false, say = false },
+        { id = 44389, message = Create, event =  SPELL_CREATE,       print = false, say = false },
+        { id = 67826, message = Create, event =  SPELL_CREATE,       print = false, say = false },
+        { id = 54710, message = Create, event =  SPELL_CREATE,       print = false, say = false },
+        { id = 54711, message = Create, event =  SPELL_CREATE,       print = false, say = false },
     },
     Accessories = {
-        -- Trinkets
-        71638, -- Клык
-        71635, -- клык
-        71586, -- ключ
+        { id = 71638, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Клык
+        { id = 71635, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  клык
+        { id = 71586, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  ключ
     },
     MagicPortals = {
-        53142, -- Даларан
-        11419, -- Дарнас
-        32266, -- Экзодар
-        11416, -- Стальгорн
-        11417, -- Огри
-        33691, -- Шатрат
-        35717, -- Шатрат
-        32267, -- Луносвет
-        49361, -- Каменор
-        10059, -- Шторм
-        49360, -- Терамор
-        11420, -- Громовой утес
-        11418, -- Подгород
+        { id = 53142, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Даларан
+        { id = 11419, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Дарнас
+        { id = 32266, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Экзодар
+        { id = 11416, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Стальгорн
+        { id = 11417, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Огри
+        { id = 33691, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Шатрат
+        { id = 32267, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Луносвет
+        { id = 35717, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Шатрат
+        { id = 49361, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Каменор
+        { id = 10059, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Шторм
+        { id = 49360, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Терамор
+        { id = 11420, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Громовой утес
+        { id = 11418, message = Create, event =  SPELL_CREATE, print = false, say = false }, --  Подгород
     },
     Food = {
-
-        --eda
-        57426, -- Рыбный пир
-        57301, -- "Пир на весь мир"
-        66476, -- Богатый пир
+        { id = 57426, message = Feast, event =  SPELL_CREATE, print = false, say = false }, --  Рыбный пир
+        { id = 57301, message = Feast, event =  SPELL_CREATE, print = false, say = false }, --  "Пир на весь мир"
+        { id = 66476, message = Feast, event =  SPELL_CREATE, print = false, say = false }, --  Богатый пир
     },
     ICC25HM = {
-        -- 74320, -- жнец душ баф на личе
-        --69409, 10 об
-        73797, -- жнец душ  25 об
-        -- 73798, -- жнец душ  10 хм
-        -- 73799, -- жнец душ  --25 хм
-        71726, -- укус вампира
-        -- 71729, -- укус вампира  -- босс в 25 хм
-        -- 71727, -- укус вампира  -- босс в 24 об
-        -- 71728, -- укус вампира  -- босс в 10 хм
-        -- 71475, -- укус вампира  -- игрок на игрока в 25 об
-        -- 71476, -- укус вампира  -- игрок на игрока в 10 хм + 10 об босс на игрока
-        -- 71477, -- укус вампира  -- игрок на игрока в 25 хм
-        -- 70946, -- укус вампира  -- 10 об игрок на игрока
-        72148, -- Исступление на шарке 25 героик
-        28747, -- Бешенство на шарке 25 героик
-        71289, -- леди контроль
-        71264, -- Роящиеся тени
-        73914, -- чума
+        --{ id = 69409, message = used, event = SPELL_CAST_SUCCESS, print = false, say = false }, -- 10 об
+        { id = 73797, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73797, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73797, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+
+        { id = 73798, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73798, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73798, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+
+        { id = 73799, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73799, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73799, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        
+        { id = 71726, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира
+        { id = 71729, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- босс в 25 хм
+        { id = 71727, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- босс в 24 об
+        { id = 71728, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- босс в 10 хм
+        { id = 71475, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- игрок на игрока в 25 об
+        { id = 71476, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- игрок на игрока в 10 хм + 10 об босс на игрока
+        { id = 71477, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- игрок на игрока в 25 хм
+        { id = 70946, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- 10 об игрок на игрока
+        { id = 72148, message = Used, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Исступление на шарке 25 героик
+        { id = 28747, message = Used, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Бешенство на шарке 25 героик
+        { id = 71289, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  леди контроль
+        { id = 71264, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Роящиеся тени
+        { id = 73914, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  чума
     },
     DISPELS = {
-        2782,  -- "Снятие проклятия"
-        526,   -- "Оздоровление"
-        4987,  -- "Очищение"
-        51886, -- "Очищение духа"
-        32375, -- "Массовое рассеивание"
-        32592, -- "Массовое рассеивание"
-        988,   -- "Рассеивание заклинаний"
-        552,   -- "Устранение болезни"
-        48011, -- "Пожирание магии"
-        528,   -- "Излечение болезни"
-        --19801,  -- "Усмиряющий выстрел"
-        475,   -- "Снятие проклятия"
-        10872, -- "Эффект устранения болезни"
-        2893,  -- "Устранение яда"
-        3137,  -- "Эффект устранения яда"
-        1152,  -- "Омовение"
-        57767, -- "Очищение"
+        { id = 02782, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Снятие проклятия"
+        { id = 00526, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Оздоровление"
+        { id = 04987, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Очищение"
+        { id = 51886, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Очищение духа"
+        { id = 32375, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Массовое рассеивание"
+        { id = 32592, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Массовое рассеивание"
+        { id = 00988, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Рассеивание заклинаний"
+        { id = 00552, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Устранение болезни"
+        { id = 48011, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Пожирание магии"
+        { id = 00528, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Излечение болезни"
+        { id = 00475, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Снятие проклятия"
+        { id = 10872, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Эффект устранения болезни"
+        { id = 02893, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Устранение яда"
+        { id = 03137, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Эффект устранения яда"
+        { id = 01152, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Омовение"
+        { id = 57767, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Очищение"
+
+        { id = 59752, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  "Каждый за себя"
+
+        { id = 02782, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Снятие проклятия"
+        { id = 00526, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Оздоровление"
+        { id = 04987, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Очищение"
+        { id = 51886, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Очищение духа"
+        { id = 32375, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Массовое рассеивание"
+        { id = 32592, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Массовое рассеивание"
+        { id = 00988, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Рассеивание заклинаний"
+        { id = 00552, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Устранение болезни"
+        { id = 48011, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Пожирание магии"
+        { id = 00528, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Излечение болезни"
+        { id = 00475, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Снятие проклятия"
+        { id = 10872, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Эффект устранения болезни"
+        { id = 02893, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Устранение яда"
+        { id = 03137, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Эффект устранения яда"
+        { id = 01152, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Омовение"
+        { id = 57767, message = DispelFail, event =  SPELL_DISPEL_FAILED, print = false, say = false }, --  "Очищение"
     }
 }
 
@@ -510,3 +362,12 @@ ns.NamedCategories = {
     { "Food",         ns.L["Food"] },
     { "ICC25HM",      ns.L["ICC25HM"] },
 }
+
+-- setting the name depending on the culture
+for i = 1, #ns.NamedCategories do
+    local arr = ns.spellsAll[ns.NamedCategories[i][1]]
+    for j = 1, #arr do
+        local name, rank = GetSpellInfo(arr[j].id)
+        arr[j].name = name;
+    end
+end
