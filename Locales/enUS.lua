@@ -62,7 +62,13 @@ L["%s creates %s!"]                                         = "%s creates %s!"
 L["%s %s dissipates %s with %s!"]                           = "%s %s dissipates %s with %s!"   
 L["%s dying. Can get up %s!"]                               = "%s dying. Can get up %s!"       
 L["%s %s failed to dispel %s's %s!"]                        = "%s %s failed to dispel %s's %s!"
-L["%s died lol!"]                                           = "%s died lol!" 
+L["%s died lol!"]                                           = "%s died lol!"
+L["%s exploded a spirit!"]                                  = "%s exploded a spirit!";
+L["%s on %s damage %s! (50% weapon)"]                       = "%s on %s damage %s! (50%% weapon)";
+L["%s on %s damage %s! (Shadow damage)"]                    = "%s on %s damage %s! (Shadow damage)";
+
+
+
 ----------------------------------------------------------------------------------------------------------------------------------------
 L["DISPELS"]                                                = "Dispels"
 L["Engineering"]                                            = "Engineering"

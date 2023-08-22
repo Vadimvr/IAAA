@@ -112,32 +112,31 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
     spellID,        -- id спела
     spellName,      -- название спела
     school,         -- маска школы
-    idScattering,   -- ид при рассеивании
+    idScattering,   -- ид при рассеивании или урон от спела
     nameScattering, -- заклинание которое рассеяли
     ...)            -- остальные аргументы
-    
-    -- if(true) then
-    --     Print("COMBAT_LOG_EVENT_UNFILTERED")
-    --     Print(tostring(timestamp).." время применения")
-    --     Print(tostring(event ).." тип события")
-    --     Print(tostring(srcGUID ).." GUID источника")
-    --     Print(tostring(srcName ).." имя источника")
-    --     Print(tostring(srcFlags ).." флаги")
-    --     Print(tostring(destGUID  ).." GUID получившего каст")
-    --     Print(tostring(destName  ).." имя получившего каст")
-    --     Print(tostring(destFlags ).." флаги")
-    --     Print(tostring(spellID  ).." id спела")
-    --     Print(tostring(spellName  ).." название спела")
-    --     Print(tostring(school  ).." маска школы")
-    --   print(debuggingMode)
-    -- end
+    if(false) then
+        Print("COMBAT_LOG_EVENT_UNFILTERED")
+        Print(tostring(timestamp).." время применения")
+        Print(tostring(event ).." тип события")
+        Print(tostring(srcGUID ).." GUID источника")
+        Print(tostring(srcName ).." имя источника")
+        Print(tostring(srcFlags ).." флаги")
+        Print(tostring(destGUID  ).." GUID получившего каст")
+        Print(tostring(destName  ).." имя получившего каст")
+        Print(tostring(destFlags ).." флаги")
+        Print(tostring(spellID  ).." id спела")
+        Print(tostring(spellName  ).." название спела")
+        Print(tostring(school  ).." маска школы")
+        Print(tostring(idScattering  ).." ид при рассеивании")
+      print(debuggingMode)
+    end
 
     if UnitInRaid(srcName) or UnitInParty(srcName) or debuggingMode then
         if (ns.SpellsAndPatterns[event]) then
             if (ns.SpellsAndPatterns[event][spellID]) then
-                send(ns.SpellsAndPatterns[event][spellID](srcGUID, srcName, spellID,destGUID, destName,idScattering ));
+                send(ns.SpellsAndPatterns[event][spellID](srcGUID, srcName, spellID, destGUID, destName, idScattering));
             end
         end
     end
 end
-

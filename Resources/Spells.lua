@@ -13,47 +13,64 @@ local SPELL_MISSED = "SPELL_MISSED"
 local SPELL_DAMAGE = "SPELL_DAMAGE"
 local SPELL_PERIODIC_HEAL = "SPELL_PERIODIC_HEAL"
 local SPELL_DISPEL = "SPELL_DISPEL"
-local SPELL_DISPEL_FAILED = "SPELL_DISPEL_FAILED"
+local SPELL_DISPEL_FAILED = "SPELL_DISPEL_FAILED";
+local SWING_MISSED = "SWING_MISSED";
+local SWING_DAMAGE = "SWING_DAMAGE"
+local SPELL_PERIODIC_DAMAGE = "SPELL_PERIODIC_DAMAGE";
 
 function Used(srcGUID, srcName, spellID,destGUID, destName,idScattering)
-    print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
 
     return ns.used:format(GetColor(srcGUID, srcName), GetSpellLink(spellID))
 end
 function TauntMissed(srcGUID, srcName, spellID,destGUID, destName,idScattering)
-    print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
 
     return ns.tauntMissed:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName))
 end
 
 function Cast(srcGUID, srcName, spellID,destGUID, destName,idScattering)
-    print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
 
     return ns.cast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName))
 end
 
 function Taunt(srcGUID, srcName, spellID,destGUID, destName,idScattering)
-    print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
     return ns.taunt:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName))
 end
 
 function Feast(srcGUID, srcName, spellID,destGUID, destName,idScattering)
-    print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
     return ns.feast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID))
 end
 
 function Dispel(srcGUID, srcName, spellID,destGUID, destName,idScattering)
-    print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
     return ns.dispel:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetSpellLink(idScattering), GetColor(destGUID, destName))
 end
 function Create(srcGUID, srcName, spellID,destGUID, destName,idScattering)
 
-    print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
     return ns.create:format(GetColor(srcGUID, srcName), GetSpellLink(spellID))
 end
 function DispelFail(srcGUID, srcName, spellID,destGUID, destName,idScattering)
-    print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
     return "DispelFail"
+end
+
+function SpiritLady(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.spiritLady:format(GetColor(destGUID, destName))
+end
+
+function SoulReaper_APPLIED(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.soulReaperApplied:format(GetSpellLink(spellID), GetColor(destGUID, destName), idScattering)
+
+end
+
+function SoulReaper_REMOVED(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.soulReaperRemoved:format(GetSpellLink(spellID), GetColor(destGUID, destName), idScattering)
 end
 
 --#region GetColor
@@ -97,8 +114,10 @@ end
 --{id = 0, message = used, event = SPELL_CAST_SUCCESS, print = false, say = false}, --
 ns.spellsAll = {
     DEATHKNIGHT = {
-        { id = 56222, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Темная власть
+        { id = 56222, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Темная власть
         { id = 56222, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Темная власть
+        { id = 49576, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Хватка смерти сам каст
+        { id = 49576, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Хватка смерти сам каст
 
         { id = 55233, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Кровь вампира
         { id = 42650, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Войско мертвых
@@ -108,8 +127,7 @@ ns.spellsAll = {
         { id = 47528, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Заморозка разума
         { id = 48707, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Антимагический панцирь
         -- { id = 49560, message = cast, event = SPELL_CAST_SUCCESS, print = false, say = false }, --  Хватка смерти
-        { id = 49576, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Хватка смерти сам каст
-        { id = 49576, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Хватка смерти сам каст
+
         { id = 48743, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Смертельный союз
         { id = 49016, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Истерия
         { id = 47476, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Удушение
@@ -125,9 +143,9 @@ ns.spellsAll = {
         { id = 53227, message = Cast, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Тайфун
         { id = 53227, message = Cast, event =  SPELL_DAMAGE,       print = false, say = false }, --  Тайфун
 
-        { id = 06795, message = Used, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Рык
+        { id = 06795, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Рык
         { id = 06795, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Рык
-        { id = 05209, message = Cast, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Вызывающий рев
+        { id = 05209, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Вызывающий рев
         { id = 05209, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Вызывающий рев
 
         { id = 29166, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Озарение
@@ -138,7 +156,7 @@ ns.spellsAll = {
         { id = 33786, message = Cast, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  конроль
     },
     HUNTER = {
-        { id = 20736, message = Taunt, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Отвлекающий выстрел
+        { id = 20736, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Отвлекающий выстрел
         { id = 20736, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Отвлекающий выстрел
         { id = 34477, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Перенаправление
         { id = 13809, message = Used, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Ледяная ловушка
@@ -153,7 +171,6 @@ ns.spellsAll = {
     },
     PALADIN = {
         { id = 31790, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Праведная защита пал
-        { id = 31789, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Праведная защита каст
         { id = 31789, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Праведная защита каст
 
         { id = 62124, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Длань возмездия
@@ -211,7 +228,7 @@ ns.spellsAll = {
         { id = 00355, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  Провокация
         { id = 00694, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  дразнящий удар
         { id = 00694, message = TauntMissed, event =  SPELL_MISSED,       print = false, say = false }, --  дразнящий удар
-        { id = 01161, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Вызывающий крик -- таунт
+        { id = 01161, message = Taunt, event =  SPELL_AURA_APPLIED, print = false, say = false }, --  Вызывающий крик -- таунт
 
         { id = 07386, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Раскол брони
         { id = 06552, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Зуботычина
@@ -261,9 +278,18 @@ ns.spellsAll = {
     },
     ICC25HM = {
         --{ id = 69409, message = used, event = SPELL_CAST_SUCCESS, print = false, say = false }, -- 10 об
-        { id = 73797, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  25 об
-        { id = 73798, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  10 хм
+        { id = 73797, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73797, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73797, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+
+        { id = 73798, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73798, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73798, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+
         { id = 73799, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73799, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73799, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        
         { id = 71726, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира
         { id = 71729, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- босс в 25 хм
         { id = 71727, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- босс в 24 об
@@ -277,6 +303,13 @@ ns.spellsAll = {
         { id = 71289, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  леди контроль
         { id = 71264, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Роящиеся тени
         { id = 73914, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  чума
+
+        -- { id = 72010, message = SpiritLady, event =  SWING_DAMAGE, print = false, say = false }, --  духи леди 10/25 ??
+        -- { id = 72011, message = SpiritLady, event =  SWING_DAMAGE, print = false, say = false }, --  духи леди 10хм
+        -- { id = 72012, message = SpiritLady, event =  SWING_DAMAGE, print = false, say = false }, --  духи леди 25 хм
+        -- { id = 72010, message = SpiritLady, event =  SWING_MISSED, print = false, say = false }, --  духи леди 10/25 ??
+        -- { id = 72011, message = SpiritLady, event =  SWING_MISSED, print = false, say = false }, --  духи леди 10хм
+        -- { id = 72012, message = SpiritLady, event =  SWING_MISSED, print = false, say = false }, --  духи леди 25 хм
     },
     DISPELS = {
         { id = 02782, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Снятие проклятия"
