@@ -28,9 +28,7 @@ function WindowSetting:ShowHide()
 end
 
 function WindowSetting:LoadSavedSettings()
-    print("LoadSavedSettings")
     for k, v in pairs(ns.TrackedSpells) do
-        print(k,v)
         if (listWithLinksToAptitudeCheckButton[v]) then
             listWithLinksToAptitudeCheckButton[v]:SetChecked(1);
         end
@@ -44,7 +42,6 @@ function SetValuesInSpellLists()
         if (listWithLinksToAptitudeCheckButton[k]:GetChecked() == 1) then
             local name, rank = GetSpellInfo(k)
             ns.TrackedSpells[name] = k;
-            --print("tracked", k,name )
         end
     end
 
@@ -54,12 +51,10 @@ function SetValuesInSpellLists()
         for j = 1, #isSpells do
             local record = isSpells[j]
             if (ns.SpellsAndPatterns[record.event] == nil) then
-                print("add event", record.event)
                 ns.SpellsAndPatterns[record.event] = {}
             end
             if (ns.TrackedSpells[record.name]) then
                 if (ns.SpellsAndPatterns[record.event][record.id] == nil) then
-                    print("add spell", record.id, record.message)
                     ns.SpellsAndPatterns[record.event][record.id] = record.message
                 end
             end
