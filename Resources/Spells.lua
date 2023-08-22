@@ -303,13 +303,6 @@ ns.spellsAll = {
         { id = 71289, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  леди контроль
         { id = 71264, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  Роящиеся тени
         { id = 73914, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  чума
-
-        -- { id = 72010, message = SpiritLady, event =  SWING_DAMAGE, print = false, say = false }, --  духи леди 10/25 ??
-        -- { id = 72011, message = SpiritLady, event =  SWING_DAMAGE, print = false, say = false }, --  духи леди 10хм
-        -- { id = 72012, message = SpiritLady, event =  SWING_DAMAGE, print = false, say = false }, --  духи леди 25 хм
-        -- { id = 72010, message = SpiritLady, event =  SWING_MISSED, print = false, say = false }, --  духи леди 10/25 ??
-        -- { id = 72011, message = SpiritLady, event =  SWING_MISSED, print = false, say = false }, --  духи леди 10хм
-        -- { id = 72012, message = SpiritLady, event =  SWING_MISSED, print = false, say = false }, --  духи леди 25 хм
     },
     DISPELS = {
         { id = 02782, message = Dispel, event =  SPELL_DISPEL, print = false, say = false }, --  "Снятие проклятия"
