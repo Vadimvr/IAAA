@@ -105,6 +105,8 @@ function ns:Send(msg)
     send(msg)
 end
 
+local src;
+local dest;
 function Core:COMBAT_LOG_EVENT_UNFILTERED(
     timestamp,      -- время применения
     event,          -- тип события
@@ -138,95 +140,116 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
     -- end
     -- print("COMBAT_LOG_EVENT_UNFILTERED")
     --
-    if UnitInRaid(destName) or UnitInParty(destName) or debuggingMode then
-        if spellName == SOUL_STONE and event == "SPELL_AURA_REMOVED" then
-            if not soulStones[destName] then soulStones[destName] = {} end
-            soulStones[destName].time = GetTime()
-        elseif spellID == 27827 and event == "SPELL_AURA_APPLIED" then
-            soulStones[destName] = {}
-            soulStones[destName].SoR = true
-        elseif event == "UNIT_DIED" and soulStones[destName] and not UnitIsFeignDeath(destName) then
-            if not soulStones[destName].SoR and (GetTime() - soulStones[destName].time) < 2 then
-                send(ns.ss:format(GetColor(destGUID, destName), GetSpellLink(6203)))
-            end
-            soulStones[destName] = nil
-        end
-    end
-    -- Проверку на бой
+    -- if UnitInRaid(destName) or UnitInParty(destName) or debuggingMode then
+    --     if spellName == SOUL_STONE and event == "SPELL_AURA_REMOVED" then
+    --         if not soulStones[destName] then soulStones[destName] = {} end
+    --         soulStones[destName].time = GetTime()
+    --     elseif spellID == 27827 and event == "SPELL_AURA_APPLIED" then
+    --         soulStones[destName] = {}
+    --         soulStones[destName].SoR = true
+    --     elseif event == "UNIT_DIED" and soulStones[destName] and not UnitIsFeignDeath(destName) then
+    --         if not soulStones[destName].SoR and (GetTime() - soulStones[destName].time) < 2 then
+    --             send(ns.ss:format(GetColor(destGUID, destName), GetSpellLink(6203)))
+    --         end
+    --         soulStones[destName] = nil
+    --     end
+    -- end
+    -- Проверка на бой
     if UnitInRaid(srcName) or UnitInParty(srcName) or debuggingMode then
-        if event == "SPELL_CAST_SUCCESS" then
-            if ns.spells[spellID] then
-                send(ns.cast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
-            elseif ns.icc[spellID] then
-                send(ns.castICC:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
-            elseif ns.use[spellID] then
-                send(ns.used:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
-            elseif ns.bots[spellID] then
-                send(ns.bot:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
-            elseif ns.rituals[spellID] then
-                send(ns.create:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
-            end
-        elseif event == "SPELL_AURA_APPLIED" then
-            if ns.taunts[spellID] then -- 31789
-                send(ns.taunt:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
-            elseif ns.bonus[spellID] then
-                send(ns.used:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
-            elseif ns.bots[spellID] then
-                send(ns.bot:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
-            elseif spellName == SOUL_STONE then
-                local _, class = UnitClass(srcName)
-                if class == "WARLOCK" then
-                    send(ns.cast:format(GetColor(srcGUID, srcName), GetSpellLink(6203), GetColor(destGUID, destName)))
+        if (ns.SpellsAndPatterns[event]) then
+            if (ns.SpellsAndPatterns[event][spellID]) then
+                -- print(ns.SpellsAndPatterns[event][spellID])
+                if (idScattering == nil) then
+                    idScattering = 1;
                 end
-            elseif ns.reborn[spellID] then
-                if not ad_heal then
-                    send(ns.ad:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
+                if (destGUID >0) then
+                    print(destGUID)
+                    dest = GetColor(destGUID, destName)
                 end
-                ad_heal = false
-            end
-        elseif event == "SPELL_HEAL" then
-            if ns.reborn[spellID] then
-                local amount = ...
-                ad_heal = true
-                send(ns.gs:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), amount))
-            end
-        elseif event == "SPELL_RESURRECT" then
-            if ns.spells[spellID] then
-                send(ns.cast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
-            end
-        elseif event == "SPELL_MISSED" then
-            if ns.taunts[spellID] then -- 31789
-                send(ns.tauntMissed:format(GetColor(srcGUID, srcName), GetSpellLink(spellID),
-                    GetColor(destGUID, destName)))
-            end
-        elseif event == "SPELL_CREATE" then
-            if ns.port[spellID] then
-                send(ns.portal:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
-            end
-        elseif event == "SPELL_CAST_START" then
-            if ns.feasts[spellID] then
-                send(ns.feast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
-            end
-        elseif event == "SPELL_DISPEL" then
-            -- print("SPELL_DISPEL",ns.dispels, spellID)
-            if ns.dispels[spellID] then
-                send(ns.dispel:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetSpellLink(idScattering),
-                    GetColor(destGUID, destName)))
-            end
-        elseif event == "UNIT_DIED" then
-            --print("UNIT_DIED",destGUID, destName)
-            if (destGUID == nil) then
-                return "====================error destGUID is nil"
-            end
-            if (destName == nil) then
-                return "====================error destName is nil"
-            end
-            local _, classFilename = GetPlayerInfoByGUID(tostring(destGUID))
-           
-            if (classFilename ~= nil) then
-                send(ns.died:format(GetColor(destGUID, destName)));
+                if (srcGUID>0) then
+                    src = GetColor(srcGUID, srcName)
+                end
+                if (spellID == nil) then
+                    spellID = 1;
+                end
+                print(spellID)
+                send(ns.SpellsAndPatterns[event][spellID]:format(src, GetSpellLink(spellID), dest,
+                    GetSpellLink(idScattering)))
             end
         end
+        -- if event == "SPELL_CAST_SUCCESS" then
+        --     if ns.spells[spellID] then
+        --         send(ns.cast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
+        --     elseif ns.icc[spellID] then
+        --         send(ns.castICC:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
+        --     elseif ns.use[spellID] then
+        --         send(ns.used:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
+        --     elseif ns.bots[spellID] then
+        --         send(ns.bot:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
+        --     elseif ns.rituals[spellID] then
+        --         send(ns.create:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
+        --     end
+        -- elseif event == "SPELL_AURA_APPLIED" then
+        --     if ns.taunts[spellID] then -- 31789
+        --         send(ns.taunt:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
+        --     elseif ns.bonus[spellID] then
+        --         send(ns.used:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
+        --     elseif ns.bots[spellID] then
+        --         send(ns.bot:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
+        --     elseif spellName == SOUL_STONE then
+        --         local _, class = UnitClass(srcName)
+        --         if class == "WARLOCK" then
+        --             send(ns.cast:format(GetColor(srcGUID, srcName), GetSpellLink(6203), GetColor(destGUID, destName)))
+        --         end
+        --     elseif ns.reborn[spellID] then
+        --         if not ad_heal then
+        --             send(ns.ad:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
+        --         end
+        --         ad_heal = false
+        --     end
+        -- elseif event == "SPELL_HEAL" then
+        --     if ns.reborn[spellID] then
+        --         local amount = ...
+        --         ad_heal = true
+        --         send(ns.gs:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), amount))
+        --     end
+        -- elseif event == "SPELL_RESURRECT" then
+        --     if ns.spells[spellID] then
+        --         send(ns.cast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName)))
+        --     end
+        -- elseif event == "SPELL_MISSED" then
+        --     if ns.taunts[spellID] then -- 31789
+        --         send(ns.tauntMissed:format(GetColor(srcGUID, srcName), GetSpellLink(spellID),
+        --             GetColor(destGUID, destName)))
+        --     end
+        -- elseif event == "SPELL_CREATE" then
+        --     if ns.port[spellID] then
+        --         send(ns.portal:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
+        --     end
+        -- elseif event == "SPELL_CAST_START" then
+        --     if ns.feasts[spellID] then
+        --         send(ns.feast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID)))
+        --     end
+        -- elseif event == "SPELL_DISPEL" then
+        --     -- print("SPELL_DISPEL",ns.dispels, spellID)
+        --     if ns.dispels[spellID] then
+        --         send(ns.dispel:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetSpellLink(idScattering),
+        --             GetColor(destGUID, destName)))
+        --     end
+        -- elseif event == "UNIT_DIED" then
+        --     --print("UNIT_DIED",destGUID, destName)
+        --     if (destGUID == nil) then
+        --         return "====================error destGUID is nil"
+        --     end
+        --     if (destName == nil) then
+        --         return "====================error destName is nil"
+        --     end
+        --     local _, classFilename = GetPlayerInfoByGUID(tostring(destGUID))
+
+        --     if (classFilename ~= nil) then
+        --         send(ns.died:format(GetColor(destGUID, destName)));
+        --     end
+        -- end
 
         -- ns.dispel           = "%s %s рассеивает %s с %s!"
         -- ns.dispelFail       = "%s %s не удалось рассеять %s's %s!"
