@@ -1,7 +1,7 @@
 ## Interface: 30300
 ## Title: IAAA by Maraka
 ## Author: Maraka
-## Version: 0.0.6 beta
+## Version: 1.0.0
 ## Notes: Information about applied abilities in raid
 ## Notes-ruRU: Измеритель урона.
 ## DefaultState: Enabled
