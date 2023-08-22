@@ -7,6 +7,7 @@ local SOUL_STONE    = GetSpellInfo(20707)                                     --
 local CABLES        = GetSpellInfo(54732)                                     -- Гномий дефибриллятор
 
 --#region old
+
 ns.dispels          = {
     [2782] = true,  -- "Снятие проклятия"
     [526] = true,   -- "Оздоровление"
@@ -231,180 +232,182 @@ ns.reborn = {
 }
 --#endregion
 
+
+--{id = 0, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false}, --
 ns.spellsNew1 = {
     DEATHKNIGHT = {
-        56222, -- Темная власть
-        55233, -- Кровь вампира
-        42650, -- Войско мертвых
-        48792, -- Незыблемость льда
-        48982, -- Захват рун
-        70654, -- Кровавый доспех
-        47528, -- Заморозка разума
-        48707, -- Антимагический панцирь
-        49560, -- Хватка смерти
-        49576, -- Хватка смерти сам каст
-        48743, -- Смертельный союз
-        49016, -- Истерия
-        47476, -- Удушение
-        49005, -- Кровавая метка
+        { id = 56222, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Темная власть
+        { id = 55233, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Кровь вампира
+        { id = 42650, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Войско мертвых
+        { id = 48792, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Незыблемость льда
+        { id = 48982, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Захват рун
+        { id = 70654, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Кровавый доспех
+        { id = 47528, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Заморозка разума
+        { id = 48707, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Антимагический панцирь
+        { id = 49560, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Хватка смерти
+        { id = 49576, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Хватка смерти сам каст
+        { id = 48743, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Смертельный союз
+        { id = 49016, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Истерия
+        { id = 47476, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Удушение
+        { id = 49005, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Кровавая метка
     },
     DRUID = {
-        61336, -- Инстинкты выживания
-        22812, -- Дубовая кожа
-        48477, -- Возрождение
-        53227, -- Тайфун
-        6795,  -- Рык
-        5209,  -- Вызывающий рев
-        29166, -- Озарение
-        70725, -- 4P T10
-        33786, -- конроль
+        { id = 61336, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Инстинкты выживания
+        { id = 22812, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Дубовая кожа
+        { id = 48477, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Возрождение
+        { id = 53227, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Тайфун
+        { id = 06795, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Рык
+        { id = 05209, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Вызывающий рев
+        { id = 29166, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Озарение
+        { id = 70725, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  4P T10
+        { id = 33786, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  конроль
     },
     HUNTER = {
-        34477, -- Перенаправление
-        13809, -- Ледяная ловушка
-        19801, -- Усмиряющий выстрел
-        20736, -- Отвлекающий выстрел
-        34600, -- Змеиная ловушка
+        { id = 34477, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Перенаправление
+        { id = 13809, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Ледяная ловушка
+        { id = 19801, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Усмиряющий выстрел
+        { id = 20736, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Отвлекающий выстрел
+        { id = 34600, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Змеиная ловушка
     },
     MAGE = {
-        66,    -- Невидимость
-        45438, -- Ледяная глыба
-        2139,  -- Антимагия
-        58659, -- Стол
+        { id = 00066, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },   -- Невидимость
+        { id = 45438, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },   --  Ледяная глыба
+        { id = 02139, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },   --  Антимагия
+        { id = 58659, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },   --  Стол
     },
     PALADIN = {
-        31790, -- Праведная защита пал
-        62124, -- Длань возмездия
-        1044,  -- Длань свободы
-        1038,  -- Длань спасения
-        6940,  -- Длань жертвенности
-        10278, -- Длань защиты
-        20066, -- Покаяние
-        48817, -- Гнев небес
-        10308, -- Молот правосудия
-        66233, -- Ревностный защитник
-        66235, -- Ревностный защитник
-        31789, -- Праведная защита каст
-        31821, -- Мастер аур
-        31884, -- крылья
-        498,   -- 50 на 50
-        642,   -- бабл
-        64205, -- масс сакра
-        19752, -- диван
-        54428, -- Святая клятва
-        20233, -- Возложение рук
-        20236, -- Возложение рук
-        31884, -- крылья
+        { id = 31790, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Праведная защита пал
+        { id = 62124, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Длань возмездия
+        { id = 01044, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Длань свободы
+        { id = 01038, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Длань спасения
+        { id = 06940, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Длань жертвенности
+        { id = 10278, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Длань защиты
+        { id = 20066, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Покаяние
+        { id = 48817, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Гнев небес
+        { id = 10308, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Молот правосудия
+        { id = 66233, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Ревностный защитник
+        { id = 66235, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Ревностный защитник
+        { id = 31789, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Праведная защита каст
+        { id = 31821, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Мастер аур
+        { id = 31884, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  крылья
+        { id = 00498, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  50 на 50
+        { id = 00642, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  бабл
+        { id = 64205, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  масс сакра
+        { id = 19752, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  диван
+        { id = 54428, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Святая клятва
+        { id = 20233, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Возложение рук
+        { id = 20236, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Возложение рук
+        { id = 31884, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  крылья
     },
     PRIEST = {
-        48153, -- Оберегающий дух
-        47788, -- Оберегающий дух
-        6346,  -- Защита от страха
-        33206, -- Подавление боли
-        64901, -- Гимн надежды
-        64843, -- Божественный гимн
+        { id = 48153, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Оберегающий дух
+        { id = 47788, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Оберегающий дух
+        { id = 06346, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Защита от страха
+        { id = 33206, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Подавление боли
+        { id = 64901, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Гимн надежды
+        { id = 64843, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Божественный гимн
     },
     ROGUE = {
-        51722, -- Долой оружие
-        57934, -- Маленькие хитрости
-        31224, -- Плащ Теней
+        { id = 51722, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Долой оружие
+        { id = 57934, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Маленькие хитрости
+        { id = 31224, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Плащ Теней
     },
     SHAMAN = {
-        2825,  -- Жажда крови
-        32182, -- Героизм
-        16190, -- Тотем прилива маны
-        21169, -- Перерождение
+        { id = 02825, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Жажда крови
+        { id = 32182, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Героизм
+        { id = 16190, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Тотем прилива маны
+        { id = 21169, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Перерождение
     },
     WARLOCK = {
-        58887, -- Ритуал душ
-        698,   -- Ритуал призыва
+        { id = 58887, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Ритуал душ
+        { id = 00698, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Ритуал призыва
     },
     WARRIOR = {
-        355,   -- Провокация
-        694,   -- дразнящий удар
-        1161,  -- Вызывающий крик -- таунт
-        7386,  -- Раскол брони
-        6552,  -- Зуботычина
-        676,   -- Разоружение
-        12809, -- Оглушающий удар
-        3411,  -- Вмешательство
-        12975, -- Ни шагу назад
-        12976, -- Ни шагу назад
-        871,   -- Глухая оборона
-        70845, -- Стоицизм т10
-        2565,  -- Блок щитом
-        5246,  -- устрашающий-крик
+        { id = 00355, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Провокация
+        { id = 00694, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  дразнящий удар
+        { id = 01161, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Вызывающий крик -- таунт
+        { id = 07386, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Раскол брони
+        { id = 06552, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Зуботычина
+        { id = 00676, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Разоружение
+        { id = 12809, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Оглушающий удар
+        { id = 03411, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Вмешательство
+        { id = 12975, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Ни шагу назад
+        { id = 12976, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Ни шагу назад
+        { id = 00871, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Глухая оборона
+        { id = 70845, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Стоицизм т10
+        { id = 02565, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  Блок щитом
+        { id = 05246, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  устрашающий-крик
     },
 
     Engineering = {
-        54861,
-        22700,
-        44389,
-        67826,
-        54710,
-        54711,
+        { id = 54861, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },
+        { id = 22700, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },
+        { id = 44389, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },
+        { id = 67826, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },
+        { id = 54710, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },
+        { id = 54711, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },
     },
     Accessories = {
-        71638, -- Клык
-        71635, -- клык
-        71586, -- ключ
+        { id = 71638, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Клык
+        { id = 71635, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  клык
+        { id = 71586, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  ключ
     },
     MagicPortals = {
-        53142, -- Даларан
-        11419, -- Дарнас
-        32266, -- Экзодар
-        11416, -- Стальгорн
-        11417, -- Огри
-        33691, -- Шатрат
-        35717, -- Шатрат
-        32267, -- Луносвет
-        49361, -- Каменор
-        10059, -- Шторм
-        49360, -- Терамор
-        11420, -- Громовой утес
-        11418, -- Подгород
+        { id = 53142, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Даларан
+        { id = 11419, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Дарнас
+        { id = 32266, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Экзодар
+        { id = 11416, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Стальгорн
+        { id = 11417, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Огри
+        { id = 33691, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Шатрат
+        { id = 35717, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Шатрат
+        { id = 32267, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Луносвет
+        { id = 49361, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Каменор
+        { id = 10059, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Шторм
+        { id = 49360, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Терамор
+        { id = 11420, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Громовой утес
+        { id = 11418, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Подгород
     },
     Food = {
-        57426, -- Рыбный пир
-        57301, -- "Пир на весь мир"
-        66476, -- Богатый пир
+        { id = 57426, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Рыбный пир
+        { id = 57301, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  "Пир на весь мир"
+        { id = 66476, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Богатый пир
     },
     ICC25HM = {
-        69409, --10 об
-        73797, -- жнец душ  25 об
-        73798, -- жнец душ  10 хм
-        73799, -- жнец душ  --25 хм
-        71726, -- укус вампира
-        71729, -- укус вампира  -- босс в 25 хм
-        71727, -- укус вампира  -- босс в 24 об
-        71728, -- укус вампира  -- босс в 10 хм
-        71475, -- укус вампира  -- игрок на игрока в 25 об
-        71476, -- укус вампира  -- игрок на игрока в 10 хм + 10 об босс на игрока
-        71477, -- укус вампира  -- игрок на игрока в 25 хм
-        70946, -- укус вампира  -- 10 об игрок на игрока
-        72148, -- Исступление на шарке 25 героик
-        28747, -- Бешенство на шарке 25 героик
-        71289, -- леди контроль
-        71264, -- Роящиеся тени
-        73914, -- чума
+        { id = 69409, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, -- 10 об
+        { id = 73797, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  25 об
+        { id = 73798, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  10 хм
+        { id = 73799, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 71726, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира
+        { id = 71729, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- босс в 25 хм
+        { id = 71727, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- босс в 24 об
+        { id = 71728, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- босс в 10 хм
+        { id = 71475, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- игрок на игрока в 25 об
+        { id = 71476, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- игрок на игрока в 10 хм + 10 об босс на игрока
+        { id = 71477, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- игрок на игрока в 25 хм
+        { id = 70946, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- 10 об игрок на игрока
+        { id = 72148, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Исступление на шарке 25 героик
+        { id = 28747, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Бешенство на шарке 25 героик
+        { id = 71289, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  леди контроль
+        { id = 71264, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  Роящиеся тени
+        { id = 73914, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false }, --  чума
     },
     DISPELS = {
-        2782,  -- "Снятие проклятия"
-        526,   -- "Оздоровление"
-        4987,  -- "Очищение"
-        51886, -- "Очищение духа"
-        32375, -- "Массовое рассеивание"
-        32592, -- "Массовое рассеивание"
-        988,   -- "Рассеивание заклинаний"
-        552,   -- "Устранение болезни"
-        48011, -- "Пожирание магии"
-        528,   -- "Излечение болезни"
-        475,   -- "Снятие проклятия"
-        10872, -- "Эффект устранения болезни"
-        2893,  -- "Устранение яда"
-        3137,  -- "Эффект устранения яда"
-        1152,  -- "Омовение"
-        57767, -- "Очищение"
+        { id = 02782, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Снятие проклятия"
+        { id = 00526, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Оздоровление"
+        { id = 04987, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Очищение"
+        { id = 51886, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Очищение духа"
+        { id = 32375, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Массовое рассеивание"
+        { id = 32592, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Массовое рассеивание"
+        { id = 00988, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Рассеивание заклинаний"
+        { id = 00552, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Устранение болезни"
+        { id = 48011, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Пожирание магии"
+        { id = 00528, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Излечение болезни"
+        { id = 00475, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Снятие проклятия"
+        { id = 10872, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Эффект устранения болезни"
+        { id = 02893, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Устранение яда"
+        { id = 03137, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Эффект устранения яда"
+        { id = 01152, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Омовение"
+        { id = 57767, mes = ns.used, e = SPELL_CAST_SUCCESS, print = false, say = false },  --  "Очищение"
     }
 }
 
