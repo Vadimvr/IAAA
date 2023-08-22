@@ -115,14 +115,14 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
     idScattering,   -- ид при рассеивании
     nameScattering, -- заклинание которое рассеяли
     ...)            -- остальные аргументы
-    --
+    
     -- if(true) then
     --     Print("COMBAT_LOG_EVENT_UNFILTERED")
     --     Print(tostring(timestamp).." время применения")
     --     Print(tostring(event ).." тип события")
     --     Print(tostring(srcGUID ).." GUID источника")
     --     Print(tostring(srcName ).." имя источника")
-    --     Print(tostring(srcFlags ).." флаги
+    --     Print(tostring(srcFlags ).." флаги")
     --     Print(tostring(destGUID  ).." GUID получившего каст")
     --     Print(tostring(destName  ).." имя получившего каст")
     --     Print(tostring(destFlags ).." флаги")
@@ -135,58 +135,9 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
     if UnitInRaid(srcName) or UnitInParty(srcName) or debuggingMode then
         if (ns.SpellsAndPatterns[event]) then
             if (ns.SpellsAndPatterns[event][spellID]) then
-                -- print(ns.SpellsAndPatterns[event][spellID])
-                if (idScattering == nil) then
-                    idScattering = 1;
-                end
-                if (destGUID >0) then
-                    dest = GetColor(destGUID, destName)
-                end
-                if (srcGUID>0) then
-                    src = GetColor(srcGUID, srcName)
-                end
-                if (spellID == nil) then
-                    spellID = 1;
-                end
-                send(ns.SpellsAndPatterns[event][spellID]:format(src, GetSpellLink(spellID), dest,
-                    GetSpellLink(idScattering)))
+                send(ns.SpellsAndPatterns[event][spellID](srcGUID, srcName, spellID,destGUID, destName,idScattering ));
             end
         end
     end
 end
 
-function GetColor(guid, name)
-    if (ns.NicknameColors[guid] == nil) then
-        local _, classFilename = GetPlayerInfoByGUID(tostring(guid))
-        local color = ns:GetColor(classFilename)
-        ns.NicknameColors[guid] = color .. name .. "|r";
-    end
-
-    return ns.NicknameColors[guid];
-end
-
-function ns:GetColor(classFilename)
-    local color = "|cFFFFFFFF";
-    if (classFilename == "DEATHKNIGHT") then
-        color = "|cFFC41E3A";
-    elseif (classFilename == "WARLOCK") then
-        color = "|cFF8788EE";
-    elseif (classFilename == "DRUID") then
-        color = "|cFFFF7C0A";
-    elseif (classFilename == "MAGE") then
-        color = "|cFF3FC7EB";
-    elseif (classFilename == "HUNTER") then
-        color = "|cFFAAD372";
-    elseif (classFilename == "PALADIN") then
-        color = "|cFFF48CBA";
-    elseif (classFilename == "WARRIOR") then
-        color = "|cFFC69B6D";
-    elseif (classFilename == "ROGUE") then
-        color = "|cFFFFF468";
-    elseif (classFilename == "SHAMAN") then
-        color = "|cFf0070DD";
-    elseif (classFilename == "PRIEST") then
-        color = "|cFFFFFFFF"
-    end
-    return color;
-end
