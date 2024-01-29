@@ -277,18 +277,23 @@ ns.spellsAll = {
         { id = 66476, message = Feast, event =  SPELL_CREATE, print = false, say = false }, --  Богатый пир
     },
     ICC25HM = {
-        --{ id = 69409, message = used, event = SPELL_CAST_SUCCESS, print = false, say = false }, -- 10 об
-        { id = 73797, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 хм
-        { id = 73797, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
-        { id = 73797, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        -- { id = 69409, message = used, event = SPELL_CAST_SUCCESS, print = false, say = false }, -- 10 об
 
-        { id = 73798, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 хм
-        { id = 73798, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
-        { id = 73798, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 69409, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, -- 10 об 
+        { id = 69409, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false },
+        { id = 69409, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false },
+
+        { id = 73797, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 об
+        { id = 73797, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, 
+        { id = 73797, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, 
+
+        { id = 73798, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --10 хм
+        { id = 73798, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, 
+        { id = 73798, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, 
 
         { id = 73799, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  жнец душ  --25 хм
-        { id = 73799, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
-        { id = 73799, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false }, --  жнец душ  --25 хм
+        { id = 73799, message = SoulReaper_APPLIED, event =  SPELL_DAMAGE, print = false, say = false }, 
+        { id = 73799, message = SoulReaper_REMOVED, event =  SPELL_PERIODIC_DAMAGE, print = false, say = false },
         
         { id = 71726, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира
         { id = 71729, message = Cast, event =  SPELL_CAST_SUCCESS, print = false, say = false }, --  укус вампира  -- босс в 25 хм
