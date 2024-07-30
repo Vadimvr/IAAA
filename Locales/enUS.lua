@@ -66,8 +66,7 @@ L["%s died lol!"]                                           = "%s died lol!"
 L["%s exploded a spirit!"]                                  = "%s exploded a spirit!";
 L["%s on %s damage %s! (50% weapon)"]                       = "%s on %s damage %s! (50%% weapon)";
 L["%s on %s damage %s! (Shadow damage)"]                    = "%s on %s damage %s! (Shadow damage)";
-
-
+L["%s on %s Missed! (Shadow damage)"] 						= "%s on %s Missed! (Shadow damage)"
 
 ----------------------------------------------------------------------------------------------------------------------------------------
 L["DISPELS"]                                                = "Dispels"

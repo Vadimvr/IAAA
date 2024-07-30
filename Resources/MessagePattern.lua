@@ -21,3 +21,4 @@ ns.died              = L["%s died lol!"]
 ns.spiritLady        = L["%s exploded a spirit!"]   --"%s взорвал духа!"
 ns.soulReaperApplied = L["%s on %s damage %s! (50% weapon)"]
 ns.soulReaperRemoved = L["%s on %s damage %s! (Shadow damage)"]
+ns.soulReaperMissed =  L["%s on %s Missed! (Shadow damage)"]

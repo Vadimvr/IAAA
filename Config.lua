@@ -32,7 +32,7 @@ ns.HistoryCombatLogBetweenSessions = {}
 
 function ns:Init()
     if (not _Config) then _Config = {} end
-
+    
     -- Show log window
     if (_Config.ShowLog == nil) then _Config.ShowLog = true; end
     ns.ShowLog = _Config.ShowLog;
@@ -80,7 +80,7 @@ function ns:Init()
     --
 
     -- Character name color
-    if (_Config.NicknameColors == nil or TableLength(_Config.NicknameColors) >1000) then
+    if (_Config.NicknameColors == nil or TableLength(_Config.NicknameColors) >100) then
         _Config.NicknameColors = ns.NicknameColors;
     else
         ns.NicknameColors = _Config.NicknameColors;

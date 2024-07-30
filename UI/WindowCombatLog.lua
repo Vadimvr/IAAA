@@ -10,7 +10,7 @@ local MainWindow = CreateFrame("Frame", AddOnName .. "_WindowCombatLog_Frame", U
 MainWindow.lines = 500;
 local buffer = {}
 local nexIndexBuffer = 1; -- индекс в буфере  куда будем вставлять элемент
-local bufferSize = 100 -- MainWindow.lines; -- размер буфера;
+local bufferSize = 500 -- MainWindow.lines; -- размер буфера;
 
 ns.WindowCombatLog = MainWindow;
 
@@ -224,13 +224,13 @@ function MainWindow:CreateMainWindow()
 
     MainWindow:SetBackdrop({
         bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark",
-        edgeFile = "Interface\\PVPFrame\\UI-Character-PVP-Highlight", -- this one is neat
-        edgeSize = 16,
+        edgeFile = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\Square_FullWhite.tga", -- this one is neat
+        edgeSize = 5,
         insets = { left = 8, right = 6, top = 8, bottom = 8 },
     })
     MainWindow:SetBackdropColor(0.5, 0.5, 0.5, ns.AlphaBackGround)
     --MainWindow:SetAlpha(0.1)
-    MainWindow:SetBackdropBorderColor(0, .44, .87, 0.5) -- darkblue
+    MainWindow:SetBackdropBorderColor(0, .44, .87, 1) -- darkblue
     MainWindow:EnableMouse(true)
     -- Movable
     MainWindow:SetMovable(true)
