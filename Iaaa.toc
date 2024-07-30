@@ -6,7 +6,7 @@
 ## Notes-ruRU: Измеритель урона.
 ## DefaultState: Enabled
 ## LoadOnDemand: 0
-## SavedVariables: _Config
+## SavedVariablesPerCharacter: _Config
 
 Libs\LibStub\LibStub.lua
 Libs\CallbackHandler-1.0\CallbackHandler-1.0.xml
