@@ -224,9 +224,9 @@ function MainWindow:CreateMainWindow()
 
     MainWindow:SetBackdrop({
         bgFile = "Interface\\DialogFrame\\UI-DialogBox-Background-Dark",
-        edgeFile = "Interface\\AddOns\\WeakAuras\\Media\\Textures\\Square_FullWhite.tga", -- this one is neat
-        edgeSize = 5,
-        insets = { left = 8, right = 6, top = 8, bottom = 8 },
+        edgeFile = "Interface\\AddOns\\"..AddOnName.."\\Textures\\Square_FullWhite.tga", -- this one is neat
+        edgeSize = 1,
+        insets = { left = 0, right = 0, top = 0, bottom = 0 },
     })
     MainWindow:SetBackdropColor(0.5, 0.5, 0.5, ns.AlphaBackGround)
     --MainWindow:SetAlpha(0.1)

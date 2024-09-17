@@ -94,7 +94,7 @@ function ns:Init()
             .HistoryCombatLogBetweenSessions;
     end
     ns.HistoryCombatLogBetweenSessions = _Config.HistoryCombatLogBetweenSessions;
-    print(ns.HistoryCombatLogBetweenSessions)
+   -- print(ns.HistoryCombatLogBetweenSessions)
     --
     if (_Config.MinimapIcon == nil) then
         _Config.MinimapIcon = {
