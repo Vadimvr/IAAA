@@ -230,6 +230,7 @@ ns.spellsAll = {
         { id = 32182, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Героизм
         { id = 16190, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Тотем прилива маны
         { id = 21169, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Перерождение
+        { id = 58857, message = Taunt, event = SPELL_AURA_APPLIED, print = false, say = false },  --  Многоголосый вой
     },
     WARLOCK = {
         { id = 58887, message = Create, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Ритуал душ
