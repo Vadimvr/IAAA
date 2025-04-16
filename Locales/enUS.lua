@@ -46,7 +46,7 @@ L["Output of messages to the chat."]                        = "Output of message
 L["Output of messages to the ride chat."]                   = "Output of messages to the ride chat."
  --------------------------------------------------------------------------------------------------------------------------------------
 L["%s uses %s!"]                                            = "%s uses %s!"                    
-L["%s uses %s!"]                                            = "%s uses %s!"                    
+L["%s end aura %s!"]                                        = "%s end aura %s!"                    
 L["%s falls from %s!"]                                      = "%s falls from %s!"              
 L["%s uses %s on %s!"]                                      = "%s uses %s on %s!"              
 L["%s uses %s on %s!"]                                      = "%s uses %s on %s!"              
@@ -67,6 +67,7 @@ L["%s exploded a spirit!"]                                  = "%s exploded a spi
 L["%s on %s damage %s! (50% weapon)"]                       = "%s on %s damage %s! (50%% weapon)";
 L["%s on %s damage %s! (Shadow damage)"]                    = "%s on %s damage %s! (Shadow damage)";
 L["%s on %s Missed! (Shadow damage)"] 						= "%s on %s Missed! (Shadow damage)"
+L["%s on %s damage %s!"]				 					= "%s on %s damage %s!"
 
 ----------------------------------------------------------------------------------------------------------------------------------------
 L["DISPELS"]                                                = "Dispels"

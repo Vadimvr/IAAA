@@ -43,7 +43,7 @@ function Core:PLAYER_ENTERING_WORLD()
     ns.WindowCombatLog:Pos()
     ns.WindowSetting:SetFrameLevel(level + 300);
     local _, instance = IsInInstance();
-    if instance == "none" then
+    if instance == "none" and x ==17  then
         Print("|cFFFF0000" .. ns.L["turned off"] .. "|r")
         Core:UnregisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
     else

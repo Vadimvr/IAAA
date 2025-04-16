@@ -21,8 +21,12 @@ local SPELL_PERIODIC_MISSED = "SPELL_PERIODIC_MISSED";
 
 function Used(srcGUID, srcName, spellID, destGUID, destName, idScattering)
     --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
-
     return ns.used:format(GetColor(srcGUID, srcName), GetSpellLink(spellID))
+end
+
+function EndAura(srcGUID, srcName, spellID, destGUID, destName, idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.endAura:format(GetColor(srcGUID, srcName), GetSpellLink(spellID))
 end
 
 function TauntMissed(srcGUID, srcName, spellID, destGUID, destName, idScattering)
@@ -79,7 +83,9 @@ end
 function SoulReaper_SPELL_PERIODIC_MISSED(srcGUID, srcName, spellID, destGUID, destName)
     return ns.soulReaperMissed:format(GetSpellLink(spellID), GetColor(destGUID, destName))
 end
-
+function Damage(srcGUID, srcName, spellID, destGUID, destName,idScattering)
+    return ns.damage:format(GetSpellLink(spellID), GetColor(destGUID, destName),idScattering)
+end
 --#region GetColor
 function GetColor(guid, name)
     if (ns.NicknameColors[guid] == nil) then
@@ -191,6 +197,7 @@ ns.spellsAll = {
         { id = 01044, message = Cast,        event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Длань свободы
         { id = 01038, message = Cast,        event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Длань спасения
         { id = 06940, message = Cast,        event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Длань жертвенности
+        { id = 06940, message = Damage,        event = SPELL_DAMAGE, print = false, say = false },  --  Длань жертвенности урон
         { id = 10278, message = Cast,        event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Длань защиты
         { id = 20066, message = Cast,        event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Покаяние
         { id = 48817, message = Used,        event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Гнев небес
@@ -230,6 +237,9 @@ ns.spellsAll = {
         { id = 32182, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Героизм
         { id = 16190, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Тотем прилива маны
         { id = 21169, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Перерождение
+
+        { id = 58857, message = Taunt,       event = SPELL_AURA_APPLIED, print = false, say = false },  --  волки провокация
+        { id = 58857, message = TauntMissed, event = SPELL_MISSED,       print = false, say = false },  --  волки провокация
     },
     WARLOCK = {
         { id = 58887, message = Create, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Ритуал душ
@@ -320,12 +330,44 @@ ns.spellsAll = {
         { id = 71476, message = Cast,                             event = SPELL_CAST_SUCCESS,    print = false, say = false },  --  укус вампира  -- игрок на игрока в 10 хм + 10 об босс на игрока
         { id = 71477, message = Cast,                             event = SPELL_CAST_SUCCESS,    print = false, say = false },  --  укус вампира  -- игрок на игрока в 25 хм
         { id = 70946, message = Used,                             event = SPELL_CAST_SUCCESS,    print = false, say = false },  --  укус вампира  -- 10 об игрок на игрока
+
+        { id = 72143, message = Used,                             event = SPELL_AURA_APPLIED,    print = false, say = false },  --  Исступление на шарке 10
+        { id = 72146, message = Used,                             event = SPELL_AURA_APPLIED,    print = false, say = false },  --  Исступление на шарке 25 
+        { id = 72147, message = Used,                             event = SPELL_AURA_APPLIED,    print = false, say = false },  --  Исступление на шарке 10 героик
         { id = 72148, message = Used,                             event = SPELL_AURA_APPLIED,    print = false, say = false },  --  Исступление на шарке 25 героик
+
+        { id = 72143, message = EndAura,                          event = SPELL_AURA_REMOVED,    print = false, say = false },  --  Исступление на шарке 10
+        { id = 72146, message = EndAura,                          event = SPELL_AURA_REMOVED,    print = false, say = false },  --  Исступление на шарке 25 
+        { id = 72147, message = EndAura,                          event = SPELL_AURA_REMOVED,    print = false, say = false },  --  Исступление на шарке 10 героик
+        { id = 72148, message = EndAura,                          event = SPELL_AURA_REMOVED,    print = false, say = false },  --  Исступление на шарке 25 героик
+
+
         { id = 28747, message = Used,                             event = SPELL_AURA_APPLIED,    print = false, say = false },  --  Бешенство на шарке 25 героик
         { id = 71289, message = Cast,                             event = SPELL_CAST_SUCCESS,    print = false, say = false },  --  леди контроль
         { id = 71264, message = Cast,                             event = SPELL_CAST_SUCCESS,    print = false, say = false },  --  Роящиеся тени
         { id = 73914, message = Cast,                             event = SPELL_CAST_SUCCESS,    print = false, say = false },  --  чума
-    },
+        --СИНДРАГОСА
+        { id = 70123, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Обжигающий холод
+        { id = 71047, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Обжигающий холод
+        { id = 71048, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Обжигающий холод
+        { id = 71049, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Обжигающий холод
+
+        { id = 71056, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание
+        { id = 73062, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание
+        
+        { id = 69649, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание 10 NORMAL
+        { id = 73061, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание 10 NORMAL
+
+        { id = 71056, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание 25 NORMAL
+        { id = 73062, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание 25 NORMAL
+        
+        { id = 71058, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание 25 ХМ
+        { id = 73064, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание 25 ХМ
+        
+        { id = 74526, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 25 об
+        { id = 74527, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 25 об
+        { id = 74528, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 25 ХМ
+    },  
     DISPELS = {
         { id = 02782, message = Dispel,     event = SPELL_DISPEL,        print = false, say = false },  --  "Снятие проклятия"
         { id = 00526, message = Dispel,     event = SPELL_DISPEL,        print = false, say = false },  --  "Оздоровление"
