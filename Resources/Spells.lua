@@ -351,9 +351,6 @@ ns.spellsAll = {
         { id = 71047, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Обжигающий холод
         { id = 71048, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Обжигающий холод
         { id = 71049, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Обжигающий холод
-
-        { id = 71056, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание
-        { id = 73062, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание
         
         { id = 69649, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание 10 NORMAL
         { id = 73061, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание 10 NORMAL
@@ -363,9 +360,10 @@ ns.spellsAll = {
         
         { id = 71058, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание 25 ХМ
         { id = 73064, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Ледяное дыхание 25 ХМ
-        
+
+        { id = 74525, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 10 об
         { id = 74526, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 25 об
-        { id = 74527, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 25 об
+        { id = 74527, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 10 XM
         { id = 74528, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 25 ХМ
     },  
     DISPELS = {
