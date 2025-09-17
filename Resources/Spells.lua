@@ -269,6 +269,9 @@ ns.spellsAll = {
         { id = 71638, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Клык
         { id = 71635, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  клык
         { id = 71586, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  ключ
+        { id = 67699, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  скарабей танк
+        { id = 67753, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  скарабей танк
+        { id = 26467, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  скарабей хил
     },
     MagicPortals = {
         { id = 53142, message = Create, event = SPELL_CREATE, print = false, say = false },  --  Даларан
