@@ -1,5 +1,5 @@
 local AddOnName, ns                      = ...;
-
+local L                                  = ns.L
 local WindowSetting                      = CreateFrame("Frame", AddOnName .. "_WindowSetting", UIParent);
 local width                              = 800;
 local height                             = 750;
@@ -22,6 +22,19 @@ function WindowSetting:ADDON_LOADED()
     if (ns.ShowSetting) then WindowSetting:Show(); else WindowSetting:Hide() end
 end
 
+function GetSpellInfo_local(spellID)
+    return ns:GetSpellInfo_local(spellID)
+end  
+-- function GetSpellInfo_local(spellID)
+--     if (spellID == 99999) then
+--         Print(L["DIED"])
+--         return L["DIED"]
+--     else
+--         local name , rank = GetSpellInfo(spellID)
+--         return name;
+--     end
+-- end
+
 function WindowSetting:ShowHide()
     if (WindowSetting:IsVisible()) then WindowSetting:Hide(); else WindowSetting:Show(); end
     ns.ShowSetting = WindowSetting:IsVisible() == 1;
@@ -40,8 +53,14 @@ function SetValuesInSpellLists()
     ns.SpellsAndPatterns={}
     for k, v in pairs(listWithLinksToAptitudeCheckButton) do
         if (listWithLinksToAptitudeCheckButton[k]:GetChecked() == 1) then
-            local name, rank = GetSpellInfo(k)
+            local name = GetSpellInfo_local(k)
+            if(name == nil)then
+                Print(k);
+            end
             ns.TrackedSpells[name] = k;
+            if(k<0)then
+                Print( ns.TrackedSpells[name])
+            end
         end
     end
 
@@ -53,6 +72,10 @@ function SetValuesInSpellLists()
             if (ns.SpellsAndPatterns[record.event] == nil) then
                 ns.SpellsAndPatterns[record.event] = {}
             end
+            -- if(record.id < 0)then
+            --     print(record.id)
+            -- end
+         --   print(record.name)
             if (ns.TrackedSpells[record.name]) then
                 if (ns.SpellsAndPatterns[record.event][record.id] == nil) then
                     ns.SpellsAndPatterns[record.event][record.id] = record.message
@@ -95,12 +118,12 @@ function WindowSetting:CreateWindowsSettingElements()
     local y = -30;
     local stringLength = 0;
     local rowLengthOfTheLastColumn = 0;
-
+    --local n;
     for i, d in pairs(ns.spellsAll) do
         if type(d) == "table" then
             for a = 1, #d do
                 if (type(d[a].id) == "number") then
-                    local name, rank = GetSpellInfo(d[a].id);
+                    local name = GetSpellInfo_local(d[a].id);
                     n = string.len(name);
                 else
                     n = string.len(d[a].id);
@@ -139,7 +162,7 @@ function WindowSetting:CreateWindowsSettingElements()
         local isSpells = ns.spellsAll[ns.NamedCategories[i][1]]
         for j = 1, #isSpells do
             local k = isSpells[j].id
-            local name, rank = GetSpellInfo(k)
+            local name = GetSpellInfo_local(k)
             if (singleButton[name] == nil  ) then
                 singleButton[name] = 1;
                 listWithLinksToAptitudeCheckButton[k] = CreateFrame("CheckButton",
@@ -148,7 +171,7 @@ function WindowSetting:CreateWindowsSettingElements()
                 listWithLinksToAptitudeCheckButton[k]:SetPoint("TOPLEFT", x - 32, y + 7);
                 listWithLinksToAptitudeCheckButton[k]:SetScript("OnMouseDown", function(self, button)
                     if (button == "RightButton") then
-                        if (name ~= nil) then
+                        if (name ~= nil and k < 99999) then
                             SetItemRef(GetSpellLink(k))
                             local w, h = ItemRefTooltip:GetSize()
                             ItemRefTooltip:SetSize(w, h + 20)

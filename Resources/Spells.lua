@@ -37,6 +37,10 @@ function Cast(srcGUID, srcName, spellID, destGUID, destName, idScattering)
     return ns.cast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName))
 end
 
+function ShadowTrap(srcGUID, srcName, spellID, destGUID, destName, idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.shadowTrap:format(GetSpellLink(spellID), GetColor(destGUID, destName))
+end
 function Taunt(srcGUID, srcName, spellID, destGUID, destName, idScattering)
     --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
     return ns.taunt:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName))
@@ -79,7 +83,9 @@ end
 function SoulReaper_SPELL_PERIODIC_MISSED(srcGUID, srcName, spellID, destGUID, destName)
     return ns.soulReaperMissed:format(GetSpellLink(spellID), GetColor(destGUID, destName))
 end
-
+function UnitDied(srcGUID, srcName, spellID, destGUID, destName)
+    return ns.died:format(GetColor(destGUID, destName))
+end
 --#region GetColor
 function GetColor(guid, name)
     if (ns.NicknameColors[guid] == nil) then
@@ -329,6 +335,11 @@ ns.spellsAll = {
         { id = 71289, message = Cast,                             event = SPELL_CAST_SUCCESS,    print = false, say = false },  --  леди контроль
         { id = 71264, message = Cast,                             event = SPELL_CAST_SUCCESS,    print = false, say = false },  --  Роящиеся тени
         { id = 73914, message = Cast,                             event = SPELL_CAST_SUCCESS,    print = false, say = false },  --  чума
+
+        { id = 73529, message = ShadowTrap,                       event = SPELL_DAMAGE,          print = false, say = false },  --  ловушка 25 гер
+        { id = 73775, message = ShadowTrap,                       event = SPELL_DAMAGE,          print = false, say = false },  --  ледяная сфера 25 гер
+        { id = 73775, message = UnitDied,                         event = UNIT_DIED,             print = false, say = false },  --  смерть
+        { id = 99999,    message = UnitDied,                         event = UNIT_DIED,             print = false, say = false },  --  смерть
     },
     DISPELS = {
         { id = 02782, message = Dispel,     event = SPELL_DISPEL,        print = false, say = false },  --  "Снятие проклятия"
@@ -393,7 +404,7 @@ ns.NamedCategories = {
 for i = 1, #ns.NamedCategories do
     local arr = ns.spellsAll[ns.NamedCategories[i][1]]
     for j = 1, #arr do
-        local name, rank = GetSpellInfo(arr[j].id)
+        local name = ns:GetSpellInfo_local(arr[j].id)
         arr[j].name = name;
     end
 end

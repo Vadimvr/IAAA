@@ -3,7 +3,7 @@
 
 ---------------------------
 local AddOnName, ns = ...;
-
+local L = ns.L
 local Core = CreateFrame("Frame", AddOnName .. "_Window", UIParent);
 local level = 200;
 
@@ -74,9 +74,7 @@ function Core:PLAYER_LOGOUT()
     ns:Exit()
 end
 
-function Print(...)
-    return print("|cff00AAFFIAAA|r:", ...)
-end
+function Print(...) return ns:Print(...) end
 
 function ns:GetTimeHH_MM_SS()
     local time = time();
@@ -97,6 +95,7 @@ end
 function ns:Send(msg)
     send(msg)
 end
+
 
 local src;
 local dest;
@@ -129,13 +128,17 @@ function Core:COMBAT_LOG_EVENT_UNFILTERED(
         Print(tostring(spellName  ).." название спела")
         Print(tostring(school  ).." маска школы")
         Print(tostring(idScattering  ).." ид при рассеивании")
-      print(debuggingMode)
+        print(debuggingMode)
     end
 
     if UnitInRaid(srcName) or UnitInParty(srcName) or debuggingMode then
         if (ns.SpellsAndPatterns[event]) then
             if (ns.SpellsAndPatterns[event][spellID]) then
                 send(ns.SpellsAndPatterns[event][spellID](srcGUID, srcName, spellID, destGUID, destName, idScattering));
+            elseif(event == "UNIT_DIED" and ns:UnitIsPlayer_local(destGUID) )then
+                if (ns.SpellsAndPatterns[event][99999]) then
+                    send(ns.SpellsAndPatterns[event][99999](srcGUID, srcName, 99999, destGUID, destName, idScattering));
+                end
             end
         end
     end
