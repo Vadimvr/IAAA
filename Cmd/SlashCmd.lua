@@ -22,12 +22,9 @@ function IAAASlashCmd(iaaaSubcommand)
     --         print(spellName, k, v)
     --     end
      elseif(t == "rws") then 
-        ns.WindowSetting:SetPoint("TOPLEFT",0,0);
-    -- elseif(t == "x") then 
-    --     for k, v in pairs(ns.icc) do
-    --         local spellName, spellRank = GetSpellInfo(k);
-    --         print(spellName, k, v)
-    --     end
+        ns.WindowSetting:SetPoint("TOPLEFT", 0, 0);
+        ns.MinimizeWindowsCombatLog:SetPoint("TOPLEFT", ns.WindowCombatLog:GetWidth(), 0);
+        ns.MinimizeWindowsCombatLog:Pos()
     elseif(t == "chat")then
         if(ns.inChat) then
             Print("|cFFFF0000".. ns.L["Message output is disabled."].." |r".. ns.L["To turn on, type"].. " |cff00ff00/ia chat.|r.")
@@ -49,7 +46,7 @@ function IAAASlashCmd(iaaaSubcommand)
         Print("/ia s    - "..ns.L["Opens the settings window."]);
         Print("/ia chat - "..ns.L["Output of messages to the chat."]);
         Print("/ia raid - "..ns.L["Output of messages to the ride chat."]);
-        Print("/ia rws - " ..ns.L["Reset position of the window settings."]);
+        Print("/ia rws - " ..ns.L["Resetting the position of the windows"]);
     end
 end
 
