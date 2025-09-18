@@ -30,6 +30,23 @@ ns.NicknameColors = {}
 ns.HistoryCombatLogBetweenSessions = {}
 --
 
+function ns:Print(...)
+    return  print("|cff00AAFFIAAA|r:", ...)
+end
+local prefixGuidNPS = 0x000000FFFFFFFFFF;
+local prefixGuidString = "0x000000"
+
+
+
+function ns:UnitIsPlayer_local(unitGUID)
+   -- print(unitGUID)
+    if (type(unitGUID) == "number") then
+        return prefixGuidNPS > unitGUID;
+    elseif (type(unitGUID) == "string") then
+        return string.sub(unitGUID, 1, #prefixGuidString) == prefixGuidString;
+    end
+end
+
 function ns:Init()
     if (not _Config) then _Config = {} end
     
@@ -130,4 +147,13 @@ function ns:Exit()
 
     _Config.HistoryCombatLogBetweenSessions = ns.HistoryCombatLogBetweenSessions;
     _Config.MinimapIcon =ns.MinimapIcon ;
+end
+
+function ns:GetSpellInfo_local(spellID)
+    if (spellID == 99999) then
+        return ns.L["DIED"]
+    else
+        local name , rank = GetSpellInfo(spellID)
+        return name;
+    end
 end

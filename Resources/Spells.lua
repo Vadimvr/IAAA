@@ -41,6 +41,10 @@ function Cast(srcGUID, srcName, spellID, destGUID, destName, idScattering)
     return ns.cast:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName))
 end
 
+function ShadowTrap(srcGUID, srcName, spellID, destGUID, destName, idScattering)
+    --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
+    return ns.shadowTrap:format(GetSpellLink(spellID), GetColor(destGUID, destName))
+end
 function Taunt(srcGUID, srcName, spellID, destGUID, destName, idScattering)
     --print(srcGUID, srcName, spellID,destGUID, destName,idScattering)
     return ns.taunt:format(GetColor(srcGUID, srcName), GetSpellLink(spellID), GetColor(destGUID, destName))
@@ -82,6 +86,9 @@ end
 
 function SoulReaper_SPELL_PERIODIC_MISSED(srcGUID, srcName, spellID, destGUID, destName)
     return ns.soulReaperMissed:format(GetSpellLink(spellID), GetColor(destGUID, destName))
+end
+function UnitDied(srcGUID, srcName, spellID, destGUID, destName)
+    return ns.died:format(GetColor(destGUID, destName))
 end
 function Damage(srcGUID, srcName, spellID, destGUID, destName,idScattering)
     return ns.damage:format(GetSpellLink(spellID), GetColor(destGUID, destName),idScattering)
@@ -278,6 +285,9 @@ ns.spellsAll = {
         { id = 71638, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  Клык
         { id = 71635, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  клык
         { id = 71586, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  ключ
+        { id = 67699, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  скарабей танк
+        { id = 67753, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  скарабей танк
+        { id = 26467, message = Used, event = SPELL_CAST_SUCCESS, print = false, say = false },  --  скарабей хил
     },
     MagicPortals = {
         { id = 53142, message = Create, event = SPELL_CREATE, print = false, say = false },  --  Даларан
@@ -365,7 +375,12 @@ ns.spellsAll = {
         { id = 74526, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 25 об
         { id = 74527, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 10 XM
         { id = 74528, message = Damage,                             event = SPELL_DAMAGE,    print = false, say = false },  --  Огненное дыхание 25 ХМ
-    },  
+
+        { id = 73529, message = ShadowTrap,                         event = SPELL_DAMAGE,          print = false, say = false },  --  ловушка 25 гер
+        { id = 73775, message = ShadowTrap,                         event = SPELL_DAMAGE,          print = false, say = false },  --  ледяная сфера 25 гер
+       -- { id = 73775, message = UnitDied,                           event = UNIT_DIED,             print = false, say = false },  --  смерть
+        { id = 99999, message = UnitDied,                           event = UNIT_DIED,             print = false, say = false },  --  смерть
+    },
     DISPELS = {
         { id = 02782, message = Dispel,     event = SPELL_DISPEL,        print = false, say = false },  --  "Снятие проклятия"
         { id = 00526, message = Dispel,     event = SPELL_DISPEL,        print = false, say = false },  --  "Оздоровление"
@@ -429,7 +444,7 @@ ns.NamedCategories = {
 for i = 1, #ns.NamedCategories do
     local arr = ns.spellsAll[ns.NamedCategories[i][1]]
     for j = 1, #arr do
-        local name, rank = GetSpellInfo(arr[j].id)
+        local name = ns:GetSpellInfo_local(arr[j].id)
         arr[j].name = name;
     end
 end
